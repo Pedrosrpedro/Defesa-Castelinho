@@ -1208,3 +1208,8 @@ body {
     flex-grow: 1;
 }
 /* --- FIM: NOVOS ESTILOS PARA DMS E GRUPOS --- */
+
+.online-mod-actions .mod-button {
+    padding: 6px 8px;
+    font-size: 0.6em;
+}
