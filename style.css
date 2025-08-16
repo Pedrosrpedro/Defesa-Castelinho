@@ -538,6 +538,8 @@ body {
   background-color: rgba(0,0,0,0.85);
   display: none; justify-content: center; align-items: center;
   z-index: 10001; /* Acima da tela de mods */
+  font-family: 'Press Start 2P', cursive, monospace;
+  color: white;
 }
 
 #add-mods-to-pack-list {
