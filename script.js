@@ -393,6 +393,168 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+        // --- Funções do Hub de Mods Online (Faltando no novo script) ---
+
+    async function showCustomModal(message, type = 'alert', defaultValue = '') {
+        return new Promise(resolve => {
+            customModalMessage.textContent = message;
+            customModalActions.innerHTML = '';
+            if (type === 'prompt') {
+                customModalInput.style.display = 'block';
+                customModalInput.value = defaultValue;
+            } else {
+                customModalInput.style.display = 'none';
+            }
+            if (type === 'confirm' || type === 'prompt') {
+                const confirmBtn = document.createElement('button');
+                confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK';
+                confirmBtn.className = 'main-menu-button';
+                confirmBtn.style.backgroundColor = '#28a745';
+                confirmBtn.style.fontSize = '0.8em';
+                confirmBtn.style.padding = '10px 20px';
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar';
+                cancelBtn.className = 'main-menu-button';
+                cancelBtn.style.backgroundColor = '#dc3545';
+                cancelBtn.style.fontSize = '0.8em';
+                cancelBtn.style.padding = '10px 20px';
+                confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); };
+                cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); };
+                customModalActions.appendChild(cancelBtn);
+                customModalActions.appendChild(confirmBtn);
+            } else {
+                const okBtn = document.createElement('button');
+                okBtn.textContent = 'OK';
+                okBtn.className = 'main-menu-button';
+                okBtn.style.backgroundColor = '#007bff';
+                okBtn.style.fontSize = '0.8em';
+                okBtn.style.padding = '10px 20px';
+                okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); };
+                customModalActions.appendChild(okBtn);
+            }
+            customModalOverlay.style.display = 'flex';
+            if (type === 'prompt') customModalInput.focus();
+        });
+    }
+
+    async function showCustomAlert(message) { return showCustomModal(message, 'alert'); }
+    async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
+    async function showCustomPrompt(message, defaultValue = '') { return showCustomModal(message, 'prompt', defaultValue); }
+
+    async function fetchOnlineMods() {
+        try {
+            const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
+            if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
+            const data = await response.json();
+            return data.record;
+        } catch (error) {
+            console.error("Falha ao carregar mods:", error);
+            onlineModList.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar mods.</p>';
+            return [];
+        }
+    }
+    
+    async function renderOnlineHub() {
+        const isModsTab = document.getElementById('hub-tab-mods').classList.contains('active');
+        onlineModList.innerHTML = '<p>Carregando...</p>';
+
+        let itemsToDisplay = [];
+        let itemType = '';
+
+        if (isModsTab) {
+            itemsToDisplay = await fetchOnlineMods();
+            itemType = 'mod';
+        } else {
+            itemsToDisplay = await fetchOnlineModpacks(); // Você vai precisar criar esta função
+            itemType = 'pack';
+        }
+
+        const searchTerm = onlineModSearch.value.toLowerCase();
+        const sortMethod = onlineModSort.value;
+
+        if (searchTerm) {
+            itemsToDisplay = itemsToDisplay.filter(item => item.name.toLowerCase().includes(searchTerm));
+        }
+
+        itemsToDisplay.sort((a, b) => {
+            switch (sortMethod) {
+                case 'usage_desc': return (b.usageCount || 0) - (a.usageCount || 0);
+                case 'name_asc': return a.name.localeCompare(b.name);
+                case 'date_desc':
+                default:
+                    return (b.publishDate || 0) - (a.publishDate || 0);
+            }
+        });
+        
+        onlineModList.innerHTML = '';
+        if (itemsToDisplay.length === 0) {
+            onlineModList.innerHTML = `<p>Nenhum ${isModsTab ? 'mod' : 'modpack'} encontrado.</p>`;
+            return;
+        }
+
+        itemsToDisplay.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.className = 'online-mod-item'; // Reutilizando a classe
+            if (itemType === 'mod') {
+                 itemElement.innerHTML = `
+                    <div class="online-mod-header">
+                        <span class="online-mod-name">${item.name}</span>
+                        <span class="online-mod-type">${item.type.charAt(0).toUpperCase()}</span>
+                    </div>
+                    <div class="online-mod-info">
+                        <span>por: ${item.author || 'Anônimo'}</span>
+                        <span>usado: ${item.usageCount || 0}x</span>
+                    </div>
+                    <div class="online-mod-actions">
+                        <button class="mod-button secondary online-mod-add-btn" data-mod-id="${item.id}" data-code="${item.modCode}">Adicionar</button>
+                        <button class="mod-button info online-mod-copy-btn" data-code="${item.modCode}">Copiar</button>
+                    </div>`;
+            } else { // pack
+                itemElement.innerHTML = `
+                     <div class="online-mod-header">
+                        <span class="online-mod-name">${item.name}</span>
+                        <span class="online-mod-type">PACK</span>
+                    </div>
+                    <div class="online-mod-info">
+                        <span>por: ${item.author || 'Anônimo'}</span>
+                        <span>${item.mods.length} mods</span>
+                    </div>
+                    <div class="online-mod-actions">
+                        <button class="mod-button secondary online-pack-add-btn" data-pack-id="${item.id}">Adicionar Pack</button>
+                    </div>`;
+            }
+            onlineModList.appendChild(itemElement);
+        });
+    }
+
+    async function publishMod(index) {
+        const modToPublish = allMods[index];
+        if (!modToPublish) return;
+        const authorName = (currentUser ? currentUser.username : await showCustomPrompt("Digite seu nome de autor:", "Anônimo"));
+        if (!authorName) return;
+        try {
+            let onlineMods = await fetchOnlineMods();
+            const modCode = btoa(JSON.stringify(modToPublish));
+            const newOnlineMod = {
+                id: `online_${Date.now()}`,
+                name: modToPublish.name,
+                type: modToPublish.type,
+                author: authorName,
+                publishDate: Date.now(),
+                usageCount: 0,
+                modCode: modCode
+            };
+            onlineMods.unshift(newOnlineMod);
+            const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) });
+            if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`);
+            await showCustomAlert(`Mod "${modToPublish.name}" publicado!`);
+            renderOnlineHub();
+        } catch (error) {
+            console.error("Falha ao publicar:", error);
+            await showCustomAlert("Erro ao publicar o mod.");
+        }
+    }
+
     function rebuildPixelGrid(width, height) { editorGridSize.width = width; editorGridSize.height = height; pixelGrid.innerHTML = ''; pixelGrid.style.setProperty('--grid-width', width); pixelGrid.style.setProperty('--grid-height', height); for (let i = 0; i < width * height; i++) { const pixel = document.createElement('div'); pixel.className = 'pixel'; pixel.style.backgroundColor = 'transparent'; pixelGrid.appendChild(pixel); } }
     function initializeModEditor() { rebuildPixelGrid(16, 16); colorPalette.innerHTML = ''; editorPaletteColors.forEach(color => { const colorBox = document.createElement('div'); colorBox.className = 'color-box'; colorBox.style.backgroundColor = color === 'transparent' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAACdJREFUOE9jZGBgEGHAD97/p0+f/v//PxMDw585858ZGBgY/j98+PA/AAAU4gH4Y0Y1iAAAAABJRU5ErkJggg==")' : color; colorBox.dataset.color = color; if (color === editorCurrentColor) colorBox.classList.add('selected'); colorPalette.appendChild(colorBox); }); waveMonsterList.innerHTML = ''; switchEditorTab('monster'); }
     function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
