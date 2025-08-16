@@ -511,7 +511,34 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkForNotifications() { if (!currentUser || currentNotification) return; const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; if (!myData) return; if (myData.friendRequests && myData.friendRequests.length > 0) { const sender = myData.friendRequests[0]; showInteractiveNotification(`${sender} enviou um pedido de amizade!`, 'friendRequest', sender); return; } if (myData.groupInvites && myData.groupInvites.length > 0) { const { groupName, sender } = myData.groupInvites[0]; showInteractiveNotification(`${sender} te convidou para o grupo "${groupName}"!`, 'groupInvite', myData.groupInvites[0]); return; } }
     function startSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); checkForNotifications(); socialPollInterval = setInterval(checkForNotifications, 10000); }
     function stopSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); socialPollInterval = null; }
-    async function updatePlayerStatsAndTrophies() { if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 }; const socialData = await fetchSocialData(); if (!socialData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies }; const myData = socialData[currentUser.username.toLowerCase()]; if (!myData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies }; const oldTrophies = myData.stats.trophies || 0; myData.stats.gamesPlayed = (myData.stats.gamesPlayed || 0) + 1; myData.stats.totalMoney = (myData.stats.totalMoney || 0) + money; myData.stats.totalDiamonds = (myData.stats.totalDiamonds || 0) + diamonds; myData.stats.totalWaves = (myData.stats.totalWaves || 0) + currentWave; const avgMoney = myData.stats.totalMoney / myData.stats.gamesPlayed; const avgDiamonds = myData.stats.totalDiamonds / myData.stats.gamesPlayed; const avgWaves = myData.stats.totalWaves / myData.stats.gamesPlayed; const newTrophies = Math.floor((avgMoney / 10) + (avgDiamonds * 5) + (avgWaves * 2)); myData.stats.trophies = newTrophies; currentUser.stats = myData.stats; await updateSocialData(socialData); updateUiForLogin(); return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies }; }
+    async function updatePlayerStatsAndTrophies() {
+    if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 };
+    const socialData = await fetchSocialData();
+    if (!socialData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
+    const myData = socialData[currentUser.username.toLowerCase()];
+    if (!myData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
+
+    const oldTrophies = myData.stats.trophies || 0;
+    myData.stats.gamesPlayed = (myData.stats.gamesPlayed || 0) + 1;
+    myData.stats.totalMoney = (myData.stats.totalMoney || 0) + money;
+    myData.stats.totalDiamonds = (myData.stats.totalDiamonds || 0) + diamonds;
+    myData.stats.totalWaves = (myData.stats.totalWaves || 0) + currentWave;
+
+    let newTrophies = oldTrophies;
+    // SÓ CALCULA SE JOGOU MAIS DE 0 PARTIDAS, EVITANDO DIVISÃO POR ZERO
+    if (myData.stats.gamesPlayed > 0) {
+        const avgMoney = myData.stats.totalMoney / myData.stats.gamesPlayed;
+        const avgDiamonds = myData.stats.totalDiamonds / myData.stats.gamesPlayed;
+        const avgWaves = myData.stats.totalWaves / myData.stats.gamesPlayed;
+        newTrophies = Math.floor((avgMoney / 10) + (avgDiamonds * 5) + (avgWaves * 2));
+    }
+    
+    myData.stats.trophies = newTrophies;
+    currentUser.stats = myData.stats;
+    await updateSocialData(socialData);
+    updateUiForLogin();
+    return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies };
+}
     function createConversationId(user1, user2) { return [user1.toLowerCase(), user2.toLowerCase()].sort().join('_'); }
     async function openDmGroupsPanel() { const socialData = await fetchSocialData(); if (!socialData || !currentUser) { await showCustomAlert("Não foi possível carregar dados."); return; } dmGroupsOverlay.style.display = 'flex'; dmGroupsMainPanel.style.display = 'block'; chatViewPanel.style.display = 'none'; createGroupPanel.style.display = 'none'; renderDmAndGroupLists(socialData); }
     function renderDmAndGroupLists(socialData) { const myData = socialData[currentUser.username.toLowerCase()]; dmListContainer.innerHTML = ''; if (myData.friends && myData.friends.length > 0) { myData.friends.forEach(friendName => { const item = document.createElement('div'); item.className = 'dm-list-item'; item.textContent = friendName; item.dataset.friendName = friendName; dmListContainer.appendChild(item); }); } else { dmListContainer.innerHTML = '<p>Nenhum amigo para conversar.</p>'; } groupListContainer.innerHTML = ''; const myGroups = Object.entries(socialData.groups || {}).filter(([id, group]) => group.members.includes(currentUser.username)); if (myGroups.length > 0) { myGroups.forEach(([id, group]) => { const item = document.createElement('div'); item.className = 'group-list-item'; item.textContent = group.name; item.dataset.groupId = id; groupListContainer.appendChild(item); }); } else { groupListContainer.innerHTML = '<p>Você não está em nenhum grupo.</p>'; } }
