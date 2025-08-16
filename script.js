@@ -21,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const modScreen = document.getElementById('mod-screen');
     const modEditorScreen = document.getElementById('mod-editor-screen');
     const backToMenuFromModsButton = document.getElementById('back-to-menu-from-mods-button');
-    const createNewButton = document.getElementById('create-new-button');
+    // CORREÇÃO 2: ID do botão corrigido de 'create-new-button' para 'create-new-mod-button'
+    const createNewButton = document.getElementById('create-new-mod-button');
     const addModButton = document.getElementById('add-mod-button');
     const modCodeInput = document.getElementById('mod-code-input');
     const modListContainer = document.getElementById('mod-list-container');
-    // A variável 'editorTabs' foi removida para evitar o erro. O listener será adicionado diretamente.
     const pixelEditorPanel = document.getElementById('pixel-editor-panel');
     const waveEditorPanel = document.getElementById('wave-editor-panel');
     const pixelGrid = document.getElementById('pixel-grid');
@@ -194,10 +194,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const JSONBIN_API_KEY = '$2a$10$4tbHfolQwMBQAiybZXK0ruCq0xYIPmFuq8NMAqrP89muVvvgQavta';
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
-    // ### INÍCIO: NOVAS CONSTANTES PARA O HUB DE MODPACKS ###
-    const MODPACK_JSONBIN_ID = '68a0dc33ae596e708fcbaabd'; // <--- SUBSTITUA AQUI
+    const MODPACK_JSONBIN_ID = '68a0dc33ae596e708fcbaabd';
     const MODPACK_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${MODPACK_JSONBIN_ID}`;
-    // ### FIM: NOVAS CONSTANTES ###
 
     const SOCIAL_JSONBIN_ID = '685c74f28960c979a5b17276';
     const SOCIAL_JSONBIN_API_KEY = '$2a$10$4tbHfolQwMBQAiybZXK0ruCq0xYIPmFuq8NMAqrP89muVvvgQavta';
@@ -393,135 +391,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-        // --- Funções do Hub de Mods Online (Faltando no novo script) ---
-
-    async function showCustomModal(message, type = 'alert', defaultValue = '') {
-        return new Promise(resolve => {
-            customModalMessage.textContent = message;
-            customModalActions.innerHTML = '';
-            if (type === 'prompt') {
-                customModalInput.style.display = 'block';
-                customModalInput.value = defaultValue;
-            } else {
-                customModalInput.style.display = 'none';
-            }
-            if (type === 'confirm' || type === 'prompt') {
-                const confirmBtn = document.createElement('button');
-                confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK';
-                confirmBtn.className = 'main-menu-button';
-                confirmBtn.style.backgroundColor = '#28a745';
-                confirmBtn.style.fontSize = '0.8em';
-                confirmBtn.style.padding = '10px 20px';
-                const cancelBtn = document.createElement('button');
-                cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar';
-                cancelBtn.className = 'main-menu-button';
-                cancelBtn.style.backgroundColor = '#dc3545';
-                cancelBtn.style.fontSize = '0.8em';
-                cancelBtn.style.padding = '10px 20px';
-                confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); };
-                cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); };
-                customModalActions.appendChild(cancelBtn);
-                customModalActions.appendChild(confirmBtn);
-            } else {
-                const okBtn = document.createElement('button');
-                okBtn.textContent = 'OK';
-                okBtn.className = 'main-menu-button';
-                okBtn.style.backgroundColor = '#007bff';
-                okBtn.style.fontSize = '0.8em';
-                okBtn.style.padding = '10px 20px';
-                okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); };
-                customModalActions.appendChild(okBtn);
-            }
-            customModalOverlay.style.display = 'flex';
-            if (type === 'prompt') customModalInput.focus();
-        });
-    }
-
+    function rebuildPixelGrid(width, height) { editorGridSize.width = width; editorGridSize.height = height; pixelGrid.innerHTML = ''; pixelGrid.style.setProperty('--grid-width', width); pixelGrid.style.setProperty('--grid-height', height); for (let i = 0; i < width * height; i++) { const pixel = document.createElement('div'); pixel.className = 'pixel'; pixel.style.backgroundColor = 'transparent'; pixelGrid.appendChild(pixel); } }
+    function initializeModEditor() { rebuildPixelGrid(16, 16); colorPalette.innerHTML = ''; editorPaletteColors.forEach(color => { const colorBox = document.createElement('div'); colorBox.className = 'color-box'; colorBox.style.backgroundColor = color === 'transparent' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAACdJREFUOE9jZGBgEGHAD97/p0+f/v//PxMDw585858ZGBgY/j98+PA/AAAU4gH4Y0Y1iAAAAABJRU5ErkJggg==")' : color; colorBox.dataset.color = color; if (color === editorCurrentColor) colorBox.classList.add('selected'); colorPalette.appendChild(colorBox); }); waveMonsterList.innerHTML = ''; switchEditorTab('monster'); }
+    function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
+    function populateMonsterDropdown(selectElement) { selectElement.innerHTML = ''; baseMonsterTypes.forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Base) ${m.name}`; selectElement.appendChild(option); }); allMods.filter(m => m.type === 'monster').forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Mod) ${m.name}`; selectElement.appendChild(option); }); }
+    
+    // --- FUNÇÕES DO HUB ONLINE RESTAURADAS E MELHORADAS ---
+    async function showCustomModal(message, type = 'alert', defaultValue = '') { return new Promise(resolve => { customModalMessage.textContent = message; customModalActions.innerHTML = ''; if (type === 'prompt') { customModalInput.style.display = 'block'; customModalInput.value = defaultValue; } else { customModalInput.style.display = 'none'; } if (type === 'confirm' || type === 'prompt') { const confirmBtn = document.createElement('button'); confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK'; confirmBtn.className = 'main-menu-button'; confirmBtn.style.backgroundColor = '#28a745'; confirmBtn.style.fontSize = '0.8em'; confirmBtn.style.padding = '10px 20px'; const cancelBtn = document.createElement('button'); cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar'; cancelBtn.className = 'main-menu-button'; cancelBtn.style.backgroundColor = '#dc3545'; cancelBtn.style.fontSize = '0.8em'; cancelBtn.style.padding = '10px 20px'; confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); }; cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); }; customModalActions.appendChild(cancelBtn); customModalActions.appendChild(confirmBtn); } else { const okBtn = document.createElement('button'); okBtn.textContent = 'OK'; okBtn.className = 'main-menu-button'; okBtn.style.backgroundColor = '#007bff'; okBtn.style.fontSize = '0.8em'; okBtn.style.padding = '10px 20px'; okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); }; customModalActions.appendChild(okBtn); } customModalOverlay.style.display = 'flex'; if (type === 'prompt') customModalInput.focus(); }); }
     async function showCustomAlert(message) { return showCustomModal(message, 'alert'); }
     async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
     async function showCustomPrompt(message, defaultValue = '') { return showCustomModal(message, 'prompt', defaultValue); }
+    async function fetchOnlineMods() { try { const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } }); if (response.status === 404) return []; if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return data.record || []; } catch (error) { console.error("Falha ao carregar mods:", error); return []; } }
+    async function fetchOnlineModpacks() { try { const response = await fetch(`${MODPACK_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } }); if (response.status === 404) return []; if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return data.record || []; } catch (error) { console.error("Falha ao carregar modpacks:", error); return []; } }
 
-    async function fetchOnlineMods() {
-        try {
-            const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
-            if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
-            const data = await response.json();
-            return data.record;
-        } catch (error) {
-            console.error("Falha ao carregar mods:", error);
-            onlineModList.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar mods.</p>';
-            return [];
-        }
-    }
-    
     async function renderOnlineHub() {
         const isModsTab = document.getElementById('hub-tab-mods').classList.contains('active');
         onlineModList.innerHTML = '<p>Carregando...</p>';
-
         let itemsToDisplay = [];
-        let itemType = '';
-
         if (isModsTab) {
             itemsToDisplay = await fetchOnlineMods();
-            itemType = 'mod';
         } else {
-            itemsToDisplay = await fetchOnlineModpacks(); // Você vai precisar criar esta função
-            itemType = 'pack';
+            itemsToDisplay = await fetchOnlineModpacks();
         }
-
         const searchTerm = onlineModSearch.value.toLowerCase();
-        const sortMethod = onlineModSort.value;
-
         if (searchTerm) {
             itemsToDisplay = itemsToDisplay.filter(item => item.name.toLowerCase().includes(searchTerm));
         }
-
         itemsToDisplay.sort((a, b) => {
+            const sortMethod = onlineModSort.value;
             switch (sortMethod) {
                 case 'usage_desc': return (b.usageCount || 0) - (a.usageCount || 0);
                 case 'name_asc': return a.name.localeCompare(b.name);
-                case 'date_desc':
-                default:
-                    return (b.publishDate || 0) - (a.publishDate || 0);
+                case 'date_desc': default: return (b.publishDate || 0) - (a.publishDate || 0);
             }
         });
-        
         onlineModList.innerHTML = '';
         if (itemsToDisplay.length === 0) {
             onlineModList.innerHTML = `<p>Nenhum ${isModsTab ? 'mod' : 'modpack'} encontrado.</p>`;
             return;
         }
-
         itemsToDisplay.forEach(item => {
             const itemElement = document.createElement('div');
-            itemElement.className = 'online-mod-item'; // Reutilizando a classe
-            if (itemType === 'mod') {
-                 itemElement.innerHTML = `
-                    <div class="online-mod-header">
-                        <span class="online-mod-name">${item.name}</span>
-                        <span class="online-mod-type">${item.type.charAt(0).toUpperCase()}</span>
-                    </div>
-                    <div class="online-mod-info">
-                        <span>por: ${item.author || 'Anônimo'}</span>
-                        <span>usado: ${item.usageCount || 0}x</span>
-                    </div>
-                    <div class="online-mod-actions">
-                        <button class="mod-button secondary online-mod-add-btn" data-mod-id="${item.id}" data-code="${item.modCode}">Adicionar</button>
-                        <button class="mod-button info online-mod-copy-btn" data-code="${item.modCode}">Copiar</button>
-                    </div>`;
-            } else { // pack
-                itemElement.innerHTML = `
-                     <div class="online-mod-header">
-                        <span class="online-mod-name">${item.name}</span>
-                        <span class="online-mod-type">PACK</span>
-                    </div>
-                    <div class="online-mod-info">
-                        <span>por: ${item.author || 'Anônimo'}</span>
-                        <span>${item.mods.length} mods</span>
-                    </div>
-                    <div class="online-mod-actions">
-                        <button class="mod-button secondary online-pack-add-btn" data-pack-id="${item.id}">Adicionar Pack</button>
-                    </div>`;
+            itemElement.className = 'online-mod-item';
+            if (isModsTab) {
+                 itemElement.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${item.name}</span><span class="online-mod-type">${item.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${item.author || 'Anônimo'}</span><span>usado: ${item.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${item.id}" data-code="${item.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${item.modCode}">Copiar</button></div>`;
+            } else {
+                itemElement.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${item.name}</span><span class="online-mod-type">PACK</span></div><div class="online-mod-info"><span>por: ${item.author || 'Anônimo'}</span><span>${item.mods.length} mods</span></div><div class="online-mod-actions"><button class="mod-button secondary online-pack-add-btn" data-pack-id="${item.id}">Adicionar Pack</button></div>`;
             }
             onlineModList.appendChild(itemElement);
         });
@@ -535,31 +450,51 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             let onlineMods = await fetchOnlineMods();
             const modCode = btoa(JSON.stringify(modToPublish));
-            const newOnlineMod = {
-                id: `online_${Date.now()}`,
-                name: modToPublish.name,
-                type: modToPublish.type,
-                author: authorName,
-                publishDate: Date.now(),
-                usageCount: 0,
-                modCode: modCode
-            };
+            const newOnlineMod = { id: `online_mod_${Date.now()}`, name: modToPublish.name, type: modToPublish.type, author: authorName, publishDate: Date.now(), usageCount: 0, modCode };
             onlineMods.unshift(newOnlineMod);
             const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) });
             if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`);
             await showCustomAlert(`Mod "${modToPublish.name}" publicado!`);
-            renderOnlineHub();
-        } catch (error) {
-            console.error("Falha ao publicar:", error);
-            await showCustomAlert("Erro ao publicar o mod.");
+            if (document.getElementById('hub-tab-mods').classList.contains('active')) renderOnlineHub();
+        } catch (error) { console.error("Falha ao publicar mod:", error); await showCustomAlert("Erro ao publicar o mod."); }
+    }
+
+    async function publishModpack(index) {
+        const packToPublish = allModpacks[index];
+        if (!packToPublish) return;
+        const authorName = (currentUser ? currentUser.username : await showCustomPrompt("Digite seu nome de autor:", "Anônimo"));
+        if (!authorName) return;
+        try {
+            let onlinePacks = await fetchOnlineModpacks();
+            const newOnlinePack = { ...packToPublish, id: `online_pack_${Date.now()}`, author: authorName, publishDate: Date.now() };
+            onlinePacks.unshift(newOnlinePack);
+            const response = await fetch(MODPACK_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlinePacks) });
+            if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`);
+            await showCustomAlert(`Modpack "${packToPublish.name}" publicado!`);
+            if (document.getElementById('hub-tab-packs').classList.contains('active')) renderOnlineHub();
+        } catch (error) { console.error("Falha ao publicar modpack:", error); await showCustomAlert("Erro ao publicar o modpack."); }
+    }
+
+    async function handleAddOnlineModpack(packId) {
+        try {
+            const onlinePacks = await fetchOnlineModpacks();
+            const packToAdd = onlinePacks.find(p => p.id === packId);
+            if (!packToAdd) throw new Error("Modpack não encontrado no hub.");
+            if (allModpacks.some(p => p.id === packToAdd.id)) {
+                await showCustomAlert(`O modpack "${packToAdd.name}" já está na sua lista.`);
+                return;
+            }
+            allModpacks.push(packToAdd);
+            saveModpacks();
+            renderModpackList();
+            await showCustomAlert(`Modpack "${packToAdd.name}" adicionado com sucesso!`);
+        } catch(error) {
+            await showCustomAlert(`Erro ao adicionar modpack: ${error.message}`);
         }
     }
 
-    function rebuildPixelGrid(width, height) { editorGridSize.width = width; editorGridSize.height = height; pixelGrid.innerHTML = ''; pixelGrid.style.setProperty('--grid-width', width); pixelGrid.style.setProperty('--grid-height', height); for (let i = 0; i < width * height; i++) { const pixel = document.createElement('div'); pixel.className = 'pixel'; pixel.style.backgroundColor = 'transparent'; pixelGrid.appendChild(pixel); } }
-    function initializeModEditor() { rebuildPixelGrid(16, 16); colorPalette.innerHTML = ''; editorPaletteColors.forEach(color => { const colorBox = document.createElement('div'); colorBox.className = 'color-box'; colorBox.style.backgroundColor = color === 'transparent' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAACdJREFUOE9jZGBgEGHAD97/p0+f/v//PxMDw585858ZGBgY/j98+PA/AAAU4gH4Y0Y1iAAAAABJRU5ErkJggg==")' : color; colorBox.dataset.color = color; if (color === editorCurrentColor) colorBox.classList.add('selected'); colorPalette.appendChild(colorBox); }); waveMonsterList.innerHTML = ''; switchEditorTab('monster'); }
-    function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
-    function populateMonsterDropdown(selectElement) { selectElement.innerHTML = ''; baseMonsterTypes.forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Base) ${m.name}`; selectElement.appendChild(option); }); allMods.filter(m => m.type === 'monster').forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Mod) ${m.name}`; selectElement.appendChild(option); }); }
-    
+    async function incrementModUsageCount(modId) { try { let onlineMods = await fetchOnlineMods(); const modIndex = onlineMods.findIndex(m => m.id === modId); if (modIndex > -1) { onlineMods[modIndex].usageCount = (onlineMods[modIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); renderOnlineHub(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
+
     async function fetchSocialData() { try { const response = await fetch(`${SOCIAL_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': SOCIAL_JSONBIN_API_KEY } }); if (response.status === 404) return {}; if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); const data = await response.json(); const record = data.record || {}; if (!record.conversations) record.conversations = {}; if (!record.groups) record.groups = {}; return record; } catch (error) { console.error("Falha ao buscar dados sociais:", error); showCustomAlert("Erro de conexão com o servidor. Tente mais tarde."); return null; } }
     async function updateSocialData(newData) { try { const response = await fetch(SOCIAL_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': SOCIAL_JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(newData) }); if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); return true; } catch (error) { console.error("Falha ao atualizar dados sociais:", error); showCustomAlert("Erro de conexão, suas alterações podem não ter sido salvas."); return false; } }
     function updateUiForLogin() { if (currentUser) { socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase(); trophyCounter.style.display = 'flex'; trophyValue.textContent = Math.floor(currentUser.stats.trophies); multiplayerButton.classList.remove('disabled'); } else { socialProfileButton.textContent = '👤'; trophyCounter.style.display = 'none'; multiplayerButton.classList.add('disabled'); } }
@@ -673,7 +608,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function applySlowEffect(monster) { if (!monster || monster.isSlowed) return; clearTimeout(monster.slowTimeout); monster.isSlowed=true; if (monster.element) monster.element.classList.add('slowed'); monster.slowTimeout = setTimeout(() => { if (monster) { monster.isSlowed = false; if(monster.element) monster.element.classList.remove('slowed'); } }, 3000); }
     function handleMonsterDeath(monster, index) { money += monster.money; monstersKilledThisWave++; if (monster.money > 3) { strongMonsterKillCount++; if (strongMonsterKillCount >= 3) { diamonds++; updateDiamondDisplay(); strongMonsterKillCount = 0; logDebugMessage(`+1 Diamante!`, 'diamond'); } } const corpse = monster.element.cloneNode(true); corpse.style.animation = monster.isFlying ? 'flying-monster-death-fall 1s forwards' : 'monster-death-fall 1s forwards'; corpse.querySelector('.monster-health-bar')?.remove(); corpse.style.zIndex = 1; gameArea.appendChild(corpse); corpse.addEventListener('animationend', () => corpse.remove(), { once: true }); if (!monster.isFlying) { const puddle = document.createElement('div'); puddle.className = 'blood-puddle'; puddle.style.left = `${monster.x}px`; puddle.style.top = `${monster.y + monster.element.offsetHeight * 0.7}px`; gameArea.appendChild(puddle); } monster.element.remove(); monsters.splice(index, 1); updateMoneyDisplay(); }
     async function gameLoop() { if (isGameOver || isPaused) return; const now = Date.now(); if (isPlayerCastleDestroyed) { playerRespawnTimer -= 1000/60; playerRespawnTimerElement.innerHTML = `${Math.ceil(playerRespawnTimer/1000)}s <span>RENASCER</span>`; if (playerRespawnTimer <= 0) { isPlayerCastleDestroyed = false; castleHealth = MAX_CASTLE_HEALTH / 2; castleElement.classList.remove('castle-destroyed'); playerRespawnTimerElement.style.display = 'none'; updateCastleHealthDisplay(false); } } if (gameMode === 'ai' && isCastleAIDestroyed) { aiRespawnTimer -= 1000/60; aiRespawnTimerElement.innerHTML = `${Math.ceil(aiRespawnTimer/1000)}s <span>RENASCER</span>`; if (aiRespawnTimer <= 0) { isCastleAIDestroyed = false; castleHealthAI = MAX_CASTLE_HEALTH_AI / 2; castleAIElement.classList.remove('castle-destroyed'); aiRespawnTimerElement.style.display = 'none'; updateCastleHealthDisplay(true); } } projectiles.forEach((p, i) => { if (!p.element || !p.targetMonster || p.targetMonster.health <= 0) { if (p.element) p.element.remove(); projectiles.splice(i, 1); return; } const tx = p.targetMonster.x + p.targetMonster.element.offsetWidth/2, ty = p.targetMonster.y + p.targetMonster.element.offsetHeight/2; const dist = Math.hypot(tx-p.x, ty-p.y); if (dist < p.speed+5) { handleProjectileHit(p); projectiles.splice(i, 1); } else { p.x += (tx-p.x)/dist*p.speed; p.y += (ty-p.y)/dist*p.speed; p.element.style.left=`${p.x}px`; p.element.style.top=`${p.y}px`; } }); guardianSlots.forEach((guardian, index) => { if (guardian === null) return; const guardianType = activeGameGuardianTypes[guardian.typeId]; if (!guardianType) return; const stats = guardianType.evolutions[guardian.level - 1]; const sourceX = castleElement.offsetLeft + castleElement.offsetWidth + 10; const sourceY = castleElement.offsetTop + (guardianSlotPositions[index].y / 100) * castleElement.offsetHeight; if (now - guardian.lastAttackTime > stats.cooldown) { const target = findNearestMonster(sourceX, sourceY, stats.range); if (target) { guardian.lastAttackTime = now; createProjectile(target, stats, { from: 'guardian', guardianTypeId: guardian.typeId, x: sourceX, y: sourceY }); } } }); if (gameMode === 'ai') { guardianSlotsAI.forEach((guardian, index) => { if (guardian === null) return; const guardianType = activeGameGuardianTypes[guardian.typeId]; if (!guardianType) return; const stats = guardianType.evolutions[guardian.level - 1]; const sourceX = castleAIElement.offsetLeft + castleAIElement.offsetWidth + 10; const sourceY = castleAIElement.offsetTop + (guardianSlotPositions[index].y / 100) * castleAIElement.offsetHeight; if (now - guardian.lastAttackTime > stats.cooldown) { const target = findNearestMonster(sourceX, sourceY, stats.range); if (target) { guardian.lastAttackTime = now; createProjectile(target, stats, { from: 'guardian', guardianTypeId: guardian.typeId, x: sourceX, y: sourceY }); } } }); } for (let i = monsters.length - 1; i >= 0; i--) { const m = monsters[i]; if (m.health <= 0) { handleMonsterDeath(m, i); continue; } if (m.targetCastle.isDestroyed()) { if (m.targetCastle.isAI) { m.targetCastle = { element: castleElement, isAI: false, isDestroyed: () => isPlayerCastleDestroyed }; } else { m.targetCastle = { element: castleAIElement, isAI: true, isDestroyed: () => isCastleAIDestroyed }; } } let castleTargetElement = m.targetCastle.element; let tx = castleTargetElement.offsetLeft + castleTargetElement.offsetWidth; let b = null; for (const bar of barricades) { if (m.x+m.element.offsetWidth>=bar.x && m.x<=bar.x+bar.width && m.y+m.element.offsetHeight/2>bar.y && m.y+m.element.offsetHeight/2<bar.y+bar.height) { castleTargetElement = bar.element; tx = bar.x; b = bar; break; } } const speed = m.isSlowed ? m.speed * 0.5 : m.currentSpeed; const targetY = m.targetCastle.element.offsetTop + m.targetCastle.element.offsetHeight / 2; const monsterY = m.y + m.element.offsetHeight / 2; const yDist = targetY - monsterY; if (Math.abs(yDist) > speed) { m.y += Math.sign(yDist) * speed * 0.7; } if (m.attackType === 'ranged') { if (Math.hypot(m.x - tx, monsterY - targetY) > m.projectile.range) { m.x -= speed; } else if (now - m.lastAttackTime > m.projectile.cooldown) { m.lastAttackTime=now; const mpEl = document.createElement('div'); mpEl.className=`monster-projectile ${m.projectile.type}`; mpEl.style.position='absolute'; monsterProjectiles.push({element:mpEl,x:m.x+m.element.offsetWidth/2,y:m.y+m.element.offsetHeight/2,target:castleTargetElement, ...m.projectile, targetCastleInfo: m.targetCastle}); gameArea.appendChild(mpEl); } } else { if (m.x > tx) { m.x -= speed; } else if (now - m.lastAttackTime > 1000) { m.lastAttackTime = now; if (b) { b.health -= m.damage; const hb = b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`; } else if (!isGodMode) { if (m.targetCastle.isAI) { if (!isCastleAIDestroyed) castleHealthAI -= m.damage; } else { if (!isPlayerCastleDestroyed) castleHealth -= m.damage; } } } } m.element.style.left = `${m.x}px`; m.element.style.top = `${m.y}px`; }
-    monsterProjectiles.forEach((mp,i)=>{ const r=mp.target.getBoundingClientRect(), gr=gameArea.getBoundingClientRect(), tx=(r.left-gr.left)+r.width/2, ty=(r.top-gr.top)+r.height/2, dist=Math.hypot(tx-mp.x, ty-mp.y); if(dist<mp.speed+5){if(!isGodMode){ if(mp.target===castleElement && !isPlayerCastleDestroyed){castleHealth-=mp.damage;} else if(mp.target===castleAIElement && !isCastleAIDestroyed){castleHealthAI-=mp.damage;} else {const b = barricades.find(bar=>bar.element===mp.target); if(b){b.health-=mp.damage; const hb=b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`;}}} if(mp.element) mp.element.remove(); monsterProjectiles.splice(i,1);} else {mp.x+=(tx-mp.x)/dist*mp.speed; mp.y+=(ty-p.y)/dist*mp.speed; mp.element.style.left=`${mp.x}px`; mp.element.style.top=`${mp.y}px`;}});
+    monsterProjectiles.forEach((mp,i)=>{ const r=mp.target.getBoundingClientRect(), gr=gameArea.getBoundingClientRect(), tx=(r.left-gr.left)+r.width/2, ty=(r.top-gr.top)+r.height/2, dist=Math.hypot(tx-mp.x, ty-mp.y); if(dist<mp.speed+5){if(!isGodMode){ if(mp.target===castleElement && !isPlayerCastleDestroyed){castleHealth-=mp.damage;} else if(mp.target===castleAIElement && !isCastleAIDestroyed){castleHealthAI-=mp.damage;} else {const b = barricades.find(bar=>bar.element===mp.target); if(b){b.health-=mp.damage; const hb=b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`;}}} if(mp.element) mp.element.remove(); monsterProjectiles.splice(i,1);} else {mp.x+=(tx-mp.x)/dist*mp.speed; mp.y+=(ty-mp.y)/dist*mp.speed; mp.element.style.left=`${mp.x}px`; mp.element.style.top=`${mp.y}px`;}});
     barricades=barricades.filter(b=>{if(b.health<=0&&b.element)b.element.remove();return b.health>0;});
     if (!isPlayerCastleDestroyed && castleHealth <= 0) { isPlayerCastleDestroyed = true; playerRespawnTimer = 30000; castleElement.classList.add('castle-destroyed'); playerRespawnTimerElement.style.display = 'flex'; }
     if (gameMode === 'ai' && !isCastleAIDestroyed && castleHealthAI <= 0) { isCastleAIDestroyed = true; aiRespawnTimer = 30000; castleAIElement.classList.add('castle-destroyed'); aiRespawnTimerElement.style.display = 'flex'; }
@@ -729,7 +664,19 @@ document.addEventListener('DOMContentLoaded', () => {
     commands.forEach(c => { const entry = document.createElement('div'); entry.className = 'command-entry'; entry.innerHTML = `<div class="command-desc"><code>${c.cmd.split(' ')[0]}</code> - ${c.desc}</div><button class="copy-command-btn" data-command="${c.cmd}"><div class="clipboard-icon"></div><span class="copied-icon">✓</span></button>`; commandHelpContent.appendChild(entry); });
     document.querySelectorAll('.copy-command-btn').forEach(btn => { btn.addEventListener('click', (e) => { const button = e.currentTarget; const commandToCopy = button.dataset.command; navigator.clipboard.writeText(commandToCopy).then(() => { const clipboardIcon = button.querySelector('.clipboard-icon'); const copiedIcon = button.querySelector('.copied-icon'); clipboardIcon.style.display = 'none'; copiedIcon.style.display = 'inline'; setTimeout(() => { clipboardIcon.style.display = 'block'; copiedIcon.style.display = 'none'; }, 1000); }); }); });
     toggleFullscreenButton.addEventListener('click', () => { if (!document.fullscreenElement) { gameContainer.requestFullscreen().catch(err => { showCustomAlert(`Não foi possível entrar em tela cheia: ${err.message}`); }); } else { document.exitFullscreen(); } });
-    modsButton.addEventListener('click', () => { startScreen.style.display = 'none'; modScreen.style.display = 'flex'; loadMods(); loadModpacks(); renderModList(); renderModpackList(); renderOnlineHub(); switchModManagerTab('local'); });
+    
+    // CORREÇÃO 3: Listener do botão de Mods atualizado para renderizar as listas
+    modsButton.addEventListener('click', () => {
+        startScreen.style.display = 'none';
+        modScreen.style.display = 'flex';
+        loadMods();
+        loadModpacks();
+        renderModList();
+        renderModpackList();
+        renderOnlineHub();
+        switchModManagerTab('local');
+    });
+
     backToMenuFromModsButton.addEventListener('click', showStartScreen);
     
     createNewButton.addEventListener('click', async () => {
@@ -784,7 +731,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // CORREÇÃO: Listener movido para cá para garantir que o elemento exista
     document.querySelector('#mod-editor-screen .editor-tabs').addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
     
     colorPalette.addEventListener('click', (e) => { const colorBox = e.target.closest('.color-box'); if (colorBox) { editorCurrentColor = colorBox.dataset.color; document.querySelectorAll('#color-palette .color-box').forEach(b => b.classList.remove('selected')); colorBox.classList.add('selected'); } });
@@ -805,13 +751,9 @@ document.addEventListener('DOMContentLoaded', () => {
     onlineModList.addEventListener('click', e => {
         const addBtn = e.target.closest('.online-mod-add-btn');
         const copyBtn = e.target.closest('.online-mod-copy-btn');
-        const editBtn = e.target.closest('.online-mod-edit-btn');
-        const deleteBtn = e.target.closest('.online-mod-delete-btn');
         const addPackBtn = e.target.closest('.online-pack-add-btn');
         if (addBtn) { modCodeInput.value = addBtn.dataset.code; addModButton.click(); const modId = addBtn.dataset.modId; if(modId) incrementModUsageCount(modId); }
         if (copyBtn) { navigator.clipboard.writeText(copyBtn.dataset.code).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1500); }); }
-        if (editBtn) { editOnlineMod(editBtn.dataset.code, editBtn.dataset.name); }
-        if (deleteBtn) { handleDeleteOnlineMod(deleteBtn.dataset.modId); }
         if (addPackBtn) { handleAddOnlineModpack(addPackBtn.dataset.packId); }
     });
     document.getElementById('hub-tab-mods').addEventListener('click', () => {
