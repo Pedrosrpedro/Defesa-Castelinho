@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addModButton = document.getElementById('add-mod-button');
     const modCodeInput = document.getElementById('mod-code-input');
     const modListContainer = document.getElementById('mod-list-container');
-    const editorTabs = document.querySelector('#mod-editor-screen .editor-tabs');
+    // A variável 'editorTabs' foi removida para evitar o erro. O listener será adicionado diretamente.
     const pixelEditorPanel = document.getElementById('pixel-editor-panel');
     const waveEditorPanel = document.getElementById('wave-editor-panel');
     const pixelGrid = document.getElementById('pixel-grid');
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
     // ### INÍCIO: NOVAS CONSTANTES PARA O HUB DE MODPACKS ###
-    const MODPACK_JSONBIN_ID = '68a0dc33ae596e708fcbaabd'; // <--- SUBSTITUA AQUI
+    const MODPACK_JSONBIN_ID = 'COLE_O_ID_DO_SEU_NOVO_BIN_AQUI'; // <--- SUBSTITUA AQUI
     const MODPACK_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${MODPACK_JSONBIN_ID}`;
     // ### FIM: NOVAS CONSTANTES ###
 
@@ -535,205 +535,6 @@ document.addEventListener('DOMContentLoaded', () => {
     async function saveCurrentGame(saveIndex = -1) { if (gameMode === 'ai') { await showCustomAlert("Não é possível salvar jogos no modo Multiplayer."); return; } let saves = getSaveGames(); let saveName; if (saveIndex !== -1 && saves[saveIndex]) { saveName = saves[saveIndex].name; } else { if (saves.length >= MAX_SAVE_SLOTS) { await showCustomAlert('Máximo de saves atingido!'); return; } saveName = await showCustomPrompt("Nome para seu jogo salvo:", `Jogo ${saves.length + 1}`); if (!saveName || saveName.trim() === '') return; } const gameState = { name: saveName.trim(), money, diamonds, currentWave, castleHealth, maxCastleHealth: MAX_CASTLE_HEALTH, currentCastleType, currentCastleEvolution, purchasedWeapons, currentWeaponIndex, guardianInventory, guardianSlots, barricades: barricades.map(b => ({ typeId: b.typeId, health: b.health, x: b.x, y: b.y })) }; if (saveIndex !== -1) { saves[saveIndex] = gameState; logDebugMessage(`Jogo "${saveName}" sobrescrito.`); } else { saves.push(gameState); } saveGameList(saves); if (saveIndex === -1) { await showCustomAlert(`Jogo "${saveName}" salvo!`); } renderSaveSlots(); }
     function loadGameFromState(state) { money = state.money; diamonds = state.diamonds; currentWave = state.currentWave - 1; purchasedWeapons = state.purchasedWeapons; currentWeaponIndex = state.currentWeaponIndex; guardianInventory = state.guardianInventory || []; guardianSlots = state.guardianSlots || [null, null, null]; isGameOver = false; isPaused = false; updateCastle(state.currentCastleType, state.currentCastleEvolution, { loadedHealth: state.castleHealth }); if(state.barricades) { barricades = []; state.barricades.forEach(bData => { const type = activeGameBarricadeTypes.find(t => t.id === bData.typeId); if(type) { placeBarricade(type, { x: bData.x, y: bData.y, health: bData.health }); } }); } updateGuardianVisuals(); updateGuardianPanel(); updateCastleHealthDisplay(false); updateDiamondDisplay(); updateMoneyDisplay(); startNextWave(); }
     
-    async function showCustomModal(message, type = 'alert', defaultValue = '') { return new Promise(resolve => { customModalMessage.textContent = message; customModalActions.innerHTML = ''; if (type === 'prompt') { customModalInput.style.display = 'block'; customModalInput.value = defaultValue; } else { customModalInput.style.display = 'none'; } if (type === 'confirm' || type === 'prompt') { const confirmBtn = document.createElement('button'); confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK'; confirmBtn.className = 'main-menu-button'; confirmBtn.style.backgroundColor = '#28a745'; confirmBtn.style.fontSize = '0.8em'; confirmBtn.style.padding = '10px 20px'; const cancelBtn = document.createElement('button'); cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar'; cancelBtn.className = 'main-menu-button'; cancelBtn.style.backgroundColor = '#dc3545'; cancelBtn.style.fontSize = '0.8em'; cancelBtn.style.padding = '10px 20px'; confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); }; cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); }; customModalActions.appendChild(cancelBtn); customModalActions.appendChild(confirmBtn); } else { const okBtn = document.createElement('button'); okBtn.textContent = 'OK'; okBtn.className = 'main-menu-button'; okBtn.style.backgroundColor = '#007bff'; okBtn.style.fontSize = '0.8em'; okBtn.style.padding = '10px 20px'; okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); }; customModalActions.appendChild(okBtn); } customModalOverlay.style.display = 'flex'; if (type === 'prompt') customModalInput.focus(); }); }
-    async function showCustomAlert(message) { return showCustomModal(message, 'alert'); }
-    async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
-    async function showCustomPrompt(message, defaultValue = '') { return showCustomModal(message, 'prompt', defaultValue); }
-
-    async function fetchOnlineMods() {
-        try {
-            const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
-            if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
-            const data = await response.json();
-            return data.record;
-        } catch (error) {
-            console.error("Falha ao carregar mods:", error);
-            onlineModList.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar mods.</p>';
-            return [];
-        }
-    }
-
-    async function fetchOnlineModpacks() {
-        try {
-            const response = await fetch(`${MODPACK_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } });
-            if (response.status === 404) return [];
-            if (!response.ok) throw new Error(`Erro: ${response.statusText}`);
-            const data = await response.json();
-            return data.record.packs || [];
-        } catch (error) {
-            console.error("Falha ao carregar modpacks online:", error);
-            return [];
-        }
-    }
-    
-    async function updateOnlineModpacks(newPacks) {
-        try {
-            const response = await fetch(MODPACK_JSONBIN_URL, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' },
-                body: JSON.stringify({ packs: newPacks })
-            });
-            if (!response.ok) throw new Error(`Erro ao atualizar: ${response.statusText}`);
-            return true;
-        } catch (error) {
-            console.error("Falha ao atualizar modpacks online:", error);
-            await showCustomAlert("Erro ao enviar modpack para o Hub.");
-            return false;
-        }
-    }
-
-    async function renderOnlineHub() {
-        const activeTab = document.querySelector('#online-mods-panel .editor-tab.active')?.dataset.hubTab || 'mods';
-        onlineModList.innerHTML = '<p>Carregando...</p>';
-        const searchTerm = onlineModSearch.value.toLowerCase();
-        onlineModList.innerHTML = '';
-    
-        if (activeTab === 'mods') {
-            let modsToDisplay = await fetchOnlineMods();
-            if (searchTerm) {
-                modsToDisplay = modsToDisplay.filter(mod => mod.name.toLowerCase().includes(searchTerm));
-            }
-            modsToDisplay.sort((a, b) => {
-                switch (onlineModSort.value) {
-                    case 'usage_desc': return (b.usageCount || 0) - (a.usageCount || 0);
-                    case 'name_asc': return a.name.localeCompare(b.name);
-                    case 'date_desc':
-                    default: return b.publishDate - a.publishDate;
-                }
-            });
-            if (modsToDisplay.length === 0) {
-                onlineModList.innerHTML = '<p>Nenhum mod encontrado.</p>';
-                return;
-            }
-            modsToDisplay.forEach(mod => {
-                const item = document.createElement('div');
-                item.className = 'online-mod-item';
-                item.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${mod.name}</span><span class="online-mod-type">${mod.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${mod.author || 'Anônimo'}</span><span>usado: ${mod.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${mod.id}" data-code="${mod.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${mod.modCode}">Copiar</button><button class="mod-button action online-mod-edit-btn" data-code="${mod.modCode}" data-name="${mod.name}">Editar</button><button class="mod-button danger online-mod-delete-btn" data-mod-id="${mod.id}">Excluir</button></div>`;
-                onlineModList.appendChild(item);
-            });
-    
-        } else { // Aba de Modpacks
-            let packsToDisplay = await fetchOnlineModpacks();
-            if (searchTerm) {
-                packsToDisplay = packsToDisplay.filter(pack => pack.name.toLowerCase().includes(searchTerm));
-            }
-            if (packsToDisplay.length === 0) {
-                onlineModList.innerHTML = '<p>Nenhum modpack encontrado.</p>';
-                return;
-            }
-            packsToDisplay.forEach(pack => {
-                const item = document.createElement('div');
-                item.className = 'online-modpack-item';
-                item.innerHTML = `
-                    <div class="online-mod-header">
-                        <span class="online-mod-name">${pack.name}</span>
-                        <span class="online-mod-type">PACK</span>
-                    </div>
-                    <div class="online-mod-info">
-                        <span>por: ${pack.author || 'Anônimo'}</span>
-                        <span>mods: ${pack.mods.length}</span>
-                    </div>
-                    <div class="online-mod-actions">
-                        <button class="mod-button secondary online-pack-add-btn" data-pack-id="${pack.id}">Adicionar Pacote</button>
-                    </div>`;
-                onlineModList.appendChild(item);
-            });
-        }
-    }
-
-    async function publishMod(index) {
-        const modToPublish = allMods[index];
-        if (!modToPublish) return;
-        const authorName = await showCustomPrompt("Digite seu nome de autor:", "Anônimo");
-        if (!authorName) return;
-        try {
-            let onlineMods = await fetchOnlineMods();
-            const modCode = btoa(JSON.stringify(modToPublish));
-            const newOnlineMod = { id: `online_${Date.now()}`, name: modToPublish.name, type: modToPublish.type, author: authorName, publishDate: Date.now(), usageCount: 0, modCode: modCode };
-            onlineMods.unshift(newOnlineMod);
-            const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) });
-            if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`);
-            await showCustomAlert(`Mod "${modToPublish.name}" publicado!`);
-            renderOnlineHub();
-        } catch (error) {
-            console.error("Falha ao publicar:", error);
-            await showCustomAlert("Erro ao publicar o mod.");
-        }
-    }
-    
-    async function publishModpack(index) {
-        const packToPublish = allModpacks[index];
-        if (!packToPublish) return;
-        const authorName = await showCustomPrompt("Digite seu nome de autor:", "Anônimo");
-        if (!authorName) return;
-        try {
-            let onlinePacks = await fetchOnlineModpacks();
-            const newOnlinePack = {
-                id: `pack_${Date.now()}`,
-                name: packToPublish.name,
-                author: authorName,
-                publishDate: Date.now(),
-                mods: packToPublish.mods
-            };
-            onlinePacks.unshift(newOnlinePack);
-            const success = await updateOnlineModpacks(onlinePacks);
-            if (success) {
-                await showCustomAlert(`Modpack "${packToPublish.name}" publicado!`);
-                renderOnlineHub();
-            }
-        } catch (error) {
-            console.error("Falha ao publicar modpack:", error);
-        }
-    }
-
-    async function handleAddOnlineModpack(packId) {
-        const onlinePacks = await fetchOnlineModpacks();
-        const packInfo = onlinePacks.find(p => p.id === packId);
-        if (!packInfo) return showCustomAlert("Modpack não encontrado no Hub.");
-        await showCustomAlert(`Baixando o pacote "${packInfo.name}". Isso pode levar um momento...`);
-        const onlineMods = await fetchOnlineMods();
-        let modsAddedCount = 0;
-        let modsSkippedCount = 0;
-        for (const modId of packInfo.mods) {
-            if (allMods.some(localMod => localMod.id === modId)) {
-                modsSkippedCount++;
-                continue;
-            }
-            const onlineMod = onlineMods.find(m => m.id.includes(modId.replace('custom_', 'online_')));
-            if (onlineMod) {
-                try {
-                    const modData = JSON.parse(atob(onlineMod.modCode));
-                    allMods.push(modData);
-                    modsAddedCount++;
-                } catch (e) {
-                    console.warn(`Falha ao adicionar o mod ${modId} do pacote.`);
-                }
-            }
-        }
-        if (modsAddedCount > 0) {
-            saveMods();
-            renderModList();
-        }
-        const localPackId = `local_${packInfo.id}`;
-        if (!allModpacks.some(p => p.id === localPackId)) {
-            const newLocalPack = { id: localPackId, name: packInfo.name, mods: packInfo.mods, active: true };
-            allModpacks.push(newLocalPack);
-            saveModpacks();
-            renderModpackList();
-        }
-        await showCustomAlert(`Pacote "${packInfo.name}" adicionado!\n${modsAddedCount} novo(s) mod(s) instalado(s).\n${modsSkippedCount} mod(s) já existiam.`);
-    }
-
-    async function editOnlineMod(code, originalName) { try { const jsonString = atob(code); let modData = JSON.parse(jsonString); modScreen.style.display = 'none'; modEditorScreen.style.display = 'flex'; initializeModEditor(); let newName = `${originalName}_edit1`; let editCount = 1; while(allMods.some(m => m.name === newName)) { editCount++; newName = `${originalName}_edit${editCount}`; } switchEditorTab(modData.type); document.getElementById('mod-name').value = newName; if (modData.type !== 'wave') { rebuildPixelGrid(modData.gridWidth || 16, modData.gridHeight || 16); document.querySelectorAll('#pixel-grid .pixel').forEach((p, i) => { p.style.backgroundColor = modData.pixelData[i] || 'transparent'; }); document.getElementById('mod-grid-width').value = modData.gridWidth || 16; document.getElementById('mod-grid-height').value = modData.gridHeight || 16; document.getElementById('mod-width').value = modData.width; document.getElementById('mod-height').value = modData.height; } if (modData.type === 'monster') { document.getElementById('mod-health').value = modData.health; document.getElementById('mod-damage').value = modData.damage; document.getElementById('mod-speed').value = modData.speed; document.getElementById('mod-money').value = modData.money; document.getElementById('mod-spawnWaves').value = modData.spawnWaves.join(','); document.getElementById('mod-spawnCount').value = modData.spawnCount; document.getElementById('mod-isFlying').value = modData.isFlying; } await showCustomAlert(`Editando cópia de "${originalName}". Salvo como "${newName}".`); } catch (error) { await showCustomAlert("Não foi possível carregar para edição."); console.error(error); } }
-    async function incrementModUsageCount(modId) { try { let onlineMods = await fetchOnlineMods(); const modIndex = onlineMods.findIndex(m => m.id === modId); if (modIndex > -1) { onlineMods[modIndex].usageCount = (onlineMods[modIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); renderOnlineHub(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
-    async function deleteOnlineModFromServer(modIdToDelete) { try { let onlineMods = await fetchOnlineMods(); const updatedMods = onlineMods.filter(mod => mod.id !== modIdToDelete); const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(updatedMods) }); if (!response.ok) { throw new Error(`Erro ao atualizar o bin: ${response.statusText}`); } return true; } catch (error) { console.error("Falha ao excluir mod do servidor:", error); return false; } }
-    async function handleDeleteOnlineMod(modId) { const password = await showCustomPrompt("Digite a senha de administrador para excluir o mod:", ""); if (password === null) return; if (password === '123456') { const success = await deleteOnlineModFromServer(modId); if (success) { await showCustomAlert("Mod excluído com sucesso da biblioteca online."); renderOnlineHub(); } else { await showCustomAlert("Ocorreu um erro ao tentar excluir o mod."); } } else { await showCustomAlert("Senha incorreta. A exclusão foi cancelada."); } }
-    function getRandomPhrase(category) { const phrases = aiPhrases[category] || ["..."]; return phrases[Math.floor(Math.random() * phrases.length)]; }
-    function runAILogic() { if (isPaused || isGameOver || isCastleAIDestroyed) return; const healItem = specialItems.full_heal; if (castleHealthAI < MAX_CASTLE_HEALTH_AI * 0.4 && diamonds >= healItem.cost) { diamonds -= healItem.cost; castleHealthAI = MAX_CASTLE_HEALTH_AI; updateDiamondDisplay(); updateCastleHealthDisplay(true); addChatMessage("IA", "Usando cura de emergência!", true); return; } const castleUpgradePath = ['wood', 'clay', 'stone', 'aluminum']; const currentAIcastleIndex = castleUpgradePath.indexOf(currentCastleTypeAI); if (currentAIcastleIndex !== -1 && currentAIcastleIndex < castleUpgradePath.length - 1) { const nextCastleId = castleUpgradePath[currentAIcastleIndex + 1]; const nextCastleInfo = castles[nextCastleId][0]; if (money >= nextCastleInfo.cost * 1.8) { money -= nextCastleInfo.cost; updateCastle(nextCastleId, 0, { isAI: true }); addChatMessage("IA", getRandomPhrase('castleUpgrade'), true); return; } } const castlePath = castles[currentCastleTypeAI]; if (currentCastleEvolutionAI < castlePath.length - 1) { const nextEvo = castlePath[currentCastleEvolutionAI + 1]; if (money > nextEvo.cost * 1.5) { if(evolveCurrentCastle(true)) { addChatMessage("IA", "Evoluindo meu castelo!", true); return; } } } if (money > 100 && Math.random() < 0.8) { for (let i = 0; i < guardianSlotsAI.length; i++) { const guardian = guardianSlotsAI[i]; if (guardian) { const type = activeGameGuardianTypes[guardian.typeId]; if (type && !type.isCustom && guardian.level < 4) { const nextEvo = type.evolutions[guardian.level]; if (money >= nextEvo.cost) { money -= nextEvo.cost; guardian.level++; addChatMessage("IA", getRandomPhrase('guardianEvolve'), true); updateMoneyDisplay(); return; } } } } const emptySlotIndex = guardianSlotsAI.findIndex(slot => slot === null); if (emptySlotIndex !== -1 && guardianInventoryAI.length > 0) { guardianSlotsAI[emptySlotIndex] = guardianInventoryAI.shift(); const type = activeGameGuardianTypes[guardianSlotsAI[emptySlotIndex].typeId]; addChatMessage("IA", `Equipando um ${type.name}.`, true); updateGuardianVisuals(); return; } if (money > 200 && (guardianInventoryAI.length + guardianSlotsAI.filter(Boolean).length) < 5) { const affordableGuardians = Object.keys(activeGameGuardianTypes).filter(id => money >= activeGameGuardianTypes[id].evolutions[0].cost); if (affordableGuardians.length > 0) { const typeId = affordableGuardians[Math.floor(Math.random() * affordableGuardians.length)]; const type = activeGameGuardianTypes[typeId]; money -= type.evolutions[0].cost; guardianInventoryAI.push({ typeId: typeId, level: 1, lastAttackTime: 0 }); addChatMessage("IA", getRandomPhrase('guardianPurchase'), true); updateMoneyDisplay(); return; } } } if (Math.random() < 0.05) { addChatMessage("IA", getRandomPhrase('idle'), true); } }
-    function addChatMessage(sender, message, isAI = false) { if (!sender || !message) return; if (chatPanel.classList.contains('hidden')) { showNotificationBubble(message, 'chat'); } const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message'; const senderSpan = document.createElement('span'); senderSpan.className = isAI ? 'sender-ai' : 'sender-player'; senderSpan.textContent = `${sender}: `; messageDiv.appendChild(senderSpan); messageDiv.append(message); chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; }
-    function showNotificationBubble(content, type) { const bubble = document.createElement('div'); bubble.className = `notification-bubble ${type}-bubble`; bubble.textContent = content; notificationBubblesContainer.appendChild(bubble); setTimeout(() => bubble.remove(), 5000); }
-    function triggerAIEmoteReaction(emote) { const reactions = aiPhrases.emoteReaction[emote] || ["..."]; const phrase = reactions[Math.floor(Math.random() * reactions.length)]; setTimeout(() => addChatMessage("IA", phrase, true), 800); }
-
     // --- Event Listeners (Main) ---
     enableDebugButton.addEventListener('click', () => { isDebugModeEnabled = !isDebugModeEnabled; enableDebugButton.textContent = `Debug: ${isDebugModeEnabled ? 'ON' : 'OFF'}`; enableDebugButton.classList.toggle('active', isDebugModeEnabled); });
     toggleLogButton.addEventListener('click', () => { debugLogOverlay.style.display = debugLogOverlay.style.display === 'flex' ? 'none' : 'flex'; });
@@ -821,7 +622,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    editorTabs.addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
+    // CORREÇÃO: Listener movido para cá para garantir que o elemento exista
+    document.querySelector('#mod-editor-screen .editor-tabs').addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
+    
     colorPalette.addEventListener('click', (e) => { const colorBox = e.target.closest('.color-box'); if (colorBox) { editorCurrentColor = colorBox.dataset.color; document.querySelectorAll('#color-palette .color-box').forEach(b => b.classList.remove('selected')); colorBox.classList.add('selected'); } });
     pencilToolBtn.addEventListener('click', () => { editorCurrentTool = 'pencil'; pencilToolBtn.classList.add('selected'); bucketToolBtn.classList.remove('selected'); eraserToolBtn.classList.remove('selected'); });
     bucketToolBtn.addEventListener('click', () => { editorCurrentTool = 'bucket'; bucketToolBtn.classList.add('selected'); pencilToolBtn.classList.remove('selected'); eraserToolBtn.classList.remove('selected'); });
