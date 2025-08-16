@@ -1,4 +1,5 @@
- // --- Elementos do DOM (Existentes) ---
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Elementos do DOM (Existentes) ---
     const introScreen = document.getElementById('intro-screen');
     const loadingScreen = document.getElementById('loading-screen'), startScreen = document.getElementById('start-screen'), newGameButton = document.getElementById('new-game-button'), gameContainer = document.getElementById('game-container'), gameArea = document.getElementById('game-area'), castleHealthBar = document.getElementById('castle-health-bar'), castleHealthText = document.getElementById('castle-health-text'), moneyDisplay = document.getElementById('money-display'), gameMessage = document.getElementById('game-message'), restartButton = document.getElementById('restart-button'), buyButtons = document.querySelectorAll('.buy-button'), waveInfo = document.getElementById('wave-info'), grassElementsContainer = document.getElementById('grass-elements-container'), castleElement = document.getElementById('castle'), pauseButton = document.getElementById('pause-button'), shopToggleButton = document.getElementById('shop-toggle-button'), gameUI = document.getElementById('game-ui'), barricadeGhost = document.getElementById('barricade-ghost'), placementModeOverlay = document.getElementById('placement-mode-overlay'), cancelPlacementButton = document.getElementById('cancel-placement-button');
     const backToMenuButton = document.getElementById('back-to-menu-button');
@@ -20,11 +21,12 @@
     const modScreen = document.getElementById('mod-screen');
     const modEditorScreen = document.getElementById('mod-editor-screen');
     const backToMenuFromModsButton = document.getElementById('back-to-menu-from-mods-button');
-    const createNewModButton = document.getElementById('create-new-mod-button');
+    // ### ALTERAÇÃO: Renomeado para botão genérico ###
+    const createNewButton = document.getElementById('create-new-button');
     const addModButton = document.getElementById('add-mod-button');
     const modCodeInput = document.getElementById('mod-code-input');
     const modListContainer = document.getElementById('mod-list-container');
-    const modEditorTabs = document.querySelector('#mod-editor-screen .editor-tabs');
+    const editorTabs = document.querySelector('.editor-tabs');
     const pixelEditorPanel = document.getElementById('pixel-editor-panel');
     const waveEditorPanel = document.getElementById('wave-editor-panel');
     const pixelGrid = document.getElementById('pixel-grid');
@@ -100,20 +102,8 @@
     const notificationDeclineBtn = document.getElementById('notification-decline-btn');
     const postGameStats = document.getElementById('post-game-stats');
     const gameOverTitle = document.getElementById('game-over-title');
-    
-    // --- INÍCIO: NOVOS ELEMENTOS DOM PARA MODPACKS ---
-    const modpackEditorScreen = document.getElementById('modpack-editor-screen');
-    const createNewModpackButton = document.getElementById('create-new-modpack-button');
-    const cancelModpackCreationButton = document.getElementById('cancel-modpack-creation-button');
-    const saveModpackButton = document.getElementById('save-modpack-button');
-    const modpackNameInput = document.getElementById('modpack-name');
-    const modpackDescriptionInput = document.getElementById('modpack-description');
-    const selectedModsList = document.getElementById('selected-mods-list');
-    const availableModsList = document.getElementById('available-mods-list');
-    const modpackListContainer = document.getElementById('modpack-list-container');
-    const onlineModpackList = document.getElementById('online-modpack-list');
 
-    // --- FIM: NOVOS ELEMENTOS DOM PARA DMS E GRUPOS ---
+    // --- Elementos DOM para DMS E GRUPOS ---
     const dmGroupsOverlay = document.getElementById('dm-and-groups-overlay');
     const dmGroupsMainPanel = document.getElementById('dm-groups-main-panel');
     const dmListContainer = document.getElementById('dm-list');
@@ -129,7 +119,20 @@
     const createGroupNameInput = document.getElementById('create-group-name');
     const createGroupFriendsList = document.getElementById('create-group-friends-list');
     const createGroupConfirmBtn = document.getElementById('create-group-confirm-btn');
-    // --- FIM: NOVOS ELEMENTOS DOM ---
+
+    // --- ### INÍCIO: NOVOS ELEMENTOS DOM PARA MODPACKS ### ---
+    const modTabLocal = document.getElementById('mod-tab-local');
+    const modTabPacks = document.getElementById('mod-tab-packs');
+    const localModsContent = document.getElementById('local-mods-content');
+    const modpacksContent = document.getElementById('modpacks-content');
+    const modpackListContainer = document.getElementById('modpack-list-container');
+    const modpackEditorOverlay = document.getElementById('modpack-editor-overlay');
+    const modpackEditorTitle = document.getElementById('modpack-editor-title');
+    const modpackNameInput = document.getElementById('modpack-name-input');
+    const addModsToPackList = document.getElementById('add-mods-to-pack-list');
+    const cancelModpackCreationButton = document.getElementById('cancel-modpack-creation-button');
+    const saveModpackButton = document.getElementById('save-modpack-button');
+    // --- ### FIM: NOVOS ELEMENTOS DOM PARA MODPACKS ### ---
 
     // --- Configurações do Jogo ---
     const weapons = [ { name: "Cuspe", damage: 2, cost: 0, cooldown: 500, color: '#add8e6', size: 8, speed: 8, cssClass: 'spit' }, { name: "Pedra", damage: 8, cost: 50, cooldown: 400, color: '#8B4513', size: 12, speed: 10, cssClass: 'stone' }, { name: "Bomba de Tinta", damage: 20, cost: 150, cooldown: 800, color: '#FF00FF', size: 20, speed: 6, cssClass: 'ink', effect: 'slow' }, { name: "Bola de Fogo", damage: 50, cost: 400, cooldown: 1200, color: '#FF4500', size: 25, speed: 7, cssClass: 'fire' }, { name: "Papergun", damage: 10, cost: 500, cooldown: 250, color: '#e9ecef', size: 10, speed: 12, cssClass: 'paper' } ];
@@ -187,7 +190,11 @@
     
     // --- Estado do Modding ---
     let allMods = [];
-    let allModpacks = []; // NOVO: Estado para Modpacks
+    // ### NOVO: Estado para Modpacks ###
+    let allModpacks = []; 
+    let currentModpackEditing = null; // Guarda o ID do modpack sendo editado
+    let currentModTab = 'local'; // 'local' ou 'packs'
+
     let activeGameMonsterTypes, activeGameGuardianTypes, activeGameBarricadeTypes, customWaveDefinitions;
     let editorCurrentType = 'monster', editorCurrentColor = '#FFFFFF', isDrawing = false, editorCurrentTool = 'pencil';
     let newlyCreatedMod = null; 
@@ -265,33 +272,118 @@
     // --- Funções de Modding ---
     function loadMods() { const storedMods = localStorage.getItem('castleDefenseMods'); if (storedMods) { try { allMods = JSON.parse(storedMods).filter(mod => mod && mod.id && mod.type && mod.name); } catch(e) { console.error("Erro ao carregar mods do localStorage, limpando...", e); allMods = []; localStorage.removeItem('castleDefenseMods'); } } else { allMods = []; } }
     function saveMods() { localStorage.setItem('castleDefenseMods', JSON.stringify(allMods)); }
-    function renderModList() { modListContainer.innerHTML = ''; if (allMods.length === 0) { modListContainer.innerHTML = '<p style="text-align:center; font-size: 0.8em; color: #888;">Nenhum mod adicionado.</p>'; return; } allMods.forEach((mod, index) => { if (!mod || !mod.type) { console.warn('Ignorando mod inválido:', index, mod); return; } const item = document.createElement('div'); item.className = 'mod-list-item'; item.innerHTML = `<span class="mod-list-item-name">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</span><div class="mod-list-item-controls"><button class="mod-button info mod-publish-btn" data-type="mod" style="padding: 4px 8px; font-size: 0.6em;" data-index="${index}">Publicar</button><label class="mod-toggle"><input type="checkbox" class="mod-toggle-check" data-index="${index}" ${mod.active ? 'checked' : ''}><span class="mod-toggle-slider"></span></label><button class="mod-button danger mod-delete-btn" data-index="${index}">X</button></div>`; modListContainer.appendChild(item); }); }
+    function renderModList() { modListContainer.innerHTML = ''; if (allMods.length === 0) { modListContainer.innerHTML = '<p style="text-align:center; font-size: 0.8em; color: #888;">Nenhum mod adicionado.</p>'; return; } allMods.forEach((mod, index) => { if (!mod || !mod.type) { console.warn('Ignorando mod inválido:', index, mod); return; } const item = document.createElement('div'); item.className = 'mod-list-item'; item.innerHTML = `<span class="mod-list-item-name">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</span><div class="mod-list-item-controls"><button class="mod-button info mod-publish-btn" style="padding: 4px 8px; font-size: 0.6em;" data-index="${index}">Publicar</button><label class="mod-toggle"><input type="checkbox" class="mod-toggle-check" data-index="${index}" ${mod.active ? 'checked' : ''}><span class="mod-toggle-slider"></span></label><button class="mod-button danger mod-delete-btn" data-index="${index}">X</button></div>`; modListContainer.appendChild(item); }); }
     
-    // --- INÍCIO: NOVAS FUNÇÕES PARA MODPACKS ---
-    function loadModpacks() { const stored = localStorage.getItem('castleDefenseModpacks'); if (stored) { try { allModpacks = JSON.parse(stored).filter(p => p && p.id && p.name && Array.isArray(p.mods)); } catch(e) { console.error("Erro ao carregar modpacks, limpando...", e); allModpacks = []; localStorage.removeItem('castleDefenseModpacks'); } } else { allModpacks = []; } }
+    // --- ### INÍCIO: NOVAS FUNÇÕES PARA MODPACKS ### ---
+    function loadModpacks() { const stored = localStorage.getItem('castleDefenseModpacks'); if (stored) { try { allModpacks = JSON.parse(stored); } catch (e) { console.error("Erro ao carregar modpacks:", e); allModpacks = []; localStorage.removeItem('castleDefenseModpacks'); } } else { allModpacks = []; } }
     function saveModpacks() { localStorage.setItem('castleDefenseModpacks', JSON.stringify(allModpacks)); }
-    function renderModpackList() { modpackListContainer.innerHTML = ''; if (allModpacks.length === 0) { modpackListContainer.innerHTML = '<p style="text-align:center; font-size: 0.8em; color: #888;">Nenhum modpack criado.</p>'; return; } allModpacks.forEach((pack, index) => { const item = document.createElement('div'); item.className = 'modpack-list-item'; item.innerHTML = `<div><div class="mod-list-item-name">${pack.name}</div><div class="modpack-item-info">${pack.mods.length} mod(s)</div></div><div class="mod-list-item-controls"><button class="mod-button info mod-publish-btn" data-type="modpack" style="padding: 4px 8px; font-size: 0.6em;" data-index="${index}">Publicar</button><label class="mod-toggle"><input type="checkbox" class="modpack-toggle-check" data-index="${index}" ${pack.active ? 'checked' : ''}><span class="mod-toggle-slider"></span></label><button class="mod-button danger modpack-delete-btn" data-index="${index}">X</button></div>`; modpackListContainer.appendChild(item); }); }
-    
-    function initializeModpackEditor() {
-        modpackNameInput.value = '';
-        modpackDescriptionInput.value = '';
-        selectedModsList.innerHTML = '<p class="empty-list-msg">Adicione mods da lista à direita.</p>';
-        availableModsList.innerHTML = '';
 
-        if (allMods.length === 0) {
-            availableModsList.innerHTML = '<p class="empty-list-msg">Você não tem mods para adicionar.</p>';
+    function renderModpackList() {
+        modpackListContainer.innerHTML = '';
+        if (allModpacks.length === 0) {
+            modpackListContainer.innerHTML = '<p style="text-align:center; font-size: 0.8em; color: #888;">Nenhum modpack criado. Clique em "Criar Novo Modpack" abaixo!</p>';
             return;
         }
-
-        allMods.forEach(mod => {
+        allModpacks.forEach((pack, index) => {
             const item = document.createElement('div');
-            item.className = 'available-mod-item';
-            item.innerHTML = `<span>[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</span><button class="mod-button secondary" data-mod-id="${mod.id}">+</button>`;
-            availableModsList.appendChild(item);
+            item.className = 'modpack-list-item';
+            const modCount = pack.mods ? pack.mods.length : 0;
+            item.innerHTML = `
+                <span class="mod-list-item-name">${pack.name} (${modCount} mods)</span>
+                <div class="mod-list-item-controls">
+                    <button class="mod-button secondary modpack-edit-btn" data-index="${index}" style="font-size: 0.7em;">Editar</button>
+                    <label class="mod-toggle">
+                        <input type="checkbox" class="modpack-toggle-check" data-index="${index}" ${pack.active ? 'checked' : ''}>
+                        <span class="mod-toggle-slider"></span>
+                    </label>
+                    <button class="mod-button danger modpack-delete-btn" data-index="${index}">X</button>
+                </div>`;
+            modpackListContainer.appendChild(item);
         });
     }
-    // --- FIM: NOVAS FUNÇÕES PARA MODPACKS ---
-    
+
+    function openModpackEditor(packIndex = null) {
+        currentModpackEditing = packIndex;
+        modpackEditorOverlay.style.display = 'flex';
+        
+        const allAvailableMods = [...allMods]; // Futuramente, pode incluir mods do Hub aqui
+        let existingModIds = [];
+
+        if (packIndex !== null) {
+            const pack = allModpacks[packIndex];
+            modpackEditorTitle.textContent = "Editar Modpack";
+            modpackNameInput.value = pack.name;
+            existingModIds = pack.mods || [];
+        } else {
+            modpackEditorTitle.textContent = "Criar Novo Modpack";
+            modpackNameInput.value = "";
+        }
+
+        addModsToPackList.innerHTML = '';
+        if(allAvailableMods.length === 0) {
+            addModsToPackList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum mod local ou do hub para adicionar.</p>';
+        }
+        allAvailableMods.forEach(mod => {
+            const isChecked = existingModIds.includes(mod.id);
+            const item = document.createElement('div');
+            item.className = 'add-mod-to-pack-item';
+            item.innerHTML = `
+                <input type="checkbox" id="add-mod-${mod.id}" data-mod-id="${mod.id}" ${isChecked ? 'checked' : ''}>
+                <label for="add-mod-${mod.id}">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</label>
+            `;
+            addModsToPackList.appendChild(item);
+        });
+    }
+
+    function saveModpack() {
+        const name = modpackNameInput.value.trim();
+        if (!name) {
+            showCustomAlert("O modpack precisa de um nome.");
+            return;
+        }
+        const selectedModIds = Array.from(addModsToPackList.querySelectorAll('input:checked'))
+                                   .map(input => input.dataset.modId);
+
+        if (currentModpackEditing !== null) {
+            // Editando um pack existente
+            allModpacks[currentModpackEditing].name = name;
+            allModpacks[currentModpackEditing].mods = selectedModIds;
+        } else {
+            // Criando um novo pack
+            const newPack = {
+                id: `pack_${Date.now()}`,
+                name: name,
+                mods: selectedModIds,
+                active: true
+            };
+            allModpacks.push(newPack);
+        }
+        
+        saveModpacks();
+        renderModpackList();
+        modpackEditorOverlay.style.display = 'none';
+        currentModpackEditing = null;
+    }
+
+    function switchModManagerTab(tabName) {
+        currentModTab = tabName;
+        // Atualiza a aparência das abas
+        document.querySelectorAll('#mod-screen .editor-tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(`mod-tab-${tabName}`).classList.add('active');
+
+        // Mostra/esconde o conteúdo
+        document.querySelectorAll('.mod-tab-content').forEach(content => content.classList.remove('active'));
+        if (tabName === 'local') {
+            localModsContent.classList.add('active');
+            createNewButton.textContent = "Criar Novo Mod";
+        } else {
+            modpacksContent.classList.add('active');
+            createNewButton.textContent = "Criar Novo Modpack";
+        }
+    }
+    // --- ### FIM: NOVAS FUNÇÕES PARA MODPACKS ### ---
+
+
     function rebuildPixelGrid(width, height) { editorGridSize.width = width; editorGridSize.height = height; pixelGrid.innerHTML = ''; pixelGrid.style.setProperty('--grid-width', width); pixelGrid.style.setProperty('--grid-height', height); for (let i = 0; i < width * height; i++) { const pixel = document.createElement('div'); pixel.className = 'pixel'; pixel.style.backgroundColor = 'transparent'; pixelGrid.appendChild(pixel); } }
     function initializeModEditor() { rebuildPixelGrid(16, 16); colorPalette.innerHTML = ''; editorPaletteColors.forEach(color => { const colorBox = document.createElement('div'); colorBox.className = 'color-box'; colorBox.style.backgroundColor = color === 'transparent' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAACdJREFUOE9jZGBgEGHAD97/p0+f/v//PxMDw585858ZGBgY/j98+PA/AAAU4gH4Y0Y1iAAAAABJRU5ErkJggg==")' : color; colorBox.dataset.color = color; if (color === editorCurrentColor) colorBox.classList.add('selected'); colorPalette.appendChild(colorBox); }); waveMonsterList.innerHTML = ''; switchEditorTab('monster'); }
     function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
@@ -609,33 +701,45 @@
 
     // --- Funções do Jogo (Existentes) ---
     function logDebugMessage(message, type = 'info') { if (!isDebugModeEnabled) return; const entry = document.createElement('div'); entry.className = `log-entry ${type}`; entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> ${message}`; debugLogContent.appendChild(entry); debugLogContent.scrollTop = debugLogContent.scrollHeight; }
+    
+    // ### ALTERAÇÃO: Função modificada para incluir Modpacks ###
     function prepareActiveGameData(selectedModIds = null) {
-        let finalModsToProcess = new Set();
-        const modsToConsider = selectedModIds ? allMods.filter(m => selectedModIds.includes(m.id)) : allMods.filter(m => m.active);
-        modsToConsider.forEach(mod => finalModsToProcess.add(mod));
-    
-        const activeModpacks = allModpacks.filter(p => p.active);
-        activeModpacks.forEach(pack => {
-            pack.mods.forEach(modId => {
-                const mod = allMods.find(m => m.id === modId);
-                if (mod) {
-                    finalModsToProcess.add(mod);
-                }
-            });
-        });
-    
+        let modsToProcess;
+
+        if (selectedModIds) {
+            // Se IDs específicos são passados (do lobby multiplayer), usa eles
+            modsToProcess = allMods.filter(m => selectedModIds.includes(m.id));
+        } else {
+            // Para single-player, considera mods individuais E mods de packs ativos
+            const activeIndividualMods = allMods.filter(m => m.active);
+            const activeModpackMods = allModpacks
+                .filter(pack => pack.active)
+                .flatMap(pack => pack.mods) // Pega todos os IDs de mods dos packs ativos
+                .map(modId => allMods.find(m => m.id === modId)) // Encontra os objetos de mod correspondentes
+                .filter(Boolean); // Remove mods não encontrados (se houver)
+
+            // Usa um Map para garantir que cada mod seja incluído apenas uma vez
+            const allActiveModsMap = new Map();
+            activeIndividualMods.forEach(mod => allActiveModsMap.set(mod.id, mod));
+            activeModpackMods.forEach(mod => allActiveModsMap.set(mod.id, mod));
+
+            modsToProcess = Array.from(allActiveModsMap.values());
+        }
+
+        // O resto da função permanece igual
         activeGameMonsterTypes = [...baseMonsterTypes];
         activeGameBarricadeTypes = [...baseBarricadeTypes];
         activeGameGuardianTypes = JSON.parse(JSON.stringify(baseGuardianTypes));
         customWaveDefinitions = {};
-    
-        finalModsToProcess.forEach(mod => {
+
+        modsToProcess.forEach(mod => {
             if (mod.type === 'monster') { activeGameMonsterTypes.push({ ...mod, elementCreator: () => createCustomModElement(mod), attackType: 'melee' }); }
             else if (mod.type === 'barricade') { activeGameBarricadeTypes.push({ ...mod, color: 'transparent', border: '2px solid #ccc', isCustom: true }); }
             else if (mod.type === 'guardian') { activeGameGuardianTypes[mod.id] = { name: mod.name, isCustom: true, modData: mod, evolutions: [{ cost: mod.cost, damage: mod.damage, cooldown: mod.cooldown, range: mod.range }], projectile: { speed: mod.projectileSpeed, size: mod.projectileSize, color: mod.projectileColor, cssClass: 'custom' } }; }
             else if (mod.type === 'wave') { customWaveDefinitions[mod.waveNumber] = mod.spawns; }
         });
     }
+
     function initializeGame(mode = 'single', options = {}) {
         const { savedState = null, selectedModIds = null, saveIndex = null } = options;
         gameMode = mode; loadedSaveSlotIndex = saveIndex;
@@ -699,9 +803,9 @@
     async function endGame(message) { isGameOver = true; clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); castleAbilityIntervals.forEach(clearInterval); if(castleAbilityIntervalsAI) castleAbilityIntervalsAI.forEach(clearInterval); logDebugMessage(`Fim de jogo: ${message}`, 'error'); const { trophiesGained, newTotalTrophies } = await updatePlayerStatsAndTrophies(); gameOverTitle.textContent = message; if (currentUser && !isDebugModeEnabled && !isGodMode) { postGameStats.innerHTML = `Estatísticas da Partida:<br>Dinheiro: $${money} | Diamantes: ${diamonds} | Onda: ${currentWave}<br>Troféus Ganhos: ${trophiesGained > 0 ? '+' : ''}${trophiesGained} 🏆<br>Total de Troféus: ${Math.floor(newTotalTrophies)} 🏆`; postGameStats.style.display = 'block'; } else { postGameStats.style.display = 'none'; } gameMessage.style.display = 'flex'; }
     function startGameLoop() { if (gameLoopInterval) clearInterval(gameLoopInterval); gameLoopInterval = setInterval(gameLoop, 1000 / 60); }
     function togglePause(forcePause = null) { isPaused = forcePause !== null ? forcePause : !isPaused; logDebugMessage(isPaused ? "Jogo Pausado" : "Jogo Retomado"); pauseButton.textContent = isPaused ? 'Continuar' : 'Pause'; if (isPaused) { clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); } else { startGameLoop(); if (monstersSpawnedThisWave < totalMonstersToSpawn) monsterSpawnInterval = setInterval(() => { if(monstersSpawnedThisWave < totalMonstersToSpawn) spawnMonster(); else clearInterval(monsterSpawnInterval); }, 500); } if (placingBarricade) barricadeGhost.style.display = isPaused ? 'block' : 'none'; }
-    function showIntroScreen() { introScreen.style.display = 'flex'; loadingScreen.style.display = 'none'; startScreen.style.display = 'none'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; modpackEditorScreen.style.display = 'none'; setTimeout(() => { introScreen.style.display = 'none'; showLoadingScreen(); }, 4000); }
+    function showIntroScreen() { introScreen.style.display = 'flex'; loadingScreen.style.display = 'none'; startScreen.style.display = 'none'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; setTimeout(() => { introScreen.style.display = 'none'; showLoadingScreen(); }, 4000); }
     function showLoadingScreen() { loadingScreen.style.display = 'flex'; startScreen.style.display = 'none'; gameContainer.style.display = 'block'; setTimeout(() => { loadingScreen.style.display = 'none'; showStartScreen(); }, 1000); }
-    function showStartScreen() { gameMessage.style.display = 'none'; startScreen.style.display = 'flex'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; playerCastleIndicator.style.display = 'none'; socialOverlay.style.display = 'none'; dmGroupsOverlay.style.display = 'none'; gameContainer.style.display = 'block'; modpackEditorScreen.style.display = 'none'; renderSaveSlots(); }
+    function showStartScreen() { gameMessage.style.display = 'none'; startScreen.style.display = 'flex'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; playerCastleIndicator.style.display = 'none'; socialOverlay.style.display = 'none'; dmGroupsOverlay.style.display = 'none'; gameContainer.style.display = 'block'; renderSaveSlots(); }
     function showLobbyScreen() { if (!currentUser) { showCustomAlert("Você precisa estar logado para acessar o modo multiplayer."); return; } startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'flex'; }
     function showModSelectionScreen() { multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'flex'; modSelectionList.innerHTML = ''; const activeLocalMods = allMods.filter(m => m.active); if(activeLocalMods.length === 0) { modSelectionList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum mod local ativo encontrado.</p>'; } else { activeLocalMods.forEach(mod => { const item = document.createElement('div'); item.className = 'mod-selection-item'; item.innerHTML = `<input type="checkbox" id="mod-select-${mod.id}" data-mod-id="${mod.id}" checked><label for="mod-select-${mod.id}">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</label>`; modSelectionList.appendChild(item); }); } }
     function startGame(mode, options = {}) { startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; initializeGame(mode, options); }
@@ -716,12 +820,12 @@
     async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
     async function showCustomPrompt(message, defaultValue = '') { return showCustomModal(message, 'prompt', defaultValue); }
     async function fetchOnlineMods() { try { const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } }); if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return data.record; } catch (error) { console.error("Falha ao carregar mods:", error); onlineModList.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar mods.</p>'; return []; } }
-    async function renderOnlineMods() { onlineModList.innerHTML = '<p>Carregando...</p>'; onlineModpackList.innerHTML = '<p>Carregando...</p>'; let onlineContent = await fetchOnlineMods(); const searchTerm = onlineModSearch.value.toLowerCase(); const sortMethod = onlineModSort.value; if (searchTerm) { onlineContent = onlineContent.filter(item => item.name.toLowerCase().includes(searchTerm)); } onlineContent.sort((a, b) => { switch (sortMethod) { case 'usage_desc': return (b.usageCount || 0) - (a.usageCount || 0); case 'name_asc': return a.name.localeCompare(b.name); case 'date_desc': default: return (b.publishDate || 0) - (a.publishDate || 0); } }); const modsToDisplay = onlineContent.filter(item => item.itemType === 'mod' || !item.itemType); const packsToDisplay = onlineContent.filter(item => item.itemType === 'modpack'); onlineModList.innerHTML = ''; if (modsToDisplay.length === 0) { onlineModList.innerHTML = '<p>Nenhum mod encontrado.</p>'; } else { modsToDisplay.forEach(mod => { const item = document.createElement('div'); item.className = 'online-mod-item'; item.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${mod.name}</span><span class="online-mod-type">${mod.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${mod.author || 'Anônimo'}</span><span>usado: ${mod.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${mod.id}" data-code="${mod.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${mod.modCode}">Copiar</button><button class="mod-button action online-mod-edit-btn" data-code="${mod.modCode}" data-name="${mod.name}">Editar</button><button class="mod-button danger online-mod-delete-btn" data-mod-id="${mod.id}">Excluir</button></div>`; onlineModList.appendChild(item); }); } onlineModpackList.innerHTML = ''; if (packsToDisplay.length === 0) { onlineModpackList.innerHTML = '<p>Nenhum modpack encontrado.</p>'; } else { packsToDisplay.forEach(pack => { const item = document.createElement('div'); item.className = 'online-mod-item modpack'; item.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${pack.name}</span><span class="online-mod-type">P</span></div><div class="online-mod-info"><span>por: ${pack.author || 'Anônimo'}</span><span>${pack.mods.length} mod(s)</span><span>usado: ${pack.usageCount || 0}x</span></div><p class="online-mod-desc">${pack.description || 'Sem descrição.'}</p><div class="online-mod-actions"><button class="mod-button secondary online-pack-install-btn" data-pack-id="${pack.id}">Instalar</button><button class="mod-button danger online-mod-delete-btn" data-mod-id="${pack.id}">Excluir</button></div>`; onlineModpackList.appendChild(item); }); } }
-    async function publishContent(index, type) { const contentToPublish = type === 'mod' ? allMods[index] : allModpacks[index]; if (!contentToPublish) return; const authorName = await showCustomPrompt("Digite seu nome de autor:", (currentUser ? currentUser.username : "Anônimo")); if (!authorName) return; try { let onlineContent = await fetchOnlineMods(); let newOnlineItem; if (type === 'mod') { const modCode = btoa(JSON.stringify(contentToPublish)); newOnlineItem = { itemType: 'mod', id: `online_${Date.now()}`, name: contentToPublish.name, type: contentToPublish.type, author: authorName, publishDate: Date.now(), usageCount: 0, modCode: modCode }; } else { // Modpack const modsWithFullData = contentToPublish.mods.map(modId => allMods.find(m => m.id === modId)).filter(Boolean); newOnlineItem = { itemType: 'modpack', id: `online_pack_${Date.now()}`, name: contentToPublish.name, description: contentToPublish.description, author: authorName, publishDate: Date.now(), usageCount: 0, mods: modsWithFullData }; } onlineContent.unshift(newOnlineItem); const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineContent) }); if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`); await showCustomAlert(`"${contentToPublish.name}" publicado!`); renderOnlineMods(); } catch (error) { console.error("Falha ao publicar:", error); await showCustomAlert("Erro ao publicar."); } }
+    async function renderOnlineMods() { onlineModList.innerHTML = '<p>Carregando...</p>'; let modsToDisplay = await fetchOnlineMods(); const searchTerm = onlineModSearch.value.toLowerCase(); const sortMethod = onlineModSort.value; if (searchTerm) modsToDisplay = modsToDisplay.filter(mod => mod.name.toLowerCase().includes(searchTerm)); modsToDisplay.sort((a, b) => { switch (sortMethod) { case 'usage_desc': return (b.usageCount || 0) - (a.usageCount || 0); case 'name_asc': return a.name.localeCompare(b.name); case 'date_desc': default: return b.publishDate - a.publishDate; } }); onlineModList.innerHTML = ''; if (modsToDisplay.length === 0) { onlineModList.innerHTML = '<p>Nenhum mod encontrado.</p>'; return; } modsToDisplay.forEach(mod => { const item = document.createElement('div'); item.className = 'online-mod-item'; item.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${mod.name}</span><span class="online-mod-type">${mod.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${mod.author || 'Anônimo'}</span><span>usado: ${mod.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${mod.id}" data-code="${mod.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${mod.modCode}">Copiar</button><button class="mod-button action online-mod-edit-btn" data-code="${mod.modCode}" data-name="${mod.name}">Editar</button><button class="mod-button danger online-mod-delete-btn" data-mod-id="${mod.id}">Excluir</button></div>`; onlineModList.appendChild(item); }); }
+    async function publishMod(index) { const modToPublish = allMods[index]; if (!modToPublish) return; const authorName = await showCustomPrompt("Digite seu nome de autor:", "Anônimo"); if (!authorName) return; try { let onlineMods = await fetchOnlineMods(); const modCode = btoa(JSON.stringify(modToPublish)); const newOnlineMod = { id: `online_${Date.now()}`, name: modToPublish.name, type: modToPublish.type, author: authorName, publishDate: Date.now(), usageCount: 0, modCode: modCode }; onlineMods.unshift(newOnlineMod); const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`); await showCustomAlert(`Mod "${modToPublish.name}" publicado!`); renderOnlineMods(); } catch (error) { console.error("Falha ao publicar:", error); await showCustomAlert("Erro ao publicar o mod."); } }
     async function editOnlineMod(code, originalName) { try { const jsonString = atob(code); let modData = JSON.parse(jsonString); modScreen.style.display = 'none'; modEditorScreen.style.display = 'flex'; initializeModEditor(); let newName = `${originalName}_edit1`; let editCount = 1; while(allMods.some(m => m.name === newName)) { editCount++; newName = `${originalName}_edit${editCount}`; } switchEditorTab(modData.type); document.getElementById('mod-name').value = newName; if (modData.type !== 'wave') { rebuildPixelGrid(modData.gridWidth || 16, modData.gridHeight || 16); document.querySelectorAll('#pixel-grid .pixel').forEach((p, i) => { p.style.backgroundColor = modData.pixelData[i] || 'transparent'; }); document.getElementById('mod-grid-width').value = modData.gridWidth || 16; document.getElementById('mod-grid-height').value = modData.gridHeight || 16; document.getElementById('mod-width').value = modData.width; document.getElementById('mod-height').value = modData.height; } if (modData.type === 'monster') { document.getElementById('mod-health').value = modData.health; document.getElementById('mod-damage').value = modData.damage; document.getElementById('mod-speed').value = modData.speed; document.getElementById('mod-money').value = modData.money; document.getElementById('mod-spawnWaves').value = modData.spawnWaves.join(','); document.getElementById('mod-spawnCount').value = modData.spawnCount; document.getElementById('mod-isFlying').value = modData.isFlying; } await showCustomAlert(`Editando cópia de "${originalName}". Salvo como "${newName}".`); } catch (error) { await showCustomAlert("Não foi possível carregar para edição."); console.error(error); } }
-    async function incrementModUsageCount(modId) { try { let onlineContent = await fetchOnlineMods(); const itemIndex = onlineContent.findIndex(m => m.id === modId); if (itemIndex > -1) { onlineContent[itemIndex].usageCount = (onlineContent[itemIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineContent) }); renderOnlineMods(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
+    async function incrementModUsageCount(modId) { try { let onlineMods = await fetchOnlineMods(); const modIndex = onlineMods.findIndex(m => m.id === modId); if (modIndex > -1) { onlineMods[modIndex].usageCount = (onlineMods[modIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); renderOnlineMods(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
     async function deleteOnlineModFromServer(modIdToDelete) { try { let onlineMods = await fetchOnlineMods(); const updatedMods = onlineMods.filter(mod => mod.id !== modIdToDelete); const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(updatedMods) }); if (!response.ok) { throw new Error(`Erro ao atualizar o bin: ${response.statusText}`); } return true; } catch (error) { console.error("Falha ao excluir mod do servidor:", error); return false; } }
-    async function handleDeleteOnlineMod(modId) { const password = await showCustomPrompt("Digite a senha de administrador para excluir o item:", ""); if (password === null) return; if (password === '123456') { const success = await deleteOnlineModFromServer(modId); if (success) { await showCustomAlert("Item excluído com sucesso da biblioteca online."); renderOnlineMods(); } else { await showCustomAlert("Ocorreu um erro ao tentar excluir o item."); } } else { await showCustomAlert("Senha incorreta. A exclusão foi cancelada."); } }
+    async function handleDeleteOnlineMod(modId) { const password = await showCustomPrompt("Digite a senha de administrador para excluir o mod:", ""); if (password === null) return; if (password === '123456') { const success = await deleteOnlineModFromServer(modId); if (success) { await showCustomAlert("Mod excluído com sucesso da biblioteca online."); renderOnlineMods(); } else { await showCustomAlert("Ocorreu um erro ao tentar excluir o mod."); } } else { await showCustomAlert("Senha incorreta. A exclusão foi cancelada."); } }
     function getRandomPhrase(category) { const phrases = aiPhrases[category] || ["..."]; return phrases[Math.floor(Math.random() * phrases.length)]; }
     function runAILogic() { if (isPaused || isGameOver || isCastleAIDestroyed) return; const healItem = specialItems.full_heal; if (castleHealthAI < MAX_CASTLE_HEALTH_AI * 0.4 && diamonds >= healItem.cost) { diamonds -= healItem.cost; castleHealthAI = MAX_CASTLE_HEALTH_AI; updateDiamondDisplay(); updateCastleHealthDisplay(true); addChatMessage("IA", "Usando cura de emergência!", true); return; } const castleUpgradePath = ['wood', 'clay', 'stone', 'aluminum']; const currentAIcastleIndex = castleUpgradePath.indexOf(currentCastleTypeAI); if (currentAIcastleIndex !== -1 && currentAIcastleIndex < castleUpgradePath.length - 1) { const nextCastleId = castleUpgradePath[currentAIcastleIndex + 1]; const nextCastleInfo = castles[nextCastleId][0]; if (money >= nextCastleInfo.cost * 1.8) { money -= nextCastleInfo.cost; updateCastle(nextCastleId, 0, { isAI: true }); addChatMessage("IA", getRandomPhrase('castleUpgrade'), true); return; } } const castlePath = castles[currentCastleTypeAI]; if (currentCastleEvolutionAI < castlePath.length - 1) { const nextEvo = castlePath[currentCastleEvolutionAI + 1]; if (money > nextEvo.cost * 1.5) { if(evolveCurrentCastle(true)) { addChatMessage("IA", "Evoluindo meu castelo!", true); return; } } } if (money > 100 && Math.random() < 0.8) { for (let i = 0; i < guardianSlotsAI.length; i++) { const guardian = guardianSlotsAI[i]; if (guardian) { const type = activeGameGuardianTypes[guardian.typeId]; if (type && !type.isCustom && guardian.level < 4) { const nextEvo = type.evolutions[guardian.level]; if (money >= nextEvo.cost) { money -= nextEvo.cost; guardian.level++; addChatMessage("IA", getRandomPhrase('guardianEvolve'), true); updateMoneyDisplay(); return; } } } } const emptySlotIndex = guardianSlotsAI.findIndex(slot => slot === null); if (emptySlotIndex !== -1 && guardianInventoryAI.length > 0) { guardianSlotsAI[emptySlotIndex] = guardianInventoryAI.shift(); const type = activeGameGuardianTypes[guardianSlotsAI[emptySlotIndex].typeId]; addChatMessage("IA", `Equipando um ${type.name}.`, true); updateGuardianVisuals(); return; } if (money > 200 && (guardianInventoryAI.length + guardianSlotsAI.filter(Boolean).length) < 5) { const affordableGuardians = Object.keys(activeGameGuardianTypes).filter(id => money >= activeGameGuardianTypes[id].evolutions[0].cost); if (affordableGuardians.length > 0) { const typeId = affordableGuardians[Math.floor(Math.random() * affordableGuardians.length)]; const type = activeGameGuardianTypes[typeId]; money -= type.evolutions[0].cost; guardianInventoryAI.push({ typeId: typeId, level: 1, lastAttackTime: 0 }); addChatMessage("IA", getRandomPhrase('guardianPurchase'), true); updateMoneyDisplay(); return; } } } if (Math.random() < 0.05) { addChatMessage("IA", getRandomPhrase('idle'), true); } }
     function addChatMessage(sender, message, isAI = false) { if (!sender || !message) return; if (chatPanel.classList.contains('hidden')) { showNotificationBubble(message, 'chat'); } const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message'; const senderSpan = document.createElement('span'); senderSpan.className = isAI ? 'sender-ai' : 'sender-player'; senderSpan.textContent = `${sender}: `; messageDiv.appendChild(senderSpan); messageDiv.append(message); chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; }
@@ -760,13 +864,61 @@
     commands.forEach(c => { const entry = document.createElement('div'); entry.className = 'command-entry'; entry.innerHTML = `<div class="command-desc"><code>${c.cmd.split(' ')[0]}</code> - ${c.desc}</div><button class="copy-command-btn" data-command="${c.cmd}"><div class="clipboard-icon"></div><span class="copied-icon">✓</span></button>`; commandHelpContent.appendChild(entry); });
     document.querySelectorAll('.copy-command-btn').forEach(btn => { btn.addEventListener('click', (e) => { const button = e.currentTarget; const commandToCopy = button.dataset.command; navigator.clipboard.writeText(commandToCopy).then(() => { const clipboardIcon = button.querySelector('.clipboard-icon'); const copiedIcon = button.querySelector('.copied-icon'); clipboardIcon.style.display = 'none'; copiedIcon.style.display = 'inline'; setTimeout(() => { clipboardIcon.style.display = 'block'; copiedIcon.style.display = 'none'; }, 1000); }); }); });
     toggleFullscreenButton.addEventListener('click', () => { if (!document.fullscreenElement) { gameContainer.requestFullscreen().catch(err => { showCustomAlert(`Não foi possível entrar em tela cheia: ${err.message}`); }); } else { document.exitFullscreen(); } });
-    modsButton.addEventListener('click', () => { startScreen.style.display = 'none'; modScreen.style.display = 'flex'; loadMods(); loadModpacks(); renderModList(); renderModpackList(); renderOnlineMods(); });
+    modsButton.addEventListener('click', () => { startScreen.style.display = 'none'; modScreen.style.display = 'flex'; loadMods(); loadModpacks(); renderModList(); renderModpackList(); renderOnlineMods(); switchModManagerTab('local'); });
     backToMenuFromModsButton.addEventListener('click', showStartScreen);
-    createNewModButton.addEventListener('click', () => { modScreen.style.display = 'none'; modEditorScreen.style.display = 'flex'; initializeModEditor(); });
-    cancelModCreationButton.addEventListener('click', () => { modEditorScreen.style.display = 'none'; modScreen.style.display = 'flex'; renderModList(); renderModpackList(); });
+    
+    // ### ALTERAÇÃO: Evento do botão genérico de criação ###
+    createNewButton.addEventListener('click', () => {
+        if (currentModTab === 'local') {
+            modScreen.style.display = 'none';
+            modEditorScreen.style.display = 'flex';
+            initializeModEditor();
+        } else { // 'packs'
+            openModpackEditor();
+        }
+    });
+
+    cancelModCreationButton.addEventListener('click', () => { modEditorScreen.style.display = 'none'; modScreen.style.display = 'flex'; renderModList(); });
     addModButton.addEventListener('click', async () => { const code = modCodeInput.value.trim(); if (!code) return showCustomAlert('Por favor, cole um código de mod.'); try { const jsonString = atob(code); const modData = JSON.parse(jsonString); if (!modData.id || !modData.type || !modData.name) throw new Error("Código de mod inválido."); if (allMods.some(m => m.id === modData.id)) return showCustomAlert('Um mod com este ID já existe!'); allMods.push(modData); saveMods(); renderModList(); modCodeInput.value = ''; await showCustomAlert(`Mod "${modData.name}" adicionado!`); } catch (error) { await showCustomAlert('Erro ao adicionar o mod. Código inválido. \n' + error.message); } });
-    modListContainer.addEventListener('click', async (e) => { const check = e.target.closest('.mod-toggle-check'); const delBtn = e.target.closest('.mod-delete-btn'); const publishBtn = e.target.closest('.mod-publish-btn'); if (check) { const index = parseInt(check.dataset.index); if (allMods[index]) { allMods[index].active = check.checked; saveMods(); } } else if (delBtn) { const index = parseInt(delBtn.dataset.index); if (allMods[index]) { const wantToDelete = await showCustomConfirm(`Deseja excluir o mod "${allMods[index].name}"?`); if(wantToDelete) { allMods.splice(index, 1); saveMods(); renderModList(); } } } else if (publishBtn) { const index = parseInt(publishBtn.dataset.index); await publishContent(index, 'mod'); } });
-    modEditorTabs.addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
+    modListContainer.addEventListener('click', async (e) => { const check = e.target.closest('.mod-toggle-check'); const delBtn = e.target.closest('.mod-delete-btn'); const publishBtn = e.target.closest('.mod-publish-btn'); if (check) { const index = parseInt(check.dataset.index); if (allMods[index]) { allMods[index].active = check.checked; saveMods(); } } else if (delBtn) { const index = parseInt(delBtn.dataset.index); if (allMods[index]) { const wantToDelete = await showCustomConfirm(`Deseja excluir o mod "${allMods[index].name}"?`); if(wantToDelete) { allMods.splice(index, 1); saveMods(); renderModList(); } } } else if (publishBtn) { const index = parseInt(publishBtn.dataset.index); await publishMod(index); } });
+    
+    // ### INÍCIO: NOVOS LISTENERS PARA MODPACKS ###
+    modTabLocal.addEventListener('click', () => switchModManagerTab('local'));
+    modTabPacks.addEventListener('click', () => switchModManagerTab('packs'));
+    cancelModpackCreationButton.addEventListener('click', () => {
+        modpackEditorOverlay.style.display = 'none';
+        currentModpackEditing = null;
+    });
+    saveModpackButton.addEventListener('click', saveModpack);
+
+    modpackListContainer.addEventListener('click', async (e) => {
+        const check = e.target.closest('.modpack-toggle-check');
+        const delBtn = e.target.closest('.modpack-delete-btn');
+        const editBtn = e.target.closest('.modpack-edit-btn');
+        if(check) {
+            const index = parseInt(check.dataset.index);
+            if(allModpacks[index]) {
+                allModpacks[index].active = check.checked;
+                saveModpacks();
+            }
+        } else if (delBtn) {
+            const index = parseInt(delBtn.dataset.index);
+            if(allModpacks[index]) {
+                const wantToDelete = await showCustomConfirm(`Deseja excluir o modpack "${allModpacks[index].name}"?`);
+                if(wantToDelete) {
+                    allModpacks.splice(index, 1);
+                    saveModpacks();
+                    renderModpackList();
+                }
+            }
+        } else if (editBtn) {
+            const index = parseInt(editBtn.dataset.index);
+            openModpackEditor(index);
+        }
+    });
+    // ### FIM: NOVOS LISTENERS PARA MODPACKS ###
+
+    editorTabs.addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
     colorPalette.addEventListener('click', (e) => { const colorBox = e.target.closest('.color-box'); if (colorBox) { editorCurrentColor = colorBox.dataset.color; document.querySelectorAll('#color-palette .color-box').forEach(b => b.classList.remove('selected')); colorBox.classList.add('selected'); } });
     pencilToolBtn.addEventListener('click', () => { editorCurrentTool = 'pencil'; pencilToolBtn.classList.add('selected'); bucketToolBtn.classList.remove('selected'); eraserToolBtn.classList.remove('selected'); });
     bucketToolBtn.addEventListener('click', () => { editorCurrentTool = 'bucket'; bucketToolBtn.classList.add('selected'); pencilToolBtn.classList.remove('selected'); eraserToolBtn.classList.remove('selected'); });
@@ -792,48 +944,6 @@
         if (editBtn) { editOnlineMod(editBtn.dataset.code, editBtn.dataset.name); }
         if (deleteBtn) { handleDeleteOnlineMod(deleteBtn.dataset.modId); }
     });
-    // NOVO: Listener para a lista de modpacks online
-    onlineModpackList.addEventListener('click', async (e) => {
-        const installBtn = e.target.closest('.online-pack-install-btn');
-        const deleteBtn = e.target.closest('.online-mod-delete-btn');
-        if (installBtn) {
-            const packId = installBtn.dataset.packId;
-            let onlineContent = await fetchOnlineMods();
-            const packData = onlineContent.find(p => p.id === packId);
-            if (packData) {
-                let newModsAdded = 0;
-                packData.mods.forEach(modInPack => {
-                    if (!allMods.some(localMod => localMod.id === modInPack.id)) {
-                        allMods.push(modInPack);
-                        newModsAdded++;
-                    }
-                });
-                if (newModsAdded > 0) saveMods();
-
-                if (!allModpacks.some(localPack => localPack.id === packData.id)) {
-                    const localPack = {
-                        id: packData.id,
-                        name: packData.name,
-                        description: packData.description,
-                        active: false,
-                        mods: packData.mods.map(m => m.id)
-                    };
-                    allModpacks.push(localPack);
-                    saveModpacks();
-                    await showCustomAlert(`Modpack "${packData.name}" e ${newModsAdded} novo(s) mod(s) instalados!`);
-                    renderModList();
-                    renderModpackList();
-                } else {
-                    await showCustomAlert(`Modpack "${packData.name}" já está instalado.`);
-                }
-                incrementModUsageCount(packId);
-            }
-        }
-        if (deleteBtn) {
-            handleDeleteOnlineMod(deleteBtn.dataset.modId);
-        }
-    });
-
     playWithAIButton.addEventListener('click', showModSelectionScreen);
     backToMenuFromLobbyButton.addEventListener('click', showStartScreen);
     backToLobbyFromModSelectionButton.addEventListener('click', showLobbyScreen);
@@ -889,126 +999,6 @@
     chatViewInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') handleSendMessage(); });
     showCreateGroupBtn.addEventListener('click', openCreateGroupPanel);
     createGroupConfirmBtn.addEventListener('click', handleCreateGroup);
-    
-    // --- INÍCIO: NOVOS LISTENERS PARA MODPACKS ---
-    createNewModpackButton.addEventListener('click', () => {
-        modScreen.style.display = 'none';
-        modpackEditorScreen.style.display = 'flex';
-        initializeModpackEditor();
-    });
-    cancelModpackCreationButton.addEventListener('click', () => {
-        modpackEditorScreen.style.display = 'none';
-        modScreen.style.display = 'flex';
-    });
-    availableModsList.addEventListener('click', e => {
-        const addBtn = e.target.closest('button');
-        if (addBtn) {
-            const modId = addBtn.dataset.modId;
-            const mod = allMods.find(m => m.id === modId);
-            if (mod && !document.querySelector(`#selected-mods-list [data-mod-id="${modId}"]`)) {
-                if (selectedModsList.querySelector('.empty-list-msg')) {
-                    selectedModsList.innerHTML = '';
-                }
-                const item = document.createElement('div');
-                item.className = 'selected-mod-item';
-                item.dataset.modId = modId;
-                item.innerHTML = `<span>[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</span><button class="mod-button danger">-</button>`;
-                selectedModsList.appendChild(item);
-                addBtn.parentElement.style.display = 'none'; // Oculta da lista de disponíveis
-            }
-        }
-    });
-    selectedModsList.addEventListener('click', e => {
-        const removeBtn = e.target.closest('button');
-        if (removeBtn) {
-            const modId = removeBtn.parentElement.dataset.modId;
-            const availableItem = availableModsList.querySelector(`.available-mod-item button[data-mod-id="${modId}"]`);
-            if (availableItem) {
-                availableItem.parentElement.style.display = 'flex'; // Mostra novamente
-            }
-            removeBtn.parentElement.remove();
-            if (selectedModsList.children.length === 0) {
-                 selectedModsList.innerHTML = '<p class="empty-list-msg">Adicione mods da lista à direita.</p>';
-            }
-        }
-    });
-    saveModpackButton.addEventListener('click', async () => {
-        const name = modpackNameInput.value.trim();
-        const description = modpackDescriptionInput.value.trim();
-        const selectedModIds = Array.from(selectedModsList.querySelectorAll('.selected-mod-item')).map(item => item.dataset.modId);
-
-        if (!name) {
-            await showCustomAlert("O nome do modpack é obrigatório.");
-            return;
-        }
-        if (selectedModIds.length === 0) {
-            await showCustomAlert("Adicione pelo menos um mod ao pacote.");
-            return;
-        }
-
-        const newPack = {
-            id: `pack_${Date.now()}`,
-            name: name,
-            description: description,
-            mods: selectedModIds,
-            active: false
-        };
-
-        allModpacks.push(newPack);
-        saveModpacks();
-        await showCustomAlert(`Modpack "${name}" salvo com sucesso!`);
-        modpackEditorScreen.style.display = 'none';
-        modScreen.style.display = 'flex';
-        renderModpackList();
-    });
-
-    modpackListContainer.addEventListener('click', async (e) => {
-        const check = e.target.closest('.modpack-toggle-check');
-        const delBtn = e.target.closest('.modpack-delete-btn');
-        const publishBtn = e.target.closest('.mod-publish-btn');
-        if (check) {
-            const index = parseInt(check.dataset.index);
-            if (allModpacks[index]) {
-                allModpacks[index].active = check.checked;
-                saveModpacks();
-            }
-        } else if (delBtn) {
-            const index = parseInt(delBtn.dataset.index);
-            if (allModpacks[index]) {
-                const wantToDelete = await showCustomConfirm(`Deseja excluir o modpack "${allModpacks[index].name}"?`);
-                if (wantToDelete) {
-                    allModpacks.splice(index, 1);
-                    saveModpacks();
-                    renderModpackList();
-                }
-            }
-        } else if (publishBtn) {
-            const index = parseInt(publishBtn.dataset.index);
-            await publishContent(index, 'modpack');
-        }
-    });
-    
-    document.querySelector('#mod-screen .editor-tabs').addEventListener('click', e => {
-        const tab = e.target.closest('.manager-tab');
-        if (tab) {
-            const view = tab.dataset.view;
-            document.querySelectorAll('#mod-screen .manager-tab, #mod-screen .manager-view').forEach(el => el.classList.remove('active'));
-            tab.classList.add('active');
-            document.getElementById(`${view}-view`).classList.add('active');
-        }
-    });
-
-    document.querySelector('#online-mods-panel .editor-tabs').addEventListener('click', e => {
-        const onlineTab = e.target.closest('.online-hub-tab');
-        if(onlineTab) {
-            const hubView = onlineTab.dataset.hubView;
-            document.querySelectorAll('#online-mods-panel .online-hub-tab, #online-mods-panel .online-list-container').forEach(el => el.classList.remove('active'));
-            onlineTab.classList.add('active');
-            if(hubView === 'mods') onlineModList.classList.add('active');
-            else onlineModpackList.classList.add('active');
-        }
-    });
-    // --- FIM: NOVOS LISTENERS PARA MODPACKS ---
     
     async function checkAutoLogin() {
         const storedUser = localStorage.getItem('castleDefenseUser');
