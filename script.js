@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modScreen = document.getElementById('mod-screen');
     const modEditorScreen = document.getElementById('mod-editor-screen');
     const backToMenuFromModsButton = document.getElementById('back-to-menu-from-mods-button');
-    // ### ALTERAÇÃO: Renomeado para botão genérico ###
     const createNewButton = document.getElementById('create-new-button');
     const addModButton = document.getElementById('add-mod-button');
     const modCodeInput = document.getElementById('mod-code-input');
@@ -38,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const waveMonsterList = document.getElementById('wave-monster-list');
     const pencilToolBtn = document.getElementById('pencil-tool-btn');
     const bucketToolBtn = document.getElementById('bucket-tool-btn');
-    const eraserToolBtn = document.getElementById('eraser-tool-btn'); 
+    const eraserToolBtn = document.getElementById('eraser-tool-btn');
     const modCodeDisplayOverlay = document.getElementById('mod-code-display-overlay');
     const modCodeTextarea = document.getElementById('mod-code-textarea');
     const copyModCodeBtn = document.getElementById('copy-mod-code-btn');
@@ -102,8 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const notificationDeclineBtn = document.getElementById('notification-decline-btn');
     const postGameStats = document.getElementById('post-game-stats');
     const gameOverTitle = document.getElementById('game-over-title');
-
-    // --- Elementos DOM para DMS E GRUPOS ---
     const dmGroupsOverlay = document.getElementById('dm-and-groups-overlay');
     const dmGroupsMainPanel = document.getElementById('dm-groups-main-panel');
     const dmListContainer = document.getElementById('dm-list');
@@ -119,8 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const createGroupNameInput = document.getElementById('create-group-name');
     const createGroupFriendsList = document.getElementById('create-group-friends-list');
     const createGroupConfirmBtn = document.getElementById('create-group-confirm-btn');
-
-    // --- ### INÍCIO: NOVOS ELEMENTOS DOM PARA MODPACKS ### ---
     const modTabLocal = document.getElementById('mod-tab-local');
     const modTabPacks = document.getElementById('mod-tab-packs');
     const localModsContent = document.getElementById('local-mods-content');
@@ -132,7 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const addModsToPackList = document.getElementById('add-mods-to-pack-list');
     const cancelModpackCreationButton = document.getElementById('cancel-modpack-creation-button');
     const saveModpackButton = document.getElementById('save-modpack-button');
-    // --- ### FIM: NOVOS ELEMENTOS DOM PARA MODPACKS ### ---
 
     // --- Configurações do Jogo ---
     const weapons = [ { name: "Cuspe", damage: 2, cost: 0, cooldown: 500, color: '#add8e6', size: 8, speed: 8, cssClass: 'spit' }, { name: "Pedra", damage: 8, cost: 50, cooldown: 400, color: '#8B4513', size: 12, speed: 10, cssClass: 'stone' }, { name: "Bomba de Tinta", damage: 20, cost: 150, cooldown: 800, color: '#FF00FF', size: 20, speed: 6, cssClass: 'ink', effect: 'slow' }, { name: "Bola de Fogo", damage: 50, cost: 400, cooldown: 1200, color: '#FF4500', size: 25, speed: 7, cssClass: 'fire' }, { name: "Papergun", damage: 10, cost: 500, cooldown: 250, color: '#e9ecef', size: 10, speed: 12, cssClass: 'paper' } ];
@@ -177,48 +171,44 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDebugModeEnabled = false, isGodMode = false;
     let guardianSlots, guardianInventory, selectedGuardianInventoryIndex;
     let currentWaveSpawnList = [];
-    let loadedSaveSlotIndex = null; 
-
-    // --- Estado Multiplayer e IA ---
+    let loadedSaveSlotIndex = null;
     let gameMode = 'single';
     let castleHealthAI, MAX_CASTLE_HEALTH_AI, castleAbilityIntervalsAI;
     let currentCastleTypeAI, currentCastleEvolutionAI;
     let isPlayerCastleDestroyed, isCastleAIDestroyed;
     let playerRespawnTimer, aiRespawnTimer;
     let aiLogicInterval, aiAttackInterval;
-    let guardianInventoryAI, guardianSlotsAI; 
-    
-    // --- Estado do Modding ---
+    let guardianInventoryAI, guardianSlotsAI;
     let allMods = [];
-    // ### NOVO: Estado para Modpacks ###
-    let allModpacks = []; 
-    let currentModpackEditing = null; // Guarda o ID do modpack sendo editado
-    let currentModTab = 'local'; // 'local' ou 'packs'
-
+    let allModpacks = [];
+    let currentModpackEditing = null;
+    let currentModTab = 'local';
     let activeGameMonsterTypes, activeGameGuardianTypes, activeGameBarricadeTypes, customWaveDefinitions;
     let editorCurrentType = 'monster', editorCurrentColor = '#FFFFFF', isDrawing = false, editorCurrentTool = 'pencil';
-    let newlyCreatedMod = null; 
+    let newlyCreatedMod = null;
     let editorGridSize = { width: 16, height: 16 };
     const editorPaletteColors = ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#808080', '#C0C0C0', '#800000', '#008000', '#000080', '#808000', '#800080', '#008080', '#a0522d', '#8B4513', '#228B22', '#556b2f', 'transparent', '#ffc0cb', '#ff69b4', '#ff1493', '#d2691e', '#a52a2a', '#6b4423', '#f5deb3', '#ffdab9', '#e6e6fa', '#d8bfd8', '#b0c4de', '#add8e6', '#90ee90', '#3cb371', '#66cdaa', '#f0e68c', '#eee8aa', '#fafad2', '#d3d3d3', '#a9a9a9'];
 
     // --- Configurações do JSONBin.io ---
-    const JSONBIN_ID = '685aeeb38960c979a5b0b5f8'; 
+    const JSONBIN_ID = '685aeeb38960c979a5b0b5f8';
     const JSONBIN_API_KEY = '$2a$10$4tbHfolQwMBQAiybZXK0ruCq0xYIPmFuq8NMAqrP89muVvvgQavta';
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
-    // --- INÍCIO: NOVAS CONFIGURAÇÕES E ESTADO DO SISTEMA SOCIAL ---
-    const SOCIAL_JSONBIN_ID = '685c74f28960c979a5b17276'; 
+    // ### INÍCIO: NOVAS CONSTANTES PARA O HUB DE MODPACKS ###
+    const MODPACK_JSONBIN_ID = 'COLE_O_ID_DO_SEU_NOVO_BIN_AQUI'; // <--- SUBSTITUA AQUI
+    const MODPACK_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${MODPACK_JSONBIN_ID}`;
+    // ### FIM: NOVAS CONSTANTES ###
+
+    const SOCIAL_JSONBIN_ID = '685c74f28960c979a5b17276';
     const SOCIAL_JSONBIN_API_KEY = '$2a$10$4tbHfolQwMBQAiybZXK0ruCq0xYIPmFuq8NMAqrP89muVvvgQavta';
     const SOCIAL_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${SOCIAL_JSONBIN_ID}`;
 
     let currentUser = null;
     let isAuthPanelInLoginMode = false;
-    let socialPollInterval = null; // Renomeado de notificationPollInterval
+    let socialPollInterval = null;
     let currentNotification = null;
-    let currentOpenChat = null; // Novo: para controlar a janela de chat aberta
-    let chatPollInterval = null; // Novo: para atualizar o chat aberto
-    // --- FIM: NOVAS CONFIGURAÇÕES E ESTADO DO SISTEMA SOCIAL ---
-
+    let currentOpenChat = null;
+    let chatPollInterval = null;
 
     // --- Funções de "Desenho" e Criação de Elementos ---
     function createGoblinElement() { const e=document.createElement('div'); e.style.cssText="width:30px;height:30px;background-color:#228B22;border:2px solid #006400;border-radius:50%;position:absolute;transition:transform .1s,opacity .1s;box-shadow:inset 0 0 5px rgba(0,0,0,.3)"; e.innerHTML=`<div style="position:absolute;top:8px;left:7px;width:5px;height:5px;background:black;border-radius:50%"></div><div style="position:absolute;top:8px;right:7px;width:5px;height:5px;background:black;border-radius:50%"></div><div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:15px;height:3px;background:black;border-radius:2px"></div>`; return e; }
@@ -233,19 +223,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function createDragonElement() { const e=document.createElement('div'); e.classList.add('monster','dragon'); e.style.position='absolute'; e.innerHTML=`<div class="head"></div><div class="wing"></div>`; return e; }
     function createBarricadeElement(type) { const e=document.createElement('div'); e.classList.add('barricade','spawning'); e.style.cssText=`width:${type.width}px;height:${type.height}px;background-color:${type.color};border:${type.border};border-radius:3px;position:absolute;box-sizing:border-box`; e.addEventListener('animationend', () => e.classList.remove('spawning'), { once: true }); const hc=document.createElement('div'); hc.style.cssText="position:absolute;top:-10px;left:0;width:100%;height:4px;background-color:#555;overflow:hidden;border-radius:2px"; const hb=document.createElement('div'); hb.classList.add('barricade-health-bar'); hb.style.cssText="width:100%;height:100%;background-color:#00ff00;transition:width .1s"; hc.appendChild(hb); e.appendChild(hc); return e; }
     function generateGrassElements() { grassElementsContainer.innerHTML=''; for(let i=0;i<150;i++){ const e=document.createElement('div'); const s=Math.random()*8+4; const castleAreaWidth = gameMode === 'ai' ? 160 : 80; e.style.cssText=`position:absolute;width:${s}px;height:${s*(Math.random()*.8+1)}px;background-color:hsl(${Math.random()*20+90},${Math.random()*20+50}%,${Math.random()*10+30}%);border-radius:${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}% / ${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}%;opacity:${Math.random()*.4+.3};filter:blur(${Math.random()*2}px);z-index:1;left:${Math.random()*(gameContainer.offsetWidth-castleAreaWidth-150)+castleAreaWidth}px;top:${Math.random()*gameContainer.offsetHeight}px`; grassElementsContainer.appendChild(e); } }
-    
     function createCustomModElement(modData) {
         const container = document.createElement('div');
         container.classList.add('custom-mod-render');
         container.style.width = `${modData.width}px`;
         container.style.height = `${modData.height}px`;
         container.style.position = 'absolute';
-        
         const gridW = modData.gridWidth || 16;
         const gridH = modData.gridHeight || 16;
         const pixelSizeW = modData.width / gridW;
         const pixelSizeH = modData.height / gridH;
-
         let boxShadows = [];
         modData.pixelData.forEach((color, index) => {
             if (color && color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)') {
@@ -254,7 +241,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 boxShadows.push(`${x}px ${y}px 0 ${Math.max(pixelSizeW, pixelSizeH)}px ${color}`);
             }
         });
-
         if (boxShadows.length > 0) {
             const pixelDrawer = document.createElement('div');
             pixelDrawer.style.position = 'absolute';
@@ -274,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveMods() { localStorage.setItem('castleDefenseMods', JSON.stringify(allMods)); }
     function renderModList() { modListContainer.innerHTML = ''; if (allMods.length === 0) { modListContainer.innerHTML = '<p style="text-align:center; font-size: 0.8em; color: #888;">Nenhum mod adicionado.</p>'; return; } allMods.forEach((mod, index) => { if (!mod || !mod.type) { console.warn('Ignorando mod inválido:', index, mod); return; } const item = document.createElement('div'); item.className = 'mod-list-item'; item.innerHTML = `<span class="mod-list-item-name">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</span><div class="mod-list-item-controls"><button class="mod-button info mod-publish-btn" style="padding: 4px 8px; font-size: 0.6em;" data-index="${index}">Publicar</button><label class="mod-toggle"><input type="checkbox" class="mod-toggle-check" data-index="${index}" ${mod.active ? 'checked' : ''}><span class="mod-toggle-slider"></span></label><button class="mod-button danger mod-delete-btn" data-index="${index}">X</button></div>`; modListContainer.appendChild(item); }); }
     
-    // --- ### INÍCIO: NOVAS FUNÇÕES PARA MODPACKS ### ---
     function loadModpacks() { const stored = localStorage.getItem('castleDefenseModpacks'); if (stored) { try { allModpacks = JSON.parse(stored); } catch (e) { console.error("Erro ao carregar modpacks:", e); allModpacks = []; localStorage.removeItem('castleDefenseModpacks'); } } else { allModpacks = []; } }
     function saveModpacks() { localStorage.setItem('castleDefenseModpacks', JSON.stringify(allModpacks)); }
 
@@ -291,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.innerHTML = `
                 <span class="mod-list-item-name">${pack.name} (${modCount} mods)</span>
                 <div class="mod-list-item-controls">
+                    <button class="mod-button info modpack-publish-btn" data-index="${index}" style="font-size: 0.7em;">Publicar</button>
                     <button class="mod-button secondary modpack-edit-btn" data-index="${index}" style="font-size: 0.7em;">Editar</button>
                     <label class="mod-toggle">
                         <input type="checkbox" class="modpack-toggle-check" data-index="${index}" ${pack.active ? 'checked' : ''}>
@@ -302,37 +288,67 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function openModpackEditor(packIndex = null) {
+    async function openModpackEditor(packIndex = null) {
         currentModpackEditing = packIndex;
         modpackEditorOverlay.style.display = 'flex';
-        
-        const allAvailableMods = [...allMods]; // Futuramente, pode incluir mods do Hub aqui
-        let existingModIds = [];
+        addModsToPackList.innerHTML = '<p style="text-align:center; color: #888;">Buscando mods locais e do Hub...</p>';
 
-        if (packIndex !== null) {
-            const pack = allModpacks[packIndex];
-            modpackEditorTitle.textContent = "Editar Modpack";
-            modpackNameInput.value = pack.name;
-            existingModIds = pack.mods || [];
-        } else {
-            modpackEditorTitle.textContent = "Criar Novo Modpack";
-            modpackNameInput.value = "";
-        }
+        try {
+            const onlineModsRaw = await fetchOnlineMods();
+            const onlineModsDecoded = onlineModsRaw.map(onlineMod => {
+                try {
+                    return JSON.parse(atob(onlineMod.modCode));
+                } catch (e) {
+                    console.warn(`Falha ao decodificar o mod online: ${onlineMod.name}`, e);
+                    return null;
+                }
+            }).filter(Boolean);
 
-        addModsToPackList.innerHTML = '';
-        if(allAvailableMods.length === 0) {
-            addModsToPackList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum mod local ou do hub para adicionar.</p>';
+            const modMap = new Map();
+            allMods.forEach(mod => modMap.set(mod.id, mod));
+            onlineModsDecoded.forEach(mod => {
+                if (!modMap.has(mod.id)) {
+                    mod.isFromHub = true;
+                    modMap.set(mod.id, mod);
+                }
+            });
+
+            const allAvailableMods = Array.from(modMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+            
+            let existingModIds = [];
+
+            if (packIndex !== null) {
+                const pack = allModpacks[packIndex];
+                modpackEditorTitle.textContent = "Editar Modpack";
+                modpackNameInput.value = pack.name;
+                existingModIds = pack.mods || [];
+            } else {
+                modpackEditorTitle.textContent = "Criar Novo Modpack";
+                modpackNameInput.value = "";
+            }
+
+            addModsToPackList.innerHTML = '';
+            if (allAvailableMods.length === 0) {
+                addModsToPackList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum mod local ou do hub para adicionar.</p>';
+                return;
+            }
+            
+            allAvailableMods.forEach(mod => {
+                const isChecked = existingModIds.includes(mod.id);
+                const item = document.createElement('div');
+                item.className = 'add-mod-to-pack-item';
+                const hubIndicator = mod.isFromHub ? '<span class="mod-hub-indicator">[Hub]</span> ' : '';
+                item.innerHTML = `
+                    <input type="checkbox" id="add-mod-${mod.id}" data-mod-id="${mod.id}" ${isChecked ? 'checked' : ''}>
+                    <label for="add-mod-${mod.id}">${hubIndicator}[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</label>
+                `;
+                addModsToPackList.appendChild(item);
+            });
+
+        } catch (error) {
+            console.error("Erro ao carregar mods para o editor:", error);
+            addModsToPackList.innerHTML = '<p style="text-align:center; color: #ff6b6b;">Não foi possível carregar os mods do Hub. Tente novamente.</p>';
         }
-        allAvailableMods.forEach(mod => {
-            const isChecked = existingModIds.includes(mod.id);
-            const item = document.createElement('div');
-            item.className = 'add-mod-to-pack-item';
-            item.innerHTML = `
-                <input type="checkbox" id="add-mod-${mod.id}" data-mod-id="${mod.id}" ${isChecked ? 'checked' : ''}>
-                <label for="add-mod-${mod.id}">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</label>
-            `;
-            addModsToPackList.appendChild(item);
-        });
     }
 
     function saveModpack() {
@@ -345,11 +361,9 @@ document.addEventListener('DOMContentLoaded', () => {
                                    .map(input => input.dataset.modId);
 
         if (currentModpackEditing !== null) {
-            // Editando um pack existente
             allModpacks[currentModpackEditing].name = name;
             allModpacks[currentModpackEditing].mods = selectedModIds;
         } else {
-            // Criando um novo pack
             const newPack = {
                 id: `pack_${Date.now()}`,
                 name: name,
@@ -367,11 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function switchModManagerTab(tabName) {
         currentModTab = tabName;
-        // Atualiza a aparência das abas
         document.querySelectorAll('#mod-screen .editor-tab').forEach(tab => tab.classList.remove('active'));
         document.getElementById(`mod-tab-${tabName}`).classList.add('active');
-
-        // Mostra/esconde o conteúdo
         document.querySelectorAll('.mod-tab-content').forEach(content => content.classList.remove('active'));
         if (tabName === 'local') {
             localModsContent.classList.add('active');
@@ -381,357 +392,65 @@ document.addEventListener('DOMContentLoaded', () => {
             createNewButton.textContent = "Criar Novo Modpack";
         }
     }
-    // --- ### FIM: NOVAS FUNÇÕES PARA MODPACKS ### ---
-
 
     function rebuildPixelGrid(width, height) { editorGridSize.width = width; editorGridSize.height = height; pixelGrid.innerHTML = ''; pixelGrid.style.setProperty('--grid-width', width); pixelGrid.style.setProperty('--grid-height', height); for (let i = 0; i < width * height; i++) { const pixel = document.createElement('div'); pixel.className = 'pixel'; pixel.style.backgroundColor = 'transparent'; pixelGrid.appendChild(pixel); } }
     function initializeModEditor() { rebuildPixelGrid(16, 16); colorPalette.innerHTML = ''; editorPaletteColors.forEach(color => { const colorBox = document.createElement('div'); colorBox.className = 'color-box'; colorBox.style.backgroundColor = color === 'transparent' ? 'url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAACdJREFUOE9jZGBgEGHAD97/p0+f/v//PxMDw585858ZGBgY/j98+PA/AAAU4gH4Y0Y1iAAAAABJRU5ErkJggg==")' : color; colorBox.dataset.color = color; if (color === editorCurrentColor) colorBox.classList.add('selected'); colorPalette.appendChild(colorBox); }); waveMonsterList.innerHTML = ''; switchEditorTab('monster'); }
     function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
     function populateMonsterDropdown(selectElement) { selectElement.innerHTML = ''; baseMonsterTypes.forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Base) ${m.name}`; selectElement.appendChild(option); }); allMods.filter(m => m.type === 'monster').forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Mod) ${m.name}`; selectElement.appendChild(option); }); }
     
-    // --- INÍCIO: NOVAS FUNÇÕES E MODIFICAÇÕES PARA O SISTEMA SOCIAL ---
-
-    async function fetchSocialData() {
-        try {
-            const response = await fetch(`${SOCIAL_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': SOCIAL_JSONBIN_API_KEY } });
-            if (response.status === 404) return {};
-            if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`);
-            const data = await response.json();
-            // Garante que a estrutura base exista
-            const record = data.record || {};
-            if (!record.conversations) record.conversations = {};
-            if (!record.groups) record.groups = {};
-            return record;
-        } catch (error) { console.error("Falha ao buscar dados sociais:", error); showCustomAlert("Erro de conexão com o servidor. Tente mais tarde."); return null; }
-    }
-
-    async function updateSocialData(newData) {
-        try {
-            const response = await fetch(SOCIAL_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': SOCIAL_JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(newData) });
-            if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`);
-            return true;
-        } catch (error) { console.error("Falha ao atualizar dados sociais:", error); showCustomAlert("Erro de conexão, suas alterações podem não ter sido salvas."); return false; }
-    }
-
-    function updateUiForLogin() {
-        if (currentUser) {
-            socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase();
-            trophyCounter.style.display = 'flex';
-            trophyValue.textContent = Math.floor(currentUser.stats.trophies);
-            // Habilita o botão multiplayer se logado
-            multiplayerButton.classList.remove('disabled');
-        } else {
-            socialProfileButton.textContent = '👤';
-            trophyCounter.style.display = 'none';
-            // Desabilita o botão multiplayer se não logado
-            multiplayerButton.classList.add('disabled');
-        }
-    }
-
-    async function handleLogin(username, password) {
-        const socialData = await fetchSocialData();
-        if (!socialData) return;
-        const user = socialData[username.toLowerCase()];
-        if (user && user.password === password) {
-            currentUser = { username: username, ...user };
-            localStorage.setItem('castleDefenseUser', JSON.stringify({ username, password }));
-            updateUiForLogin();
-            socialOverlay.style.display = 'none';
-            await showCustomAlert(`Bem-vindo de volta, ${username}!`);
-            startSocialPoll();
-        } else { await showCustomAlert("Nome de usuário ou senha incorretos."); }
-    }
-
-    async function handleCreateAccount(username, password) {
-        if (username.length < 3 || password.length < 4) { await showCustomAlert("Usuário deve ter no mínimo 3 caracteres e senha no mínimo 4."); return; }
-        const socialData = await fetchSocialData();
-        if (!socialData) return;
-        if (socialData[username.toLowerCase()]) { await showCustomAlert("Este nome de usuário já existe."); return; }
-        socialData[username.toLowerCase()] = { password: password, friends: [], friendRequests: [], groupInvites: [], stats: { totalMoney: 0, totalDiamonds: 0, totalWaves: 0, gamesPlayed: 0, trophies: 0 } };
-        const success = await updateSocialData(socialData);
-        if (success) { await showCustomAlert("Conta criada com sucesso! Agora você pode logar."); toggleAuthMode(true); }
-    }
-
+    async function fetchSocialData() { try { const response = await fetch(`${SOCIAL_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': SOCIAL_JSONBIN_API_KEY } }); if (response.status === 404) return {}; if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); const data = await response.json(); const record = data.record || {}; if (!record.conversations) record.conversations = {}; if (!record.groups) record.groups = {}; return record; } catch (error) { console.error("Falha ao buscar dados sociais:", error); showCustomAlert("Erro de conexão com o servidor. Tente mais tarde."); return null; } }
+    async function updateSocialData(newData) { try { const response = await fetch(SOCIAL_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': SOCIAL_JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(newData) }); if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); return true; } catch (error) { console.error("Falha ao atualizar dados sociais:", error); showCustomAlert("Erro de conexão, suas alterações podem não ter sido salvas."); return false; } }
+    function updateUiForLogin() { if (currentUser) { socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase(); trophyCounter.style.display = 'flex'; trophyValue.textContent = Math.floor(currentUser.stats.trophies); multiplayerButton.classList.remove('disabled'); } else { socialProfileButton.textContent = '👤'; trophyCounter.style.display = 'none'; multiplayerButton.classList.add('disabled'); } }
+    async function handleLogin(username, password) { const socialData = await fetchSocialData(); if (!socialData) return; const user = socialData[username.toLowerCase()]; if (user && user.password === password) { currentUser = { username: username, ...user }; localStorage.setItem('castleDefenseUser', JSON.stringify({ username, password })); updateUiForLogin(); socialOverlay.style.display = 'none'; await showCustomAlert(`Bem-vindo de volta, ${username}!`); startSocialPoll(); } else { await showCustomAlert("Nome de usuário ou senha incorretos."); } }
+    async function handleCreateAccount(username, password) { if (username.length < 3 || password.length < 4) { await showCustomAlert("Usuário deve ter no mínimo 3 caracteres e senha no mínimo 4."); return; } const socialData = await fetchSocialData(); if (!socialData) return; if (socialData[username.toLowerCase()]) { await showCustomAlert("Este nome de usuário já existe."); return; } socialData[username.toLowerCase()] = { password: password, friends: [], friendRequests: [], groupInvites: [], stats: { totalMoney: 0, totalDiamonds: 0, totalWaves: 0, gamesPlayed: 0, trophies: 0 } }; const success = await updateSocialData(socialData); if (success) { await showCustomAlert("Conta criada com sucesso! Agora você pode logar."); toggleAuthMode(true); } }
     function handleLogout() { currentUser = null; localStorage.removeItem('castleDefenseUser'); updateUiForLogin(); socialOverlay.style.display = 'none'; stopSocialPoll(); }
-    
     function toggleAuthMode(forceLogin) { isAuthPanelInLoginMode = forceLogin !== undefined ? forceLogin : !isAuthPanelInLoginMode; if (isAuthPanelInLoginMode) { authTitle.textContent = "Logar na Conta"; authSubmitButton.textContent = "Logar"; authToggleLink.textContent = "Não tem uma conta? Crie uma agora"; } else { authTitle.textContent = "Criar Conta"; authSubmitButton.textContent = "Criar Conta"; authToggleLink.textContent = "Já tem uma conta? Clique para logar"; } authUsernameInput.value = ''; authPasswordInput.value = ''; }
-
-    async function renderFriendsPanel() {
-        friendsPanelTitle.textContent = `Amigos de ${currentUser.username}`;
-        friendsListContainer.innerHTML = '<p>Carregando amigos...</p>';
-        const socialData = await fetchSocialData();
-        if (!socialData || !currentUser) { friendsListContainer.innerHTML = '<p style="color: #f44336;">Erro ao carregar dados.</p>'; return; }
-        const myData = socialData[currentUser.username.toLowerCase()];
-        if (!myData || !myData.friends || myData.friends.length === 0) { friendsListContainer.innerHTML = '<p>Você ainda não tem amigos.</p>'; return; }
-        friendsListContainer.innerHTML = '';
-        myData.friends.forEach(friendName => {
-            const friendData = socialData[friendName.toLowerCase()];
-            const trophies = friendData ? Math.floor(friendData.stats.trophies) : '???';
-            const item = document.createElement('div');
-            item.className = 'friend-item';
-            item.innerHTML = `<div class="friend-info"><span>${friendName}</span> - <span class="trophy-icon">🏆</span><span>${trophies}</span></div><div class="friend-actions"><button class="mod-button secondary message-friend-btn" data-friend-name="${friendName}">✉️</button><button class="mod-button danger remove-friend-btn" data-friend-name="${friendName}">❌</button></div>`;
-            friendsListContainer.appendChild(item);
-        });
-    }
-
+    async function renderFriendsPanel() { friendsPanelTitle.textContent = `Amigos de ${currentUser.username}`; friendsListContainer.innerHTML = '<p>Carregando amigos...</p>'; const socialData = await fetchSocialData(); if (!socialData || !currentUser) { friendsListContainer.innerHTML = '<p style="color: #f44336;">Erro ao carregar dados.</p>'; return; } const myData = socialData[currentUser.username.toLowerCase()]; if (!myData || !myData.friends || myData.friends.length === 0) { friendsListContainer.innerHTML = '<p>Você ainda não tem amigos.</p>'; return; } friendsListContainer.innerHTML = ''; myData.friends.forEach(friendName => { const friendData = socialData[friendName.toLowerCase()]; const trophies = friendData ? Math.floor(friendData.stats.trophies) : '???'; const item = document.createElement('div'); item.className = 'friend-item'; item.innerHTML = `<div class="friend-info"><span>${friendName}</span> - <span class="trophy-icon">🏆</span><span>${trophies}</span></div><div class="friend-actions"><button class="mod-button secondary message-friend-btn" data-friend-name="${friendName}">✉️</button><button class="mod-button danger remove-friend-btn" data-friend-name="${friendName}">❌</button></div>`; friendsListContainer.appendChild(item); }); }
     async function handleSendFriendRequest() { const targetUsername = addFriendUsernameInput.value.trim(); if (!targetUsername || targetUsername.toLowerCase() === currentUser.username.toLowerCase()) { await showCustomAlert("Nome de usuário inválido."); return; } const socialData = await fetchSocialData(); if (!socialData) return; const targetUser = socialData[targetUsername.toLowerCase()]; if (!targetUser) { await showCustomAlert("Usuário não encontrado."); return; } if (targetUser.friends.includes(currentUser.username) || targetUser.friendRequests.includes(currentUser.username)) { await showCustomAlert("Você já é amigo ou já enviou uma solicitação."); return; } targetUser.friendRequests.push(currentUser.username); const success = await updateSocialData(socialData); if (success) { await showCustomAlert(`Solicitação de amizade enviada para ${targetUsername}.`); addFriendUsernameInput.value = ''; } }
-    
     async function handleFriendRequestResponse(senderUsername, accept) { const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; const senderData = socialData[senderUsername.toLowerCase()]; if (!myData || !senderData) return; myData.friendRequests = myData.friendRequests.filter(u => u.toLowerCase() !== senderUsername.toLowerCase()); if (accept) { myData.friends.push(senderUsername); senderData.friends.push(currentUser.username); } const success = await updateSocialData(socialData); if (success && accept) { await showCustomAlert(`Você e ${senderUsername} agora são amigos!`); if (friendsPanel.style.display === 'block') renderFriendsPanel(); } hideInteractiveNotification(); checkForNotifications(); }
-    
     async function handleRemoveFriend(friendUsername) { const wantsToRemove = await showCustomConfirm(`Deseja remover ${friendUsername} da sua lista de amigos?`); if (!wantsToRemove) return; const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; const friendData = socialData[friendUsername.toLowerCase()]; if (myData) { myData.friends = myData.friends.filter(f => f.toLowerCase() !== friendUsername.toLowerCase()); } if (friendData) { friendData.friends = friendData.friends.filter(f => f.toLowerCase() !== currentUser.username.toLowerCase()); } const success = await updateSocialData(socialData); if (success) { await showCustomAlert(`${friendUsername} foi removido.`); renderFriendsPanel(); } }
-
     function showInteractiveNotification(text, type, data) { hideInteractiveNotification(); currentNotification = { type, data }; interactiveNotificationText.textContent = text; interactiveNotification.style.display = 'flex'; }
     function hideInteractiveNotification() { currentNotification = null; interactiveNotification.style.display = 'none'; }
-    
-    async function checkForNotifications() {
-        if (!currentUser || currentNotification) return;
-        const socialData = await fetchSocialData();
-        if (!socialData) return;
-        const myData = socialData[currentUser.username.toLowerCase()];
-        if (!myData) return;
-        if (myData.friendRequests && myData.friendRequests.length > 0) { const sender = myData.friendRequests[0]; showInteractiveNotification(`${sender} enviou um pedido de amizade!`, 'friendRequest', sender); return; }
-        if (myData.groupInvites && myData.groupInvites.length > 0) { const { groupName, sender } = myData.groupInvites[0]; showInteractiveNotification(`${sender} te convidou para o grupo "${groupName}"!`, 'groupInvite', myData.groupInvites[0]); return; }
-    }
-
+    async function checkForNotifications() { if (!currentUser || currentNotification) return; const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; if (!myData) return; if (myData.friendRequests && myData.friendRequests.length > 0) { const sender = myData.friendRequests[0]; showInteractiveNotification(`${sender} enviou um pedido de amizade!`, 'friendRequest', sender); return; } if (myData.groupInvites && myData.groupInvites.length > 0) { const { groupName, sender } = myData.groupInvites[0]; showInteractiveNotification(`${sender} te convidou para o grupo "${groupName}"!`, 'groupInvite', myData.groupInvites[0]); return; } }
     function startSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); checkForNotifications(); socialPollInterval = setInterval(checkForNotifications, 10000); }
     function stopSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); socialPollInterval = null; }
-
-    async function updatePlayerStatsAndTrophies() {
-        if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 };
-        const socialData = await fetchSocialData();
-        if (!socialData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
-        const myData = socialData[currentUser.username.toLowerCase()];
-        if (!myData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
-        const oldTrophies = myData.stats.trophies || 0;
-        myData.stats.gamesPlayed = (myData.stats.gamesPlayed || 0) + 1;
-        myData.stats.totalMoney = (myData.stats.totalMoney || 0) + money;
-        myData.stats.totalDiamonds = (myData.stats.totalDiamonds || 0) + diamonds;
-        myData.stats.totalWaves = (myData.stats.totalWaves || 0) + currentWave;
-        const avgMoney = myData.stats.totalMoney / myData.stats.gamesPlayed;
-        const avgDiamonds = myData.stats.totalDiamonds / myData.stats.gamesPlayed;
-        const avgWaves = myData.stats.totalWaves / myData.stats.gamesPlayed;
-        const newTrophies = Math.floor((avgMoney / 10) + (avgDiamonds * 5) + (avgWaves * 2));
-        myData.stats.trophies = newTrophies;
-        currentUser.stats = myData.stats;
-        await updateSocialData(socialData);
-        updateUiForLogin();
-        return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies };
-    }
-
+    async function updatePlayerStatsAndTrophies() { if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 }; const socialData = await fetchSocialData(); if (!socialData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies }; const myData = socialData[currentUser.username.toLowerCase()]; if (!myData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies }; const oldTrophies = myData.stats.trophies || 0; myData.stats.gamesPlayed = (myData.stats.gamesPlayed || 0) + 1; myData.stats.totalMoney = (myData.stats.totalMoney || 0) + money; myData.stats.totalDiamonds = (myData.stats.totalDiamonds || 0) + diamonds; myData.stats.totalWaves = (myData.stats.totalWaves || 0) + currentWave; const avgMoney = myData.stats.totalMoney / myData.stats.gamesPlayed; const avgDiamonds = myData.stats.totalDiamonds / myData.stats.gamesPlayed; const avgWaves = myData.stats.totalWaves / myData.stats.gamesPlayed; const newTrophies = Math.floor((avgMoney / 10) + (avgDiamonds * 5) + (avgWaves * 2)); myData.stats.trophies = newTrophies; currentUser.stats = myData.stats; await updateSocialData(socialData); updateUiForLogin(); return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies }; }
     function createConversationId(user1, user2) { return [user1.toLowerCase(), user2.toLowerCase()].sort().join('_'); }
-    
-    async function openDmGroupsPanel() {
-        const socialData = await fetchSocialData();
-        if (!socialData || !currentUser) { await showCustomAlert("Não foi possível carregar dados."); return; }
-        dmGroupsOverlay.style.display = 'flex';
-        dmGroupsMainPanel.style.display = 'block';
-        chatViewPanel.style.display = 'none';
-        createGroupPanel.style.display = 'none';
-        renderDmAndGroupLists(socialData);
-    }
-    
-    function renderDmAndGroupLists(socialData) {
-        const myData = socialData[currentUser.username.toLowerCase()];
-        dmListContainer.innerHTML = '';
-        if (myData.friends && myData.friends.length > 0) {
-            myData.friends.forEach(friendName => {
-                const item = document.createElement('div');
-                item.className = 'dm-list-item';
-                item.textContent = friendName;
-                item.dataset.friendName = friendName;
-                dmListContainer.appendChild(item);
-            });
-        } else { dmListContainer.innerHTML = '<p>Nenhum amigo para conversar.</p>'; }
-
-        groupListContainer.innerHTML = '';
-        const myGroups = Object.entries(socialData.groups || {}).filter(([id, group]) => group.members.includes(currentUser.username));
-        if (myGroups.length > 0) {
-            myGroups.forEach(([id, group]) => {
-                const item = document.createElement('div');
-                item.className = 'group-list-item';
-                item.textContent = group.name;
-                item.dataset.groupId = id;
-                groupListContainer.appendChild(item);
-            });
-        } else { groupListContainer.innerHTML = '<p>Você não está em nenhum grupo.</p>'; }
-    }
-
-    async function openChatView(type, id) {
-        currentOpenChat = { type, id };
-        dmGroupsMainPanel.style.display = 'none';
-        chatViewPanel.style.display = 'flex';
-
-        if (type === 'dm') chatWithName.textContent = id;
-        else if (type === 'group') {
-            const socialData = await fetchSocialData();
-            chatWithName.textContent = socialData.groups[id]?.name || 'Grupo';
-        }
-        await renderChatMessages();
-        startChatPoll();
-    }
-    
-    async function renderChatMessages() {
-        if (!currentOpenChat) return;
-        const socialData = await fetchSocialData();
-        let messages = [];
-        if (currentOpenChat.type === 'dm') {
-            const conversationId = createConversationId(currentUser.username, currentOpenChat.id);
-            messages = socialData.conversations[conversationId] || [];
-        } else { // group
-            messages = socialData.groups[currentOpenChat.id]?.chat || [];
-        }
-        chatViewMessages.innerHTML = '';
-        messages.forEach(msg => {
-            const bubble = document.createElement('div');
-            bubble.className = 'chat-message-bubble';
-            if (msg.sender.toLowerCase() === currentUser.username.toLowerCase()) {
-                bubble.classList.add('mine');
-            } else {
-                bubble.classList.add('theirs');
-                if (currentOpenChat.type === 'group') {
-                    bubble.innerHTML = `<span class="sender-name">${msg.sender}</span>`;
-                }
-            }
-            const textNode = document.createTextNode(msg.text);
-            bubble.appendChild(textNode);
-            chatViewMessages.appendChild(bubble);
-        });
-        chatViewMessages.scrollTop = chatViewMessages.scrollHeight;
-    }
-
-    async function handleSendMessage() {
-        const text = chatViewInput.value.trim();
-        if (!text || !currentOpenChat) return;
-        const socialData = await fetchSocialData();
-        const message = { sender: currentUser.username, text, timestamp: Date.now() };
-
-        if (currentOpenChat.type === 'dm') {
-            const conversationId = createConversationId(currentUser.username, currentOpenChat.id);
-            if (!socialData.conversations[conversationId]) socialData.conversations[conversationId] = [];
-            socialData.conversations[conversationId].push(message);
-        } else { // group
-            const groupId = currentOpenChat.id;
-            if (socialData.groups[groupId]) socialData.groups[groupId].chat.push(message);
-        }
-
-        chatViewInput.value = '';
-        await updateSocialData(socialData);
-        await renderChatMessages();
-    }
-
+    async function openDmGroupsPanel() { const socialData = await fetchSocialData(); if (!socialData || !currentUser) { await showCustomAlert("Não foi possível carregar dados."); return; } dmGroupsOverlay.style.display = 'flex'; dmGroupsMainPanel.style.display = 'block'; chatViewPanel.style.display = 'none'; createGroupPanel.style.display = 'none'; renderDmAndGroupLists(socialData); }
+    function renderDmAndGroupLists(socialData) { const myData = socialData[currentUser.username.toLowerCase()]; dmListContainer.innerHTML = ''; if (myData.friends && myData.friends.length > 0) { myData.friends.forEach(friendName => { const item = document.createElement('div'); item.className = 'dm-list-item'; item.textContent = friendName; item.dataset.friendName = friendName; dmListContainer.appendChild(item); }); } else { dmListContainer.innerHTML = '<p>Nenhum amigo para conversar.</p>'; } groupListContainer.innerHTML = ''; const myGroups = Object.entries(socialData.groups || {}).filter(([id, group]) => group.members.includes(currentUser.username)); if (myGroups.length > 0) { myGroups.forEach(([id, group]) => { const item = document.createElement('div'); item.className = 'group-list-item'; item.textContent = group.name; item.dataset.groupId = id; groupListContainer.appendChild(item); }); } else { groupListContainer.innerHTML = '<p>Você não está em nenhum grupo.</p>'; } }
+    async function openChatView(type, id) { currentOpenChat = { type, id }; dmGroupsMainPanel.style.display = 'none'; chatViewPanel.style.display = 'flex'; if (type === 'dm') chatWithName.textContent = id; else if (type === 'group') { const socialData = await fetchSocialData(); chatWithName.textContent = socialData.groups[id]?.name || 'Grupo'; } await renderChatMessages(); startChatPoll(); }
+    async function renderChatMessages() { if (!currentOpenChat) return; const socialData = await fetchSocialData(); let messages = []; if (currentOpenChat.type === 'dm') { const conversationId = createConversationId(currentUser.username, currentOpenChat.id); messages = socialData.conversations[conversationId] || []; } else { messages = socialData.groups[currentOpenChat.id]?.chat || []; } chatViewMessages.innerHTML = ''; messages.forEach(msg => { const bubble = document.createElement('div'); bubble.className = 'chat-message-bubble'; if (msg.sender.toLowerCase() === currentUser.username.toLowerCase()) { bubble.classList.add('mine'); } else { bubble.classList.add('theirs'); if (currentOpenChat.type === 'group') { bubble.innerHTML = `<span class="sender-name">${msg.sender}</span>`; } } const textNode = document.createTextNode(msg.text); bubble.appendChild(textNode); chatViewMessages.appendChild(bubble); }); chatViewMessages.scrollTop = chatViewMessages.scrollHeight; }
+    async function handleSendMessage() { const text = chatViewInput.value.trim(); if (!text || !currentOpenChat) return; const socialData = await fetchSocialData(); const message = { sender: currentUser.username, text, timestamp: Date.now() }; if (currentOpenChat.type === 'dm') { const conversationId = createConversationId(currentUser.username, currentOpenChat.id); if (!socialData.conversations[conversationId]) socialData.conversations[conversationId] = []; socialData.conversations[conversationId].push(message); } else { const groupId = currentOpenChat.id; if (socialData.groups[groupId]) socialData.groups[groupId].chat.push(message); } chatViewInput.value = ''; await updateSocialData(socialData); await renderChatMessages(); }
     function startChatPoll() { stopChatPoll(); chatPollInterval = setInterval(renderChatMessages, 5000); }
     function stopChatPoll() { if (chatPollInterval) clearInterval(chatPollInterval); chatPollInterval = null; }
-
     function closeChatView() { stopChatPoll(); currentOpenChat = null; dmGroupsMainPanel.style.display = 'block'; chatViewPanel.style.display = 'none'; }
+    async function openCreateGroupPanel() { const socialData = await fetchSocialData(); const myFriends = socialData[currentUser.username.toLowerCase()].friends; createGroupFriendsList.innerHTML = ''; if (myFriends && myFriends.length > 0) { myFriends.forEach(friendName => { const item = document.createElement('div'); item.className = 'friend-invite-item'; item.innerHTML = `<input type="checkbox" id="invite-${friendName}" data-friend-name="${friendName}"><label for="invite-${friendName}">${friendName}</label>`; createGroupFriendsList.appendChild(item); }); } else { createGroupFriendsList.innerHTML = '<p>Você precisa de amigos para convidar.</p>'; } dmGroupsMainPanel.style.display = 'none'; createGroupPanel.style.display = 'block'; }
+    async function handleCreateGroup() { const groupName = createGroupNameInput.value.trim(); if (!groupName) { await showCustomAlert("O grupo precisa de um nome."); return; } const invitedFriends = Array.from(createGroupFriendsList.querySelectorAll('input:checked')).map(input => input.dataset.friendName); const socialData = await fetchSocialData(); const groupId = `group_${Date.now()}`; socialData.groups[groupId] = { name: groupName, owner: currentUser.username, members: [currentUser.username], chat: [] }; const notification = { groupId, groupName, sender: currentUser.username }; invitedFriends.forEach(friendName => { if (socialData[friendName.toLowerCase()]) { if (!socialData[friendName.toLowerCase()].groupInvites) socialData[friendName.toLowerCase()].groupInvites = []; socialData[friendName.toLowerCase()].groupInvites.push(notification); } }); const success = await updateSocialData(socialData); if (success) { await showCustomAlert(`Grupo "${groupName}" criado e convites enviados!`); createGroupNameInput.value = ''; dmGroupsOverlay.style.display = 'none'; } }
+    async function handleGroupInviteResponse(notificationData, accept) { const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; myData.groupInvites = myData.groupInvites.filter(inv => inv.groupId !== notificationData.groupId); if (accept) { const group = socialData.groups[notificationData.groupId]; if (group && !group.members.includes(currentUser.username)) { group.members.push(currentUser.username); } } const success = await updateSocialData(socialData); if (success && accept) { await showCustomAlert(`Você entrou no grupo "${notificationData.groupName}"!`); } hideInteractiveNotification(); checkForNotifications(); }
     
-    async function openCreateGroupPanel() {
-        const socialData = await fetchSocialData();
-        const myFriends = socialData[currentUser.username.toLowerCase()].friends;
-        
-        createGroupFriendsList.innerHTML = '';
-        if (myFriends && myFriends.length > 0) {
-            myFriends.forEach(friendName => {
-                const item = document.createElement('div');
-                item.className = 'friend-invite-item';
-                item.innerHTML = `<input type="checkbox" id="invite-${friendName}" data-friend-name="${friendName}"><label for="invite-${friendName}">${friendName}</label>`;
-                createGroupFriendsList.appendChild(item);
-            });
-        } else {
-            createGroupFriendsList.innerHTML = '<p>Você precisa de amigos para convidar.</p>';
-        }
-
-        dmGroupsMainPanel.style.display = 'none';
-        createGroupPanel.style.display = 'block';
-    }
-
-    async function handleCreateGroup() {
-        const groupName = createGroupNameInput.value.trim();
-        if (!groupName) { await showCustomAlert("O grupo precisa de um nome."); return; }
-        
-        const invitedFriends = Array.from(createGroupFriendsList.querySelectorAll('input:checked')).map(input => input.dataset.friendName);
-        
-        const socialData = await fetchSocialData();
-        const groupId = `group_${Date.now()}`;
-        socialData.groups[groupId] = {
-            name: groupName,
-            owner: currentUser.username,
-            members: [currentUser.username],
-            chat: []
-        };
-        
-        const notification = { groupId, groupName, sender: currentUser.username };
-        invitedFriends.forEach(friendName => {
-            if (socialData[friendName.toLowerCase()]) {
-                if (!socialData[friendName.toLowerCase()].groupInvites) socialData[friendName.toLowerCase()].groupInvites = [];
-                socialData[friendName.toLowerCase()].groupInvites.push(notification);
-            }
-        });
-
-        const success = await updateSocialData(socialData);
-        if (success) {
-            await showCustomAlert(`Grupo "${groupName}" criado e convites enviados!`);
-            createGroupNameInput.value = '';
-            dmGroupsOverlay.style.display = 'none';
-        }
-    }
-    
-    async function handleGroupInviteResponse(notificationData, accept) {
-        const socialData = await fetchSocialData();
-        if (!socialData) return;
-        const myData = socialData[currentUser.username.toLowerCase()];
-        
-        myData.groupInvites = myData.groupInvites.filter(inv => inv.groupId !== notificationData.groupId);
-        
-        if (accept) {
-            const group = socialData.groups[notificationData.groupId];
-            if (group && !group.members.includes(currentUser.username)) {
-                group.members.push(currentUser.username);
-            }
-        }
-        
-        const success = await updateSocialData(socialData);
-        if (success && accept) {
-            await showCustomAlert(`Você entrou no grupo "${notificationData.groupName}"!`);
-        }
-        hideInteractiveNotification();
-        checkForNotifications();
-    }
-    
-    // --- FIM: NOVAS FUNÇÕES ---
-
     // --- Funções do Jogo (Existentes) ---
     function logDebugMessage(message, type = 'info') { if (!isDebugModeEnabled) return; const entry = document.createElement('div'); entry.className = `log-entry ${type}`; entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> ${message}`; debugLogContent.appendChild(entry); debugLogContent.scrollTop = debugLogContent.scrollHeight; }
     
-    // ### ALTERAÇÃO: Função modificada para incluir Modpacks ###
     function prepareActiveGameData(selectedModIds = null) {
         let modsToProcess;
-
         if (selectedModIds) {
-            // Se IDs específicos são passados (do lobby multiplayer), usa eles
             modsToProcess = allMods.filter(m => selectedModIds.includes(m.id));
         } else {
-            // Para single-player, considera mods individuais E mods de packs ativos
             const activeIndividualMods = allMods.filter(m => m.active);
             const activeModpackMods = allModpacks
                 .filter(pack => pack.active)
-                .flatMap(pack => pack.mods) // Pega todos os IDs de mods dos packs ativos
-                .map(modId => allMods.find(m => m.id === modId)) // Encontra os objetos de mod correspondentes
-                .filter(Boolean); // Remove mods não encontrados (se houver)
-
-            // Usa um Map para garantir que cada mod seja incluído apenas uma vez
+                .flatMap(pack => pack.mods)
+                .map(modId => allMods.find(m => m.id === modId))
+                .filter(Boolean);
             const allActiveModsMap = new Map();
             activeIndividualMods.forEach(mod => allActiveModsMap.set(mod.id, mod));
             activeModpackMods.forEach(mod => allActiveModsMap.set(mod.id, mod));
-
             modsToProcess = Array.from(allActiveModsMap.values());
         }
-
-        // O resto da função permanece igual
         activeGameMonsterTypes = [...baseMonsterTypes];
         activeGameBarricadeTypes = [...baseBarricadeTypes];
         activeGameGuardianTypes = JSON.parse(JSON.stringify(baseGuardianTypes));
         customWaveDefinitions = {};
-
         modsToProcess.forEach(mod => {
             if (mod.type === 'monster') { activeGameMonsterTypes.push({ ...mod, elementCreator: () => createCustomModElement(mod), attackType: 'melee' }); }
             else if (mod.type === 'barricade') { activeGameBarricadeTypes.push({ ...mod, color: 'transparent', border: '2px solid #ccc', isCustom: true }); }
@@ -815,17 +534,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderSaveSlots() { const saves = getSaveGames(); saveSlotsContainer.innerHTML = ''; for (let i = 0; i < MAX_SAVE_SLOTS; i++) { const save = saves[i]; const slot = document.createElement('div'); slot.classList.add('save-slot'); if (save) { const healthPercent = (save.castleHealth / save.maxCastleHealth) * 100; slot.innerHTML = `<div class="save-slot-header"><span class="save-slot-name">${save.name}</span><div class="save-slot-wave">Onda ${save.currentWave}</div></div><div class="save-slot-stats"><span>$${save.money}</span><span>💎 ${save.diamonds}</span></div><div class="save-slot-progress-container"><div class="save-slot-progress-bar" style="width: ${healthPercent}%;"></div></div><button class="save-slot-delete-button" data-index="${i}">X</button>`; slot.dataset.index = i; } else { slot.classList.add('empty'); slot.textContent = `[ Jogo Vazio ${i + 1} ]`; } saveSlotsContainer.appendChild(slot); } }
     async function saveCurrentGame(saveIndex = -1) { if (gameMode === 'ai') { await showCustomAlert("Não é possível salvar jogos no modo Multiplayer."); return; } let saves = getSaveGames(); let saveName; if (saveIndex !== -1 && saves[saveIndex]) { saveName = saves[saveIndex].name; } else { if (saves.length >= MAX_SAVE_SLOTS) { await showCustomAlert('Máximo de saves atingido!'); return; } saveName = await showCustomPrompt("Nome para seu jogo salvo:", `Jogo ${saves.length + 1}`); if (!saveName || saveName.trim() === '') return; } const gameState = { name: saveName.trim(), money, diamonds, currentWave, castleHealth, maxCastleHealth: MAX_CASTLE_HEALTH, currentCastleType, currentCastleEvolution, purchasedWeapons, currentWeaponIndex, guardianInventory, guardianSlots, barricades: barricades.map(b => ({ typeId: b.typeId, health: b.health, x: b.x, y: b.y })) }; if (saveIndex !== -1) { saves[saveIndex] = gameState; logDebugMessage(`Jogo "${saveName}" sobrescrito.`); } else { saves.push(gameState); } saveGameList(saves); if (saveIndex === -1) { await showCustomAlert(`Jogo "${saveName}" salvo!`); } renderSaveSlots(); }
     function loadGameFromState(state) { money = state.money; diamonds = state.diamonds; currentWave = state.currentWave - 1; purchasedWeapons = state.purchasedWeapons; currentWeaponIndex = state.currentWeaponIndex; guardianInventory = state.guardianInventory || []; guardianSlots = state.guardianSlots || [null, null, null]; isGameOver = false; isPaused = false; updateCastle(state.currentCastleType, state.currentCastleEvolution, { loadedHealth: state.castleHealth }); if(state.barricades) { barricades = []; state.barricades.forEach(bData => { const type = activeGameBarricadeTypes.find(t => t.id === bData.typeId); if(type) { placeBarricade(type, { x: bData.x, y: bData.y, health: bData.health }); } }); } updateGuardianVisuals(); updateGuardianPanel(); updateCastleHealthDisplay(false); updateDiamondDisplay(); updateMoneyDisplay(); startNextWave(); }
-    function showCustomModal(message, type = 'alert', defaultValue = '') { return new Promise(resolve => { customModalMessage.textContent = message; customModalActions.innerHTML = ''; if (type === 'prompt') { customModalInput.style.display = 'block'; customModalInput.value = defaultValue; } else { customModalInput.style.display = 'none'; } if (type === 'confirm' || type === 'prompt') { const confirmBtn = document.createElement('button'); confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK'; confirmBtn.className = 'main-menu-button'; confirmBtn.style.backgroundColor = '#28a745'; confirmBtn.style.fontSize = '0.8em'; confirmBtn.style.padding = '10px 20px'; const cancelBtn = document.createElement('button'); cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar'; cancelBtn.className = 'main-menu-button'; cancelBtn.style.backgroundColor = '#dc3545'; cancelBtn.style.fontSize = '0.8em'; cancelBtn.style.padding = '10px 20px'; confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); }; cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); }; customModalActions.appendChild(cancelBtn); customModalActions.appendChild(confirmBtn); } else { const okBtn = document.createElement('button'); okBtn.textContent = 'OK'; okBtn.className = 'main-menu-button'; okBtn.style.backgroundColor = '#007bff'; okBtn.style.fontSize = '0.8em'; okBtn.style.padding = '10px 20px'; okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); }; customModalActions.appendChild(okBtn); } customModalOverlay.style.display = 'flex'; if (type === 'prompt') customModalInput.focus(); }); }
-    async function showCustomAlert(message) { return showCustomModal(message, 'alert'); }
-    async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
-    async function showCustomPrompt(message, defaultValue = '') { return showCustomModal(message, 'prompt', defaultValue); }
-    async function fetchOnlineMods() { try { const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } }); if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return data.record; } catch (error) { console.error("Falha ao carregar mods:", error); onlineModList.innerHTML = '<p style="color:#ff6b6b;">Erro ao carregar mods.</p>'; return []; } }
-    async function renderOnlineMods() { onlineModList.innerHTML = '<p>Carregando...</p>'; let modsToDisplay = await fetchOnlineMods(); const searchTerm = onlineModSearch.value.toLowerCase(); const sortMethod = onlineModSort.value; if (searchTerm) modsToDisplay = modsToDisplay.filter(mod => mod.name.toLowerCase().includes(searchTerm)); modsToDisplay.sort((a, b) => { switch (sortMethod) { case 'usage_desc': return (b.usageCount || 0) - (a.usageCount || 0); case 'name_asc': return a.name.localeCompare(b.name); case 'date_desc': default: return b.publishDate - a.publishDate; } }); onlineModList.innerHTML = ''; if (modsToDisplay.length === 0) { onlineModList.innerHTML = '<p>Nenhum mod encontrado.</p>'; return; } modsToDisplay.forEach(mod => { const item = document.createElement('div'); item.className = 'online-mod-item'; item.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${mod.name}</span><span class="online-mod-type">${mod.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${mod.author || 'Anônimo'}</span><span>usado: ${mod.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${mod.id}" data-code="${mod.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${mod.modCode}">Copiar</button><button class="mod-button action online-mod-edit-btn" data-code="${mod.modCode}" data-name="${mod.name}">Editar</button><button class="mod-button danger online-mod-delete-btn" data-mod-id="${mod.id}">Excluir</button></div>`; onlineModList.appendChild(item); }); }
-    async function publishMod(index) { const modToPublish = allMods[index]; if (!modToPublish) return; const authorName = await showCustomPrompt("Digite seu nome de autor:", "Anônimo"); if (!authorName) return; try { let onlineMods = await fetchOnlineMods(); const modCode = btoa(JSON.stringify(modToPublish)); const newOnlineMod = { id: `online_${Date.now()}`, name: modToPublish.name, type: modToPublish.type, author: authorName, publishDate: Date.now(), usageCount: 0, modCode: modCode }; onlineMods.unshift(newOnlineMod); const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`); await showCustomAlert(`Mod "${modToPublish.name}" publicado!`); renderOnlineMods(); } catch (error) { console.error("Falha ao publicar:", error); await showCustomAlert("Erro ao publicar o mod."); } }
+    
     async function editOnlineMod(code, originalName) { try { const jsonString = atob(code); let modData = JSON.parse(jsonString); modScreen.style.display = 'none'; modEditorScreen.style.display = 'flex'; initializeModEditor(); let newName = `${originalName}_edit1`; let editCount = 1; while(allMods.some(m => m.name === newName)) { editCount++; newName = `${originalName}_edit${editCount}`; } switchEditorTab(modData.type); document.getElementById('mod-name').value = newName; if (modData.type !== 'wave') { rebuildPixelGrid(modData.gridWidth || 16, modData.gridHeight || 16); document.querySelectorAll('#pixel-grid .pixel').forEach((p, i) => { p.style.backgroundColor = modData.pixelData[i] || 'transparent'; }); document.getElementById('mod-grid-width').value = modData.gridWidth || 16; document.getElementById('mod-grid-height').value = modData.gridHeight || 16; document.getElementById('mod-width').value = modData.width; document.getElementById('mod-height').value = modData.height; } if (modData.type === 'monster') { document.getElementById('mod-health').value = modData.health; document.getElementById('mod-damage').value = modData.damage; document.getElementById('mod-speed').value = modData.speed; document.getElementById('mod-money').value = modData.money; document.getElementById('mod-spawnWaves').value = modData.spawnWaves.join(','); document.getElementById('mod-spawnCount').value = modData.spawnCount; document.getElementById('mod-isFlying').value = modData.isFlying; } await showCustomAlert(`Editando cópia de "${originalName}". Salvo como "${newName}".`); } catch (error) { await showCustomAlert("Não foi possível carregar para edição."); console.error(error); } }
-    async function incrementModUsageCount(modId) { try { let onlineMods = await fetchOnlineMods(); const modIndex = onlineMods.findIndex(m => m.id === modId); if (modIndex > -1) { onlineMods[modIndex].usageCount = (onlineMods[modIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); renderOnlineMods(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
+    async function incrementModUsageCount(modId) { try { let onlineMods = await fetchOnlineMods(); const modIndex = onlineMods.findIndex(m => m.id === modId); if (modIndex > -1) { onlineMods[modIndex].usageCount = (onlineMods[modIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); renderOnlineHub(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
     async function deleteOnlineModFromServer(modIdToDelete) { try { let onlineMods = await fetchOnlineMods(); const updatedMods = onlineMods.filter(mod => mod.id !== modIdToDelete); const response = await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(updatedMods) }); if (!response.ok) { throw new Error(`Erro ao atualizar o bin: ${response.statusText}`); } return true; } catch (error) { console.error("Falha ao excluir mod do servidor:", error); return false; } }
-    async function handleDeleteOnlineMod(modId) { const password = await showCustomPrompt("Digite a senha de administrador para excluir o mod:", ""); if (password === null) return; if (password === '123456') { const success = await deleteOnlineModFromServer(modId); if (success) { await showCustomAlert("Mod excluído com sucesso da biblioteca online."); renderOnlineMods(); } else { await showCustomAlert("Ocorreu um erro ao tentar excluir o mod."); } } else { await showCustomAlert("Senha incorreta. A exclusão foi cancelada."); } }
+    async function handleDeleteOnlineMod(modId) { const password = await showCustomPrompt("Digite a senha de administrador para excluir o mod:", ""); if (password === null) return; if (password === '123456') { const success = await deleteOnlineModFromServer(modId); if (success) { await showCustomAlert("Mod excluído com sucesso da biblioteca online."); renderOnlineHub(); } else { await showCustomAlert("Ocorreu um erro ao tentar excluir o mod."); } } else { await showCustomAlert("Senha incorreta. A exclusão foi cancelada."); } }
     function getRandomPhrase(category) { const phrases = aiPhrases[category] || ["..."]; return phrases[Math.floor(Math.random() * phrases.length)]; }
     function runAILogic() { if (isPaused || isGameOver || isCastleAIDestroyed) return; const healItem = specialItems.full_heal; if (castleHealthAI < MAX_CASTLE_HEALTH_AI * 0.4 && diamonds >= healItem.cost) { diamonds -= healItem.cost; castleHealthAI = MAX_CASTLE_HEALTH_AI; updateDiamondDisplay(); updateCastleHealthDisplay(true); addChatMessage("IA", "Usando cura de emergência!", true); return; } const castleUpgradePath = ['wood', 'clay', 'stone', 'aluminum']; const currentAIcastleIndex = castleUpgradePath.indexOf(currentCastleTypeAI); if (currentAIcastleIndex !== -1 && currentAIcastleIndex < castleUpgradePath.length - 1) { const nextCastleId = castleUpgradePath[currentAIcastleIndex + 1]; const nextCastleInfo = castles[nextCastleId][0]; if (money >= nextCastleInfo.cost * 1.8) { money -= nextCastleInfo.cost; updateCastle(nextCastleId, 0, { isAI: true }); addChatMessage("IA", getRandomPhrase('castleUpgrade'), true); return; } } const castlePath = castles[currentCastleTypeAI]; if (currentCastleEvolutionAI < castlePath.length - 1) { const nextEvo = castlePath[currentCastleEvolutionAI + 1]; if (money > nextEvo.cost * 1.5) { if(evolveCurrentCastle(true)) { addChatMessage("IA", "Evoluindo meu castelo!", true); return; } } } if (money > 100 && Math.random() < 0.8) { for (let i = 0; i < guardianSlotsAI.length; i++) { const guardian = guardianSlotsAI[i]; if (guardian) { const type = activeGameGuardianTypes[guardian.typeId]; if (type && !type.isCustom && guardian.level < 4) { const nextEvo = type.evolutions[guardian.level]; if (money >= nextEvo.cost) { money -= nextEvo.cost; guardian.level++; addChatMessage("IA", getRandomPhrase('guardianEvolve'), true); updateMoneyDisplay(); return; } } } } const emptySlotIndex = guardianSlotsAI.findIndex(slot => slot === null); if (emptySlotIndex !== -1 && guardianInventoryAI.length > 0) { guardianSlotsAI[emptySlotIndex] = guardianInventoryAI.shift(); const type = activeGameGuardianTypes[guardianSlotsAI[emptySlotIndex].typeId]; addChatMessage("IA", `Equipando um ${type.name}.`, true); updateGuardianVisuals(); return; } if (money > 200 && (guardianInventoryAI.length + guardianSlotsAI.filter(Boolean).length) < 5) { const affordableGuardians = Object.keys(activeGameGuardianTypes).filter(id => money >= activeGameGuardianTypes[id].evolutions[0].cost); if (affordableGuardians.length > 0) { const typeId = affordableGuardians[Math.floor(Math.random() * affordableGuardians.length)]; const type = activeGameGuardianTypes[typeId]; money -= type.evolutions[0].cost; guardianInventoryAI.push({ typeId: typeId, level: 1, lastAttackTime: 0 }); addChatMessage("IA", getRandomPhrase('guardianPurchase'), true); updateMoneyDisplay(); return; } } } if (Math.random() < 0.05) { addChatMessage("IA", getRandomPhrase('idle'), true); } }
     function addChatMessage(sender, message, isAI = false) { if (!sender || !message) return; if (chatPanel.classList.contains('hidden')) { showNotificationBubble(message, 'chat'); } const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message'; const senderSpan = document.createElement('span'); senderSpan.className = isAI ? 'sender-ai' : 'sender-player'; senderSpan.textContent = `${sender}: `; messageDiv.appendChild(senderSpan); messageDiv.append(message); chatMessages.appendChild(messageDiv); chatMessages.scrollTop = chatMessages.scrollHeight; }
@@ -864,17 +577,16 @@ document.addEventListener('DOMContentLoaded', () => {
     commands.forEach(c => { const entry = document.createElement('div'); entry.className = 'command-entry'; entry.innerHTML = `<div class="command-desc"><code>${c.cmd.split(' ')[0]}</code> - ${c.desc}</div><button class="copy-command-btn" data-command="${c.cmd}"><div class="clipboard-icon"></div><span class="copied-icon">✓</span></button>`; commandHelpContent.appendChild(entry); });
     document.querySelectorAll('.copy-command-btn').forEach(btn => { btn.addEventListener('click', (e) => { const button = e.currentTarget; const commandToCopy = button.dataset.command; navigator.clipboard.writeText(commandToCopy).then(() => { const clipboardIcon = button.querySelector('.clipboard-icon'); const copiedIcon = button.querySelector('.copied-icon'); clipboardIcon.style.display = 'none'; copiedIcon.style.display = 'inline'; setTimeout(() => { clipboardIcon.style.display = 'block'; copiedIcon.style.display = 'none'; }, 1000); }); }); });
     toggleFullscreenButton.addEventListener('click', () => { if (!document.fullscreenElement) { gameContainer.requestFullscreen().catch(err => { showCustomAlert(`Não foi possível entrar em tela cheia: ${err.message}`); }); } else { document.exitFullscreen(); } });
-    modsButton.addEventListener('click', () => { startScreen.style.display = 'none'; modScreen.style.display = 'flex'; loadMods(); loadModpacks(); renderModList(); renderModpackList(); renderOnlineMods(); switchModManagerTab('local'); });
+    modsButton.addEventListener('click', () => { startScreen.style.display = 'none'; modScreen.style.display = 'flex'; loadMods(); loadModpacks(); renderModList(); renderModpackList(); renderOnlineHub(); switchModManagerTab('local'); });
     backToMenuFromModsButton.addEventListener('click', showStartScreen);
     
-    // ### ALTERAÇÃO: Evento do botão genérico de criação ###
-    createNewButton.addEventListener('click', () => {
+    createNewButton.addEventListener('click', async () => {
         if (currentModTab === 'local') {
             modScreen.style.display = 'none';
             modEditorScreen.style.display = 'flex';
             initializeModEditor();
-        } else { // 'packs'
-            openModpackEditor();
+        } else {
+            await openModpackEditor();
         }
     });
 
@@ -882,7 +594,6 @@ document.addEventListener('DOMContentLoaded', () => {
     addModButton.addEventListener('click', async () => { const code = modCodeInput.value.trim(); if (!code) return showCustomAlert('Por favor, cole um código de mod.'); try { const jsonString = atob(code); const modData = JSON.parse(jsonString); if (!modData.id || !modData.type || !modData.name) throw new Error("Código de mod inválido."); if (allMods.some(m => m.id === modData.id)) return showCustomAlert('Um mod com este ID já existe!'); allMods.push(modData); saveMods(); renderModList(); modCodeInput.value = ''; await showCustomAlert(`Mod "${modData.name}" adicionado!`); } catch (error) { await showCustomAlert('Erro ao adicionar o mod. Código inválido. \n' + error.message); } });
     modListContainer.addEventListener('click', async (e) => { const check = e.target.closest('.mod-toggle-check'); const delBtn = e.target.closest('.mod-delete-btn'); const publishBtn = e.target.closest('.mod-publish-btn'); if (check) { const index = parseInt(check.dataset.index); if (allMods[index]) { allMods[index].active = check.checked; saveMods(); } } else if (delBtn) { const index = parseInt(delBtn.dataset.index); if (allMods[index]) { const wantToDelete = await showCustomConfirm(`Deseja excluir o mod "${allMods[index].name}"?`); if(wantToDelete) { allMods.splice(index, 1); saveMods(); renderModList(); } } } else if (publishBtn) { const index = parseInt(publishBtn.dataset.index); await publishMod(index); } });
     
-    // ### INÍCIO: NOVOS LISTENERS PARA MODPACKS ###
     modTabLocal.addEventListener('click', () => switchModManagerTab('local'));
     modTabPacks.addEventListener('click', () => switchModManagerTab('packs'));
     cancelModpackCreationButton.addEventListener('click', () => {
@@ -895,6 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const check = e.target.closest('.modpack-toggle-check');
         const delBtn = e.target.closest('.modpack-delete-btn');
         const editBtn = e.target.closest('.modpack-edit-btn');
+        const publishBtn = e.target.closest('.modpack-publish-btn');
         if(check) {
             const index = parseInt(check.dataset.index);
             if(allModpacks[index]) {
@@ -913,10 +625,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (editBtn) {
             const index = parseInt(editBtn.dataset.index);
-            openModpackEditor(index);
+            await openModpackEditor(index);
+        } else if (publishBtn) {
+            const index = parseInt(publishBtn.dataset.index);
+            await publishModpack(index);
         }
     });
-    // ### FIM: NOVOS LISTENERS PARA MODPACKS ###
 
     editorTabs.addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
     colorPalette.addEventListener('click', (e) => { const colorBox = e.target.closest('.color-box'); if (colorBox) { editorCurrentColor = colorBox.dataset.color; document.querySelectorAll('#color-palette .color-box').forEach(b => b.classList.remove('selected')); colorBox.classList.add('selected'); } });
@@ -932,17 +646,29 @@ document.addEventListener('DOMContentLoaded', () => {
     addNewlyCreatedModBtn.addEventListener('click', () => { if (newlyCreatedMod) { if (!allMods.some(m => m.id === newlyCreatedMod.id)) { allMods.push(newlyCreatedMod); saveMods(); } newlyCreatedMod = null; modCodeDisplayOverlay.style.display = 'none'; modEditorScreen.style.display = 'none'; modScreen.style.display = 'flex'; renderModList(); } });
     closeCodePanelBtn.addEventListener('click', () => { newlyCreatedMod = null; modCodeDisplayOverlay.style.display = 'none'; });
     onlinePanelToggle.addEventListener('click', () => onlineModsPanel.classList.toggle('collapsed'));
-    onlineModSearch.addEventListener('input', renderOnlineMods);
-    onlineModSort.addEventListener('change', renderOnlineMods);
-    onlineModList.addEventListener('click', e => { 
-        const addBtn = e.target.closest('.online-mod-add-btn'); 
-        const copyBtn = e.target.closest('.online-mod-copy-btn'); 
-        const editBtn = e.target.closest('.online-mod-edit-btn'); 
-        const deleteBtn = e.target.closest('.online-mod-delete-btn'); 
-        if (addBtn) { modCodeInput.value = addBtn.dataset.code; addModButton.click(); const modId = addBtn.dataset.modId; if(modId) incrementModUsageCount(modId); } 
-        if (copyBtn) { navigator.clipboard.writeText(copyBtn.dataset.code).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1500); }); } 
+    onlineModSearch.addEventListener('input', renderOnlineHub);
+    onlineModSort.addEventListener('change', renderOnlineHub);
+    onlineModList.addEventListener('click', e => {
+        const addBtn = e.target.closest('.online-mod-add-btn');
+        const copyBtn = e.target.closest('.online-mod-copy-btn');
+        const editBtn = e.target.closest('.online-mod-edit-btn');
+        const deleteBtn = e.target.closest('.online-mod-delete-btn');
+        const addPackBtn = e.target.closest('.online-pack-add-btn');
+        if (addBtn) { modCodeInput.value = addBtn.dataset.code; addModButton.click(); const modId = addBtn.dataset.modId; if(modId) incrementModUsageCount(modId); }
+        if (copyBtn) { navigator.clipboard.writeText(copyBtn.dataset.code).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1500); }); }
         if (editBtn) { editOnlineMod(editBtn.dataset.code, editBtn.dataset.name); }
         if (deleteBtn) { handleDeleteOnlineMod(deleteBtn.dataset.modId); }
+        if (addPackBtn) { handleAddOnlineModpack(addPackBtn.dataset.packId); }
+    });
+    document.getElementById('hub-tab-mods').addEventListener('click', () => {
+        document.getElementById('hub-tab-packs').classList.remove('active');
+        document.getElementById('hub-tab-mods').classList.add('active');
+        renderOnlineHub();
+    });
+    document.getElementById('hub-tab-packs').addEventListener('click', () => {
+        document.getElementById('hub-tab-mods').classList.remove('active');
+        document.getElementById('hub-tab-packs').classList.add('active');
+        renderOnlineHub();
     });
     playWithAIButton.addEventListener('click', showModSelectionScreen);
     backToMenuFromLobbyButton.addEventListener('click', showStartScreen);
@@ -954,7 +680,6 @@ document.addEventListener('DOMContentLoaded', () => {
     emotePicker.addEventListener('click', e => { if(e.target.classList.contains('emote')) { const emote = e.target.textContent; showNotificationBubble(emote, 'emote'); triggerAIEmoteReaction(emote); emotePicker.style.display = 'none'; } });
     chatInput.addEventListener('keydown', e => { if (e.key === 'Enter' && chatInput.value.trim() !== '') { addChatMessage('Player', chatInput.value.trim(), false); chatInput.value = ''; } });
     
-    // --- Event Listeners Sociais (Com Novas Funções) ---
     socialProfileButton.addEventListener('click', () => {
         socialOverlay.style.display = 'flex';
         if (currentUser) {
@@ -991,7 +716,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentNotification.type === 'groupInvite') { handleGroupInviteResponse(currentNotification.data, false); }
     });
     
-    // --- NOVOS Event Listeners para DMs e Grupos ---
     dmListContainer.addEventListener('click', (e) => { const item = e.target.closest('.dm-list-item'); if(item) openChatView('dm', item.dataset.friendName); });
     groupListContainer.addEventListener('click', (e) => { const item = e.target.closest('.group-list-item'); if(item) openChatView('group', item.dataset.groupId); });
     chatBackButton.addEventListener('click', closeChatView);
@@ -1008,7 +732,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (username && password) await handleLogin(username, password);
             } catch (e) { console.error("Erro no auto-login", e); localStorage.removeItem('castleDefenseUser'); }
         }
-        updateUiForLogin(); // Garante que o botão MP seja atualizado
+        updateUiForLogin();
     }
 
     // --- Inicialização ---
