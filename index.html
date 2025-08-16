@@ -4,502 +4,473 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Defesa do Castelo</title>
-    <!-- Link para o seu arquivo de CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@700;900&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- TODA A ESTRUTURA HTML DO JOGO VAI AQUI -->
-    <div id="game-container" style="width: 100%; max-width: 960px; height: 540px; border: 2px solid #333; background-color: #7CFC00; position: relative; overflow: hidden; margin: 20px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.2); display: none;">
+<div id="game-container" style="width: 100%; max-width: 960px; height: 540px; border: 2px solid #333; background-color: #7CFC00; position: relative; overflow: hidden; margin: 20px auto; box-shadow: 0 4px 8px rgba(0,0,0,0.2); display: none;">
     
-        <div id="intro-screen">
-            <div id="intro-content">
-                <div id="af-logo"></div>
-                <h2 id="intro-text">Arroz e Feijãozinho Games</h2>
-            </div>
+    <div id="intro-screen">
+        <div id="intro-content">
+            <div id="af-logo"></div>
+            <h2 id="intro-text">Arroz e Feijãozinho Games</h2>
         </div>
-        <div id="loading-screen">
-            <div style="font-size: 1.5em; margin-bottom: 20px;">Carregando...</div>
-            <div id="loading-spinner" style="border: 8px solid #f3f3f3; border-top: 8px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+    </div>
+    <div id="loading-screen">
+        <div style="font-size: 1.5em; margin-bottom: 20px;">Carregando...</div>
+        <div id="loading-spinner" style="border: 8px solid #f3f3f3; border-top: 8px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <!-- TELA INICIAL MODIFICADA COM SAVE SLOTS -->
+    <div id="start-screen">
+        <div id="saved-games-panel" class="collapsed">
+            <h2 class="panel-title">Jogos Salvos</h2>
+            <div id="save-slots-container">
+                <!-- Populado por JavaScript -->
+            </div>
+            <div id="save-panel-toggle"><span class="arrow">▶</span></div>
         </div>
-    
-        <!-- TELA INICIAL MODIFICADA COM SAVE SLOTS -->
-        <div id="start-screen">
-            <div id="saved-games-panel" class="collapsed">
-                <h2 class="panel-title">Jogos Salvos</h2>
-                <div id="save-slots-container">
-                    <!-- Populado por JavaScript -->
-                </div>
-                <div id="save-panel-toggle"><span class="arrow">▶</span></div>
-            </div>
-            <div id="main-actions-panel">
-                <h1 style="font-size: 3em; margin-bottom: 40px; text-shadow: 4px 4px 0px #000;">DEFESA DO CASTELO</h1>
-                <div id="start-menu-buttons">
-                    <button id="new-game-button" class="main-menu-button">Novo Jogo</button>
-                    <button id="multiplayer-button" class="main-menu-button">Multiplayer</button>
-                    <button id="mods-button" class="main-menu-button">Mods</button>
-                </div>
-            </div>
-            
-            <!-- INÍCIO: NOVOS ELEMENTOS SOCIAIS NA TELA INICIAL -->
-            <button id="social-profile-button">👤</button>
-            <div id="trophy-counter">
-                <span class="trophy-icon">🏆</span>
-                <span id="trophy-value">0</span>
-            </div>
-            <!-- FIM: NOVOS ELEMENTOS SOCIAIS NA TELA INICIAL -->
-    
-            <button id="toggle-fullscreen-button">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <button id="enable-debug-button">Debug: OFF</button>
-        </div>
-        
-        <!-- TELA DE LOBBY MULTIPLAYER -->
-        <div id="multiplayer-lobby-screen">
-            <h1 style="font-size: 2.5em; margin-bottom: 40px; text-shadow: 3px 3px 0px #000;">MODO MULTIPLAYER</h1>
-            <div id="lobby-buttons" style="display: flex; flex-direction: column; gap: 20px;">
-                <button id="play-with-ai-button" class="main-menu-button" style="background-color: #28a745;">Jogar com IA</button>
-                <button id="play-with-friend-button" class="main-menu-button disabled">Jogar com Amigo (Em breve)</button>
-                <button id="back-to-menu-from-lobby-button" class="main-menu-button" style="background-color: #dc3545; font-size: 1em; padding: 10px 20px;">Voltar</button>
-            </div>
-        </div>
-    
-        <!-- NOVO: TELA DE SELEÇÃO DE MODS -->
-        <div id="mod-selection-screen">
-            <div class="mod-screen-container">
-                <h2 class="mod-header">Selecionar Mods para a Partida</h2>
-                <div id="mod-selection-list">
-                    <!-- Populado por JS -->
-                </div>
-                <div class="mod-controls" style="justify-content: space-between;">
-                    <button id="back-to-lobby-from-mod-selection-button" class="mod-button danger">Voltar</button>
-                    <button id="start-ai-game-with-mods-button" class="mod-button primary">Iniciar Jogo</button>
-                </div>
-            </div>
-        </div>
-    
-    
-        <!-- Modding System Screens -->
-        <div id="mod-screen">
-            <div class="mod-screen-container">
-                <h2 class="mod-header">Gerenciador de Mods</h2>
-        
-                <!-- INÍCIO: ABAS PARA MODS E MODPACKS -->
-                <div class="editor-tabs" style="margin-bottom: 15px; flex-shrink: 0;">
-                    <button class="manager-tab active" data-view="mods">Mods Individuais</button>
-                    <button class="manager-tab" data-view="modpacks">Modpacks</button>
-                </div>
-                <!-- FIM: ABAS -->
-        
-                <!-- Container para a visualização de Mods Individuais -->
-                <div id="mods-view" class="manager-view active">
-                    <div class="mod-controls">
-                        <input type="text" id="mod-code-input" class="mod-input" placeholder="Cole o código do mod aqui...">
-                        <button id="add-mod-button" class="mod-button primary">Adicionar</button>
-                    </div>
-                    <div id="mod-list-container" class="manager-list-container">
-                        <!-- Mod list will be generated by JS -->
-                    </div>
-                </div>
-        
-                <!-- Container para a visualização de Modpacks -->
-                <div id="modpacks-view" class="manager-view">
-                    <div id="modpack-list-container" class="manager-list-container">
-                        <!-- Modpack list will be generated by JS -->
-                    </div>
-                </div>
-        
-                <div class="mod-controls" style="margin-top: 20px; margin-bottom: 0; justify-content: space-between;">
-                    <button id="back-to-menu-from-mods-button" class="mod-button danger">Voltar ao Menu</button>
-                    <div>
-                        <button id="create-new-mod-button" class="mod-button secondary">Criar Novo Mod</button>
-                        <button id="create-new-modpack-button" class="mod-button secondary" style="background-color: #ff9800;">Criar Novo Modpack</button>
-                    </div>
-                </div>
-            </div>
-        
-            <div id="online-mods-panel" class="collapsed">
-                <div id="online-panel-toggle">
-                    <span class="arrow">▶</span>
-                </div>
-                <div id="online-panel-content">
-                    <h2 class="mod-header" style="font-size: 1.3em; color: #4db8ff;">Mod Hub</h2>
-                    <!-- INÍCIO: ABAS PARA HUB ONLINE -->
-                    <div class="editor-tabs" style="margin-bottom: 10px; font-size: 0.8em; flex-shrink: 0;">
-                        <button class="online-hub-tab active" data-hub-view="mods">Mods</button>
-                        <button class="online-hub-tab" data-hub-view="modpacks">Modpacks</button>
-                    </div>
-                    <!-- FIM: ABAS -->
-                    <div id="online-mod-controls">
-                        <input type="text" id="online-mod-search" class="mod-input" placeholder="Pesquisar por nome...">
-                        <select id="online-mod-sort" class="mod-input">
-                            <option value="date_desc">Mais Recentes</option>
-                            <option value="usage_desc">Mais Usados</option>
-                            <option value="name_asc">Nome (A-Z)</option>
-                        </select>
-                    </div>
-                    <div id="online-mod-list" class="online-list-container active">
-                        <!-- Lista de mods online será gerada por JS -->
-                    </div>
-                    <div id="online-modpack-list" class="online-list-container">
-                        <!-- Lista de modpacks online será gerada por JS -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <div id="mod-editor-screen">
-            <div id="mod-editor-content">
-                <div id="editor-main-panel">
-                    <div class="editor-tabs">
-                        <button class="editor-tab active" data-type="monster">Monstro</button>
-                        <button class="editor-tab" data-type="guardian">Guardião</button>
-                        <button class="editor-tab" data-type="barricade">Barricada</button>
-                        <button class="editor-tab" data-type="wave">Onda</button>
-                    </div>
-    
-                    <div id="pixel-editor-panel" class="editor-panel-for-type">
-                        <div id="pixel-editor">
-                            <div id="pixel-grid" style="--grid-width: 16; --grid-height: 16;"></div>
-                            <div id="editor-tools">
-                                <div id="color-palette"></div>
-                                <button id="pencil-tool-btn" class="editor-tool-btn selected"></button>
-                                <button id="bucket-tool-btn" class="editor-tool-btn"></button>
-                                <button id="eraser-tool-btn" class="editor-tool-btn"></button>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <div id="wave-editor-panel" class="editor-panel-for-type">
-                        <div id="wave-monster-list" style="max-height: 200px; overflow-y: auto; padding: 5px;">
-                           <!-- Wave monster entries will be added here -->
-                        </div>
-                        <button id="add-monster-to-wave-btn" class="mod-button secondary" style="font-size: 0.6em; padding: 6px;">+ Adicionar Monstro à Onda</button>
-                    </div>
-                    
-                    <div class="editor-actions-bar">
-                        <button id="cancel-mod-creation-button" class="mod-button danger">Cancelar</button>
-                        <button id="save-mod-button" class="mod-button primary">Salvar e Gerar Código</button>
-                    </div>
-                </div>
-                <div id="editor-stat-panel">
-                    <h3 style="text-align: center; margin-top: 0; font-size: 1em; color: #ffc107;">Propriedades</h3>
-                    <div id="stat-inputs-container">
-                        <!-- Stat inputs will be generated by JS -->
-                    </div>
-                </div>
+        <div id="main-actions-panel">
+            <h1 style="font-size: 3em; margin-bottom: 40px; text-shadow: 4px 4px 0px #000;">DEFESA DO CASTELO</h1>
+            <div id="start-menu-buttons">
+                <button id="new-game-button" class="main-menu-button">Novo Jogo</button>
+                <button id="multiplayer-button" class="main-menu-button">Multiplayer</button>
+                <button id="mods-button" class="main-menu-button">Mods</button>
             </div>
         </div>
         
-        <!-- INÍCIO: NOVA TELA - EDITOR DE MODPACK -->
-        <div id="modpack-editor-screen" style="display: none; background-color: #2c2c2c; z-index: 9997; font-family: 'Press Start 2P', cursive, monospace; color: white; padding: 20px; position: absolute; top:0; left:0; width:100%; height:100%; box-sizing: border-box;">
-            <div class="mod-screen-container">
-                <h2 class="mod-header">Criador de Modpacks</h2>
-                <div id="modpack-editor-content" style="display: flex; gap: 20px; flex-grow: 1; min-height: 0;">
-                    <!-- Coluna da Esquerda: Detalhes e Mods Selecionados -->
-                    <div style="flex: 1; display: flex; flex-direction: column;">
-                        <div class="stat-input-group">
-                            <label for="modpack-name">Nome do Modpack:</label>
-                            <input type="text" id="modpack-name" class="mod-input" placeholder="Ex: Pacote de Monstros Épicos">
-                        </div>
-                        <div class="stat-input-group">
-                            <label for="modpack-description">Descrição:</label>
-                            <textarea id="modpack-description" class="mod-input" style="height: 60px; resize: vertical;" placeholder="O que este modpack faz?"></textarea>
-                        </div>
-                        <h3 style="font-size: 0.9em; color: #ffc107; margin-top: 15px;">Mods no Pacote:</h3>
-                        <div id="selected-mods-list" class="manager-list-container" style="flex-grow: 1;">
-                            <!-- Mods adicionados ao pack aparecerão aqui -->
-                        </div>
-                    </div>
-                    <!-- Coluna da Direita: Mods Disponíveis para Adicionar -->
-                    <div style="flex: 1; display: flex; flex-direction: column;">
-                        <h3 style="font-size: 0.9em; color: #4db8ff; margin-top: 0;">Mods Disponíveis:</h3>
-                        <div id="available-mods-list" class="manager-list-container" style="flex-grow: 1;">
-                            <!-- Lista de mods locais para adicionar -->
-                        </div>
-                    </div>
-                </div>
-                <div class="mod-controls" style="margin-top: 20px; justify-content: space-between;">
-                    <button id="cancel-modpack-creation-button" class="mod-button danger">Cancelar</button>
-                    <button id="save-modpack-button" class="mod-button primary">Salvar Modpack</button>
-                </div>
-            </div>
+        <!-- INÍCIO: NOVOS ELEMENTOS SOCIAIS NA TELA INICIAL -->
+        <button id="social-profile-button">👤</button>
+        <div id="trophy-counter">
+            <span class="trophy-icon">🏆</span>
+            <span id="trophy-value">0</span>
         </div>
-        <!-- FIM: NOVA TELA - EDITOR DE MODPACK -->
-    
-        <div id="mod-code-display-overlay">
-            <div class="mod-code-panel">
-                <h3 class="mod-header" style="font-size: 1.2em; margin-bottom: 10px;">Mod Criado com Sucesso!</h3>
-                <textarea id="mod-code-textarea" readonly></textarea>
-                <div class="mod-code-panel-actions">
-                    <button id="copy-mod-code-btn" class="mod-button secondary">Copiar Código</button>
-                    <button id="add-newly-created-mod-btn" class="mod-button primary">Adicionar ao Jogo e Fechar</button>
-                    <button id="close-code-panel-btn" class="mod-button danger">Fechar</button>
-                </div>
-            </div>
-        </div>
-    
-    
-        <div id="grass-elements-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-        <div class="cloud" style="position: absolute; top: 20px; left: 80%; width: 100px; height: 40px; background: white; border-radius: 50px; animation: cloud-move 30s linear infinite; z-index: 0;"> <div style="position: absolute; top: -15px; left: 10px; width: 60px; height: 30px; background: white; border-radius: 50%;"></div> <div style="position: absolute; top: -10px; right: 10px; width: 70px; height: 35px; background: white; border-radius: 50%;"></div> </div>
-        <div class="cloud" style="position: absolute; top: 70px; left: 40%; width: 120px; height: 50px; background: white; border-radius: 60px; animation: cloud-move 45s linear infinite; animation-delay: 15s; z-index: 0;"> <div style="position: absolute; top: -20px; left: 20px; width: 80px; height: 40px; background: white; border-radius: 50%;"></div> <div style="position: absolute; top: -15px; right: 20px; width: 90px; height: 45px; background: white; border-radius: 50%;"></div> </div>
-        
-        <div id="castle">
-            <div class="crenellation" style="position: absolute; top: -10px; left: 0; width: 100%; height: 10px;"></div>
-            <div class="main-tower" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 120px;"></div>
-            <div class="gate" id="castle-gate" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 60px; border-top-left-radius: 20px; border-top-right-radius: 20px;"></div>
-            <div class="window" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 6px; height: 40px;"></div>
-            <div class="window" style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%); width: 6px; height: 40px;"></div>
-        </div>
-        <div id="castle-ai">
-            <!-- O conteúdo do castelo da IA será clonado pelo JS -->
-        </div>
-        <div id="player-respawn-timer" class="respawn-timer"></div>
-        <div id="ai-respawn-timer" class="respawn-timer"></div>
-        <!-- NOVO: Indicador do castelo do jogador -->
-        <div id="player-castle-indicator"></div>
-    
-    
-        <div id="soldier1" class="castle-soldier"></div>
-        <div id="soldier2" class="castle-soldier"></div>
-        
-        <div id="guardian-placement-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none;"></div>
-    
-        <div id="top-hud">
-            <div id="top-ui-elements">
-                <button id="back-to-menu-nav-button">Menu</button>
-                <button id="pause-button">Pause</button>
-                <div id="money-display">Dinheiro: $0</div>
-                <div id="diamond-display">💎 <span>0</span></div>
-                <div class="hud-item">
-                    <div class="hud-label">JOGADOR</div>
-                    <div id="castle-health-bar-container">
-                        <div id="castle-health-bar"></div>
-                        <div id="castle-health-text"></div>
-                    </div>
-                </div>
-                <div class="hud-item" id="ai-hud-item" style="display: none;">
-                    <div class="hud-label">IA</div>
-                    <div id="castle-health-bar-container-ai">
-                        <div id="castle-health-bar-ai"></div>
-                        <div id="castle-health-text-ai"></div>
-                    </div>
-                </div>
-                <div id="wave-info">Onda: 1</div>
-            </div>
-            <div id="game-ui" class="collapsed">
-                <button id="shop-toggle-button">Loja</button> 
-                <div id="shop-content-wrapper"> 
-                    <div id="weapon-shop" style="margin-top: 8px;"> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Armas</h3> <button class="buy-button" data-item-type="weapon" data-item-id="0"></button> <button class="buy-button" data-item-type="weapon" data-item-id="1"></button> <button class="buy-button" data-item-type="weapon" data-item-id="2"></button> <button class="buy-button" data-item-type="weapon" data-item-id="3"></button> <button class="buy-button" data-item-type="weapon" data-item-id="4"></button> </div>
-                    <div id="barricade-shop" style="margin-top: 10px;"> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Barricadas</h3></div>
-                    
-                    <div id="specials-shop" style="margin-top: 10px;">
-                        <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Especiais</h3>
-                        <button class="buy-button" data-item-type="special" data-item-id="full_heal"></button>
-                    </div>
-                    
-                    <div id="castle-shop" style="margin-top: 10px;">
-                        <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Castelo</h3>
-                    </div>
-    
-                    <div id="guardian-shop" style="margin-top: 10px;">
-                        <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Guardiões</h3>
-                        <!-- Conteúdo gerado dinamicamente pelo JS -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    
-        <button id="guardian-ui-toggle-button">
-            <div class="barbarian-icon">
-                <div class="helmet"></div>
-                <div class="head"></div>
-                <div class="mustache"></div>
-            </div>
+        <!-- FIM: NOVOS ELEMENTOS SOCIAIS NA TELA INICIAL -->
+
+        <button id="toggle-fullscreen-button">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
-        <div id="guardian-management-panel">
-            <div id="guardian-panel-header">
-                <span>Guardiões</span>
-                <button id="close-guardian-panel-button">X</button>
-            </div>
-            <div id="guardian-panel-content">
-                <div class="panel-section-header">Estoque</div>
-                <div id="guardian-inventory"></div>
-                <div class="panel-section-header">Slots Ativos</div>
-                <div id="guardian-slots-display"></div>
-            </div>
-        </div>
+        <button id="enable-debug-button">Debug: OFF</button>
+    </div>
     
-        <div id="game-message" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.9); color: white; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Press Start 2P', cursive, monospace; font-size: 2em; display: none; flex-direction: column; z-index: 150;">
-            <span id="game-over-title">Game Over!</span>
-            <!-- INÍCIO: NOVO ELEMENTO PARA STATS PÓS-JOGO -->
-            <p id="post-game-stats" style="font-size: 0.4em; line-height: 1.5; margin-top: 15px;"></p>
-            <!-- FIM: NOVO ELEMENTO PARA STATS PÓS-JOGO -->
-            <div id="game-over-buttons">
-                <button id="restart-button" class="game-over-button">Reiniciar</button>
-                <button id="back-to-menu-button" class="game-over-button">Voltar ao Menu</button>
-            </div>
-        </div>
-    
-        <div id="barricade-ghost"><div class="health-preview"></div></div>
-        <div id="placement-mode-overlay"><div id="placement-message">Dê um clique duplo para colocar a barricada!</div><div id="placement-controls"><button id="cancel-placement-button">Cancelar</button></div></div>
-        <div id="game-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;"></div>
-        
-        <div id="chat-emote-container" style="display: none;"> <!-- Oculto por padrão -->
-          <div id="notification-bubbles-container"></div>
-          <div id="chat-panel" class="hidden">
-            <div id="chat-messages"></div>
-            <div id="chat-input-wrapper">
-              <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="100">
-            </div>
-          </div>
-          <!-- --- ALTERAÇÃO: Mais emotes adicionados --- -->
-          <div id="emote-picker">
-              <span class="emote">😀</span>
-              <span class="emote">😂</span>
-              <span class="emote">👍</span>
-              <span class="emote">⚔️</span>
-              <span class="emote">💰</span>
-              <span class="emote">😢</span>
-              <span class="emote">😠</span>
-              <span class="emote">😱</span>
-              <span class="emote">❓</span>
-              <span class="emote">🙏</span>
-          </div>
-          <button id="chat-toggle-button">💬</button>
-          <button id="emote-toggle-button">😀</button>
-        </div>
-    
-    
-        <button id="toggle-log-button" style="display: none;">Logs</button>
-        <div id="debug-log-overlay">
-            <div id="debug-log-header">
-                <span>Game Logs</span>
-                <div>
-                    <button id="help-button">?</button>
-                    <button id="close-log-button">X</button>
-                </div>
-            </div>
-            <div id="debug-log-content"></div>
-            <div id="debug-command-container"> <input type="text" id="command-input" placeholder="Digite um comando..."> <button id="command-submit-button">Enviar</button> </div>
-        </div>
-        <div id="command-help-overlay">
-            <div id="debug-log-header">
-                <span>Ajuda de Comandos</span>
-                <button id="close-help-button">X</button>
-            </div>
-            <div id="command-help-content"></div>
-        </div>
-    
-      <!-- INÍCIO: HTML PARA DMS E GRUPOS -->
-    <div id="dm-and-groups-overlay" style="display: none;">
-        <!-- Painel Principal de DMs e Grupos -->
-        <div id="dm-groups-main-panel" class="social-panel">
-            <button class="social-panel-close-button">X</button>
-            <h2>Mensagens</h2>
-            <div class="dm-groups-columns">
-                <div class="dm-groups-column">
-                    <h3>Amigos (DMs)</h3>
-                    <div id="dm-list" class="dm-groups-list-container"></div>
-                </div>
-                <div class="dm-groups-column">
-                    <h3>Grupos</h3>
-                    <div id="group-list" class="dm-groups-list-container"></div>
-                    <button id="show-create-group-btn" class="main-menu-button secondary" style="width: 100%; font-size: 0.8em; margin-top: 10px;">Criar Novo Grupo</button>
-                </div>
-            </div>
-        </div>
-    
-        <!-- Painel da Janela de Chat -->
-        <div id="chat-view-panel" class="social-panel" style="display: none;">
-            <div id="chat-view-header">
-                <button id="chat-back-button">← Voltar</button>
-                <h3 id="chat-with-name"></h3>
-            </div>
-            <div id="chat-view-messages"></div>
-            <div id="chat-view-input-form">
-                <input type="text" id="chat-view-input" placeholder="Digite uma mensagem...">
-                <button id="chat-view-send-btn">Enviar</button>
-            </div>
-        </div>
-    
-        <!-- Painel de Criação de Grupo -->
-        <div id="create-group-panel" class="social-panel" style="display: none;">
-            <button class="social-panel-close-button">X</button>
-            <h2>Criar Novo Grupo</h2>
-            <div class="social-input-group">
-                <label for="create-group-name">Nome do Grupo</label>
-                <input type="text" id="create-group-name" class="social-input">
-            </div>
-            <h3>Convidar Amigos</h3>
-            <div id="create-group-friends-list" class="dm-groups-list-container"></div>
-            <button id="create-group-confirm-btn" class="main-menu-button primary" style="width: 100%; margin-top: 15px;">Criar Grupo</button>
+    <!-- TELA DE LOBBY MULTIPLAYER -->
+    <div id="multiplayer-lobby-screen">
+        <h1 style="font-size: 2.5em; margin-bottom: 40px; text-shadow: 3px 3px 0px #000;">MODO MULTIPLAYER</h1>
+        <div id="lobby-buttons" style="display: flex; flex-direction: column; gap: 20px;">
+            <button id="play-with-ai-button" class="main-menu-button" style="background-color: #28a745;">Jogar com IA</button>
+            <button id="play-with-friend-button" class="main-menu-button disabled">Jogar com Amigo (Em breve)</button>
+            <button id="back-to-menu-from-lobby-button" class="main-menu-button" style="background-color: #dc3545; font-size: 1em; padding: 10px 20px;">Voltar</button>
         </div>
     </div>
-    <!-- FIM: HTML PARA DMS E GRUPOS -->
-      
-        <!-- INÍCIO: NOVOS ELEMENTOS GLOBAIS PARA O SISTEMA SOCIAL -->
-        <div id="social-overlay">
-            <!-- Painel de Login / Registro -->
-            <div id="auth-panel" class="social-panel" style="display: none;">
-                <button class="social-panel-close-button">X</button>
-                <h2 id="auth-title">Criar Conta</h2>
-                <div class="social-input-group">
-                    <label for="auth-username">Seu nome de usuário</label>
-                    <input type="text" id="auth-username" class="social-input" autocomplete="username">
-                </div>
-                <div class="social-input-group">
-                    <label for="auth-password">Sua senha</label>
-                    <input type="password" id="auth-password" class="social-input" autocomplete="current-password">
-                </div>
-                <button id="auth-submit-button" class="main-menu-button primary" style="width: 100%; font-size: 1em;">Criar Conta</button>
-                <span id="auth-toggle-link" class="auth-toggle-link">Já tem uma conta? Clique para logar</span>
+
+    <!-- NOVO: TELA DE SELEÇÃO DE MODS -->
+    <div id="mod-selection-screen">
+        <div class="mod-screen-container">
+            <h2 class="mod-header">Selecionar Mods para a Partida</h2>
+            <div id="mod-selection-list">
+                <!-- Populado por JS -->
             </div>
-    
-            <!-- Painel de Amigos -->
-            <div id="friends-panel" class="social-panel" style="display: none;">
-                <button class="social-panel-close-button">X</button>
-                <h2 id="friends-panel-title">Amigos de NOME</h2>
-                <div id="friends-list-container">
-                    <!-- Lista de amigos populada por JS -->
-                </div>
-                
-                <div id="add-friend-panel">
-                    <h3>Adicionar Amigo</h3>
-                    <form id="add-friend-form" onsubmit="event.preventDefault();">
-                        <input type="text" id="add-friend-username" class="social-input" placeholder="Nome de usuário do amigo">
-                        <button id="add-friend-button" class="mod-button secondary" style="font-size: 1.2em;">+</button>
-                    </form>
-                </div>
-                <button id="logout-button" class="main-menu-button danger" style="width: 100%; font-size: 0.8em; margin-top: 20px;">Logout</button>
-            </div>
-        </div>
-    
-        <div id="interactive-notification">
-            <span id="interactive-notification-text"></span>
-            <div id="interactive-notification-actions">
-                <button id="notification-accept-btn">✔️</button>
-                <button id="notification-decline-btn">❌</button>
-            </div>
-        </div>
-        <!-- FIM: NOVOS ELEMENTOS GLOBAIS PARA O SISTEMA SOCIAL -->
-    
-    </div>
-    <!-- Custom Modal System HTML -->
-    <div id="custom-modal-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 20000; font-family: 'Press Start 2P', cursive, monospace;">
-        <div id="custom-modal-panel" style="background-color: #333; color: white; border: 4px solid #ffc107; padding: 25px; border-radius: 10px; text-align: center; max-width: 80%;">
-            <p id="custom-modal-message" style="margin-top: 0; margin-bottom: 20px; font-size: 0.9em; line-height: 1.5;"></p>
-            <input type="text" id="custom-modal-input" style="display: none; width: calc(100% - 20px); padding: 10px; margin-bottom: 20px; font-family: 'Press Start 2P', cursive, monospace; font-size: 0.8em; background-color: #222; border: 2px solid #555; color: white; border-radius: 5px;">
-            <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 15px;">
+            <div class="mod-controls" style="justify-content: space-between;">
+                <button id="back-to-lobby-from-mod-selection-button" class="mod-button danger">Voltar</button>
+                <button id="start-ai-game-with-mods-button" class="mod-button primary">Iniciar Jogo</button>
             </div>
         </div>
     </div>
 
-    <!-- Link para o seu arquivo de JavaScript -->
-    <script src="script.js"></script>
+
+    <!-- Modding System Screens -->
+    <div id="mod-screen">
+        <div class="mod-screen-container">
+            <h2 class="mod-header">Gerenciador de Mods</h2>
+            <!-- ### ALTERAÇÃO AQUI: Abas para Mods e Modpacks ### -->
+            <div class="editor-tabs" style="margin-bottom: 20px;">
+                <button id="mod-tab-local" class="editor-tab active" data-tab="local">Mods Locais</button>
+                <button id="mod-tab-packs" class="editor-tab" data-tab="packs">Modpacks</button>
+            </div>
+
+            <!-- Container para Mods Locais -->
+            <div id="local-mods-content" class="mod-tab-content active">
+                <div class="mod-controls">
+                    <input type="text" id="mod-code-input" class="mod-input" placeholder="Cole o código do mod aqui...">
+                    <button id="add-mod-button" class="mod-button primary">Adicionar</button>
+                </div>
+                <div id="mod-list-container">
+                    <!-- Mod list will be generated by JS -->
+                </div>
+            </div>
+
+             <!-- Container para Modpacks -->
+             <div id="modpacks-content" class="mod-tab-content">
+                <div id="modpack-list-container">
+                    <!-- Lista de Modpacks será gerada por JS -->
+                </div>
+            </div>
+
+            <div class="mod-controls" style="margin-top: 20px; margin-bottom: 0; justify-content: space-between;">
+                <button id="back-to-menu-from-mods-button" class="mod-button danger">Voltar ao Menu</button>
+                <!-- ### ALTERAÇÃO AQUI: Botão de criar muda de acordo com a aba ### -->
+                <button id="create-new-button" class="mod-button secondary">Criar Novo Mod</button> 
+            </div>
+        </div>
+
+        <div id="online-mods-panel" class="collapsed">
+            <div id="online-panel-toggle">
+                <span class="arrow">▶</span>
+            </div>
+            <div id="online-panel-content">
+                <h2 class="mod-header" style="font-size: 1.3em; color: #4db8ff;">Mod Hub</h2>
+                <div id="online-mod-controls">
+                    <input type="text" id="online-mod-search" class="mod-input" placeholder="Pesquisar por nome...">
+                    <select id="online-mod-sort" class="mod-input">
+                        <option value="date_desc">Mais Recentes</option>
+                        <option value="usage_desc">Mais Usados</option>
+                        <option value="name_asc">Nome (A-Z)</option>
+                    </select>
+                </div>
+                <div id="online-mod-list">
+                    <!-- Lista de mods online será gerada por JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ### NOVO: Tela do Editor de Modpack ### -->
+    <div id="modpack-editor-overlay">
+        <div class="mod-screen-container">
+            <h2 id="modpack-editor-title" class="mod-header">Criar Novo Modpack</h2>
+            <div class="stat-input-group">
+                <label for="modpack-name-input">Nome do Modpack:</label>
+                <input type="text" id="modpack-name-input" class="mod-input" style="font-size: 1em;">
+            </div>
+            <h3 class="panel-section-header" style="color: #ffc107;">Adicionar Mods (Locais e do Hub)</h3>
+            <div id="add-mods-to-pack-list">
+                <!-- Lista de mods disponíveis para adicionar ao pack -->
+            </div>
+            <div class="mod-controls" style="margin-top: 20px; margin-bottom: 0; justify-content: flex-end;">
+                <button id="cancel-modpack-creation-button" class="mod-button danger">Cancelar</button>
+                <button id="save-modpack-button" class="mod-button primary">Salvar Modpack</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="mod-editor-screen">
+        <div id="mod-editor-content">
+            <div id="editor-main-panel">
+                <div class="editor-tabs">
+                    <button class="editor-tab active" data-type="monster">Monstro</button>
+                    <button class="editor-tab" data-type="guardian">Guardião</button>
+                    <button class="editor-tab" data-type="barricade">Barricada</button>
+                    <button class="editor-tab" data-type="wave">Onda</button>
+                </div>
+
+                <div id="pixel-editor-panel" class="editor-panel-for-type">
+                    <div id="pixel-editor">
+                        <div id="pixel-grid" style="--grid-width: 16; --grid-height: 16;"></div>
+                        <div id="editor-tools">
+                            <div id="color-palette"></div>
+                            <button id="pencil-tool-btn" class="editor-tool-btn selected"></button>
+                            <button id="bucket-tool-btn" class="editor-tool-btn"></button>
+                            <button id="eraser-tool-btn" class="editor-tool-btn"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="wave-editor-panel" class="editor-panel-for-type">
+                    <div id="wave-monster-list" style="max-height: 200px; overflow-y: auto; padding: 5px;">
+                       <!-- Wave monster entries will be added here -->
+                    </div>
+                    <button id="add-monster-to-wave-btn" class="mod-button secondary" style="font-size: 0.6em; padding: 6px;">+ Adicionar Monstro à Onda</button>
+                </div>
+                
+                <div class="editor-actions-bar">
+                    <button id="cancel-mod-creation-button" class="mod-button danger">Cancelar</button>
+                    <button id="save-mod-button" class="mod-button primary">Salvar e Gerar Código</button>
+                </div>
+            </div>
+            <div id="editor-stat-panel">
+                <h3 style="text-align: center; margin-top: 0; font-size: 1em; color: #ffc107;">Propriedades</h3>
+                <div id="stat-inputs-container">
+                    <!-- Stat inputs will be generated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mod-code-display-overlay">
+        <div class="mod-code-panel">
+            <h3 class="mod-header" style="font-size: 1.2em; margin-bottom: 10px;">Mod Criado com Sucesso!</h3>
+            <textarea id="mod-code-textarea" readonly></textarea>
+            <div class="mod-code-panel-actions">
+                <button id="copy-mod-code-btn" class="mod-button secondary">Copiar Código</button>
+                <button id="add-newly-created-mod-btn" class="mod-button primary">Adicionar ao Jogo e Fechar</button>
+                <button id="close-code-panel-btn" class="mod-button danger">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="grass-elements-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+    <div class="cloud" style="position: absolute; top: 20px; left: 80%; width: 100px; height: 40px; background: white; border-radius: 50px; animation: cloud-move 30s linear infinite; z-index: 0;"> <div style="position: absolute; top: -15px; left: 10px; width: 60px; height: 30px; background: white; border-radius: 50%;"></div> <div style="position: absolute; top: -10px; right: 10px; width: 70px; height: 35px; background: white; border-radius: 50%;"></div> </div>
+    <div class="cloud" style="position: absolute; top: 70px; left: 40%; width: 120px; height: 50px; background: white; border-radius: 60px; animation: cloud-move 45s linear infinite; animation-delay: 15s; z-index: 0;"> <div style="position: absolute; top: -20px; left: 20px; width: 80px; height: 40px; background: white; border-radius: 50%;"></div> <div style="position: absolute; top: -15px; right: 20px; width: 90px; height: 45px; background: white; border-radius: 50%;"></div> </div>
+    
+    <div id="castle">
+        <div class="crenellation" style="position: absolute; top: -10px; left: 0; width: 100%; height: 10px;"></div>
+        <div class="main-tower" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 60px; height: 120px;"></div>
+        <div class="gate" id="castle-gate" style="position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 40px; height: 60px; border-top-left-radius: 20px; border-top-right-radius: 20px;"></div>
+        <div class="window" style="position: absolute; top: 150px; left: 50%; transform: translateX(-50%); width: 6px; height: 40px;"></div>
+        <div class="window" style="position: absolute; top: 250px; left: 50%; transform: translateX(-50%); width: 6px; height: 40px;"></div>
+    </div>
+    <div id="castle-ai">
+        <!-- O conteúdo do castelo da IA será clonado pelo JS -->
+    </div>
+    <div id="player-respawn-timer" class="respawn-timer"></div>
+    <div id="ai-respawn-timer" class="respawn-timer"></div>
+    <!-- NOVO: Indicador do castelo do jogador -->
+    <div id="player-castle-indicator"></div>
+
+
+    <div id="soldier1" class="castle-soldier"></div>
+    <div id="soldier2" class="castle-soldier"></div>
+    
+    <div id="guardian-placement-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none;"></div>
+
+    <div id="top-hud">
+        <div id="top-ui-elements">
+            <button id="back-to-menu-nav-button">Menu</button>
+            <button id="pause-button">Pause</button>
+            <div id="money-display">Dinheiro: $0</div>
+            <div id="diamond-display">💎 <span>0</span></div>
+            <div class="hud-item">
+                <div class="hud-label">JOGADOR</div>
+                <div id="castle-health-bar-container">
+                    <div id="castle-health-bar"></div>
+                    <div id="castle-health-text"></div>
+                </div>
+            </div>
+            <div class="hud-item" id="ai-hud-item" style="display: none;">
+                <div class="hud-label">IA</div>
+                <div id="castle-health-bar-container-ai">
+                    <div id="castle-health-bar-ai"></div>
+                    <div id="castle-health-text-ai"></div>
+                </div>
+            </div>
+            <div id="wave-info">Onda: 1</div>
+        </div>
+        <div id="game-ui" class="collapsed">
+            <button id="shop-toggle-button">Loja</button> 
+            <div id="shop-content-wrapper"> 
+                <div id="weapon-shop" style="margin-top: 8px;"> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Armas</h3> <button class="buy-button" data-item-type="weapon" data-item-id="0"></button> <button class="buy-button" data-item-type="weapon" data-item-id="1"></button> <button class="buy-button" data-item-type="weapon" data-item-id="2"></button> <button class="buy-button" data-item-type="weapon" data-item-id="3"></button> <button class="buy-button" data-item-type="weapon" data-item-id="4"></button> </div>
+                <div id="barricade-shop" style="margin-top: 10px;"> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Barricadas</h3></div>
+                
+                <div id="specials-shop" style="margin-top: 10px;">
+                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Especiais</h3>
+                    <button class="buy-button" data-item-type="special" data-item-id="full_heal"></button>
+                </div>
+                
+                <div id="castle-shop" style="margin-top: 10px;">
+                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Castelo</h3>
+                </div>
+
+                <div id="guardian-shop" style="margin-top: 10px;">
+                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Guardiões</h3>
+                    <!-- Conteúdo gerado dinamicamente pelo JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="guardian-ui-toggle-button">
+        <div class="barbarian-icon">
+            <div class="helmet"></div>
+            <div class="head"></div>
+            <div class="mustache"></div>
+        </div>
+    </button>
+    <div id="guardian-management-panel">
+        <div id="guardian-panel-header">
+            <span>Guardiões</span>
+            <button id="close-guardian-panel-button">X</button>
+        </div>
+        <div id="guardian-panel-content">
+            <div class="panel-section-header">Estoque</div>
+            <div id="guardian-inventory"></div>
+            <div class="panel-section-header">Slots Ativos</div>
+            <div id="guardian-slots-display"></div>
+        </div>
+    </div>
+
+    <div id="game-message" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.9); color: white; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Press Start 2P', cursive, monospace; font-size: 2em; display: none; flex-direction: column; z-index: 150;">
+        <span id="game-over-title">Game Over!</span>
+        <!-- INÍCIO: NOVO ELEMENTO PARA STATS PÓS-JOGO -->
+        <p id="post-game-stats" style="font-size: 0.4em; line-height: 1.5; margin-top: 15px;"></p>
+        <!-- FIM: NOVO ELEMENTO PARA STATS PÓS-JOGO -->
+        <div id="game-over-buttons">
+            <button id="restart-button" class="game-over-button">Reiniciar</button>
+            <button id="back-to-menu-button" class="game-over-button">Voltar ao Menu</button>
+        </div>
+    </div>
+
+    <div id="barricade-ghost"><div class="health-preview"></div></div>
+    <div id="placement-mode-overlay"><div id="placement-message">Dê um clique duplo para colocar a barricada!</div><div id="placement-controls"><button id="cancel-placement-button">Cancelar</button></div></div>
+    <div id="game-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;"></div>
+    
+    <div id="chat-emote-container" style="display: none;"> <!-- Oculto por padrão -->
+      <div id="notification-bubbles-container"></div>
+      <div id="chat-panel" class="hidden">
+        <div id="chat-messages"></div>
+        <div id="chat-input-wrapper">
+          <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="100">
+        </div>
+      </div>
+      <!-- --- ALTERAÇÃO: Mais emotes adicionados --- -->
+      <div id="emote-picker">
+          <span class="emote">😀</span>
+          <span class="emote">😂</span>
+          <span class="emote">👍</span>
+          <span class="emote">⚔️</span>
+          <span class="emote">💰</span>
+          <span class="emote">😢</span>
+          <span class="emote">😠</span>
+          <span class="emote">😱</span>
+          <span class="emote">❓</span>
+          <span class="emote">🙏</span>
+      </div>
+      <button id="chat-toggle-button">💬</button>
+      <button id="emote-toggle-button">😀</button>
+    </div>
+
+
+    <button id="toggle-log-button" style="display: none;">Logs</button>
+    <div id="debug-log-overlay">
+        <div id="debug-log-header">
+            <span>Game Logs</span>
+            <div>
+                <button id="help-button">?</button>
+                <button id="close-log-button">X</button>
+            </div>
+        </div>
+        <div id="debug-log-content"></div>
+        <div id="debug-command-container"> <input type="text" id="command-input" placeholder="Digite um comando..."> <button id="command-submit-button">Enviar</button> </div>
+    </div>
+    <div id="command-help-overlay">
+        <div id="debug-log-header">
+            <span>Ajuda de Comandos</span>
+            <button id="close-help-button">X</button>
+        </div>
+        <div id="command-help-content"></div>
+    </div>
+
+  <!-- INÍCIO: HTML PARA DMS E GRUPOS -->
+<div id="dm-and-groups-overlay" style="display: none;">
+    <!-- Painel Principal de DMs e Grupos -->
+    <div id="dm-groups-main-panel" class="social-panel">
+        <button class="social-panel-close-button">X</button>
+        <h2>Mensagens</h2>
+        <div class="dm-groups-columns">
+            <div class="dm-groups-column">
+                <h3>Amigos (DMs)</h3>
+                <div id="dm-list" class="dm-groups-list-container"></div>
+            </div>
+            <div class="dm-groups-column">
+                <h3>Grupos</h3>
+                <div id="group-list" class="dm-groups-list-container"></div>
+                <button id="show-create-group-btn" class="main-menu-button secondary" style="width: 100%; font-size: 0.8em; margin-top: 10px;">Criar Novo Grupo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Painel da Janela de Chat -->
+    <div id="chat-view-panel" class="social-panel" style="display: none;">
+        <div id="chat-view-header">
+            <button id="chat-back-button">← Voltar</button>
+            <h3 id="chat-with-name"></h3>
+        </div>
+        <div id="chat-view-messages"></div>
+        <div id="chat-view-input-form">
+            <input type="text" id="chat-view-input" placeholder="Digite uma mensagem...">
+            <button id="chat-view-send-btn">Enviar</button>
+        </div>
+    </div>
+
+    <!-- Painel de Criação de Grupo -->
+    <div id="create-group-panel" class="social-panel" style="display: none;">
+        <button class="social-panel-close-button">X</button>
+        <h2>Criar Novo Grupo</h2>
+        <div class="social-input-group">
+            <label for="create-group-name">Nome do Grupo</label>
+            <input type="text" id="create-group-name" class="social-input">
+        </div>
+        <h3>Convidar Amigos</h3>
+        <div id="create-group-friends-list" class="dm-groups-list-container"></div>
+        <button id="create-group-confirm-btn" class="main-menu-button primary" style="width: 100%; margin-top: 15px;">Criar Grupo</button>
+    </div>
+</div>
+<!-- FIM: HTML PARA DMS E GRUPOS -->
+  
+    <!-- INÍCIO: NOVOS ELEMENTOS GLOBAIS PARA O SISTEMA SOCIAL -->
+    <div id="social-overlay">
+        <!-- Painel de Login / Registro -->
+        <div id="auth-panel" class="social-panel" style="display: none;">
+            <button class="social-panel-close-button">X</button>
+            <h2 id="auth-title">Criar Conta</h2>
+            <div class="social-input-group">
+                <label for="auth-username">Seu nome de usuário</label>
+                <input type="text" id="auth-username" class="social-input" autocomplete="username">
+            </div>
+            <div class="social-input-group">
+                <label for="auth-password">Sua senha</label>
+                <input type="password" id="auth-password" class="social-input" autocomplete="current-password">
+            </div>
+            <button id="auth-submit-button" class="main-menu-button primary" style="width: 100%; font-size: 1em;">Criar Conta</button>
+            <span id="auth-toggle-link" class="auth-toggle-link">Já tem uma conta? Clique para logar</span>
+        </div>
+
+        <!-- Painel de Amigos -->
+        <div id="friends-panel" class="social-panel" style="display: none;">
+            <button class="social-panel-close-button">X</button>
+            <h2 id="friends-panel-title">Amigos de NOME</h2>
+            <div id="friends-list-container">
+                <!-- Lista de amigos populada por JS -->
+            </div>
+            
+            <div id="add-friend-panel">
+                <h3>Adicionar Amigo</h3>
+                <form id="add-friend-form" onsubmit="event.preventDefault();">
+                    <input type="text" id="add-friend-username" class="social-input" placeholder="Nome de usuário do amigo">
+                    <button id="add-friend-button" class="mod-button secondary" style="font-size: 1.2em;">+</button>
+                </form>
+            </div>
+            <button id="logout-button" class="main-menu-button danger" style="width: 100%; font-size: 0.8em; margin-top: 20px;">Logout</button>
+        </div>
+    </div>
+
+    <div id="interactive-notification">
+        <span id="interactive-notification-text"></span>
+        <div id="interactive-notification-actions">
+            <button id="notification-accept-btn">✔️</button>
+            <button id="notification-decline-btn">❌</button>
+        </div>
+    </div>
+    <!-- FIM: NOVOS ELEMENTOS GLOBAIS PARA O SISTEMA SOCIAL -->
+
+</div>
+<!-- Custom Modal System HTML -->
+<div id="custom-modal-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 20000; font-family: 'Press Start 2P', cursive, monospace;">
+    <div id="custom-modal-panel" style="background-color: #333; color: white; border: 4px solid #ffc107; padding: 25px; border-radius: 10px; text-align: center; max-width: 80%;">
+        <p id="custom-modal-message" style="margin-top: 0; margin-bottom: 20px; font-size: 0.9em; line-height: 1.5;"></p>
+        <input type="text" id="custom-modal-input" style="display: none; width: calc(100% - 20px); padding: 10px; margin-bottom: 20px; font-family: 'Press Start 2P', cursive, monospace; font-size: 0.8em; background-color: #222; border: 2px solid #555; color: white; border-radius: 5px;">
+        <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 15px;">
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
