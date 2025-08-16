@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
     // ### INÍCIO: NOVAS CONSTANTES PARA O HUB DE MODPACKS ###
-    const MODPACK_JSONBIN_ID = 'COLE_O_ID_DO_SEU_NOVO_BIN_AQUI'; // <--- SUBSTITUA AQUI
+    const MODPACK_JSONBIN_ID = '68a0dc33ae596e708fcbaabd'; // <--- SUBSTITUA AQUI
     const MODPACK_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${MODPACK_JSONBIN_ID}`;
     // ### FIM: NOVAS CONSTANTES ###
 
