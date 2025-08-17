@@ -132,6 +132,75 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelModpackCreationButton = document.getElementById('cancel-modpack-creation-button');
     const saveModpackButton = document.getElementById('save-modpack-button');
 
+    // ### INÍCIO: Definição dos Mods e Modpack Padrão "NIGHTMARE MODE" ###
+
+    const NIGHTMARE_MODS = [
+        {
+            id: 'nightmare_abomination',
+            type: 'monster',
+            name: 'Abominação Rastejante',
+            health: 80,
+            damage: 4,
+            speed: 0.4,
+            money: 40,
+            spawnWaves: [8, 12, 16, 20],
+            spawnCount: 1,
+            isFlying: false,
+            width: 50,
+            height: 35,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'regen', amount: 1, interval: 1000 }],
+            pixelData: ['transparent','transparent','transparent','transparent','#2e0a2e','#3a0c3a','#3a0c3a','#2e0a2e','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2e0a2e','#3a0c3a','#460e46','#521052','#521052','#460e46','#3a0c3a','#2e0a2e','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#691469','#751675','#751675','#691469','#521052','#460e46','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#691469','#811881','#811881','#811881','#691469','#521052','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','#460e46','#691469','#811881','#811881','#9d1c9d','#811881','#811881','#691469','#460e46','#3a0c3a','transparent','transparent','transparent','transparent','#521052','#751675','#8d1a8d','#9d1c9d','#9d1c9d','#8d1a8d','#811881','#691469','#521052','#460e46','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#811881','#9d1c9d','#ff0000','#9d1c9d','#9d1c9d','#811881','#691469','#460e46','#3a0c3a','transparent','transparent','transparent','#2e0a2e','#460e46','#691469','#811881','#9d1c9d','#9d1c9d','#9d1c9d','#811881','#811881','#691469','#460e46','#2e0a2e','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#691469','#811881','#8d1a8d','#811881','#691469','#521052','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2e0a2e','#460e46','#521052','#691469','#521052','#460e46','#2e0a2e','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3a0c3a','#3a0c3a','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'nightmare_spectre',
+            type: 'monster',
+            name: 'Espectro Caçador',
+            health: 25,
+            damage: 3.5,
+            speed: 2.0,
+            money: 25,
+            spawnWaves: [10, 14, 18, 22],
+            spawnCount: 2,
+            isFlying: true,
+            width: 30,
+            height: 55,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#3c3c3c','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2b2b2b','#3c3c3c','#ffffff','#ffffff','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#3c3c3c','#3c3c3c','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#1a1a1a','transparent','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'nightmare_abyss_eye',
+            type: 'monster',
+            name: 'Olho do Abismo',
+            health: 40,
+            damage: 1,
+            speed: 0.8,
+            money: 50,
+            spawnWaves: [15, 19, 23],
+            spawnCount: 1,
+            isFlying: true,
+            width: 45,
+            height: 45,
+            gridWidth: 16,
+            gridHeight: 16,
+            attackType: 'ranged',
+            projectile: { type: 'corrupting_bolt', damage: 15, speed: 5, cooldown: 3000, range: 450 },
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','#1a1a1a','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#3c3c3c','#3c3c3c','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#3c3c3c','#4f4f4f','#691469','#691469','#4f4f4f','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','#2b2b2b','#4f4f4f','#691469','#8d1a8d','#8d1a8d','#8d1a8d','#691469','#4f4f4f','#2b2b2b','transparent','transparent','transparent','transparent','#2b2b2b','#691469','#8d1a8d','#ff0000','#ff0000','#8d1a8d','#8d1a8d','#691469','#2b2b2b','transparent','transparent','transparent','transparent','#3c3c3c','#691469','#8d1a8d','#ff0000','#000000','#ff0000','#8d1a8d','#691469','#3c3c3c','transparent','transparent','transparent','transparent','#3c3c3c','#691469','#8d1a8d','#ff0000','#ff0000','#8d1a8d','#8d1a8d','#691469','#3c3c3c','transparent','transparent','transparent','transparent','#2b2b2b','#691469','#8d1a8d','#8d1a8d','#8d1a8d','#8d1a8d','#8d1a8d','#691469','#2b2b2b','transparent','transparent','transparent','transparent','#2b2b2b','#4f4f4f','#691469','#691469','#691469','#691469','#691469','#4f4f4f','#2b2b2b','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#3c3c3c','#4f4f4f','#4f4f4f','#4f4f4f','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        }
+    ];
+
+    const NIGHTMARE_MODPACK = {
+        id: 'default_nightmare_mode',
+        name: 'NIGHTMARE MODE',
+        mods: ['nightmare_abomination', 'nightmare_spectre', 'nightmare_abyss_eye'],
+        active: false,
+        isDefault: true // Propriedade especial para identificação
+    };
+
+    // ### FIM: Definição dos Mods ###
+
     // --- Configurações do Jogo ---
     const weapons = [ { name: "Cuspe", damage: 2, cost: 0, cooldown: 500, color: '#add8e6', size: 8, speed: 8, cssClass: 'spit' }, { name: "Pedra", damage: 8, cost: 50, cooldown: 400, color: '#8B4513', size: 12, speed: 10, cssClass: 'stone' }, { name: "Bomba de Tinta", damage: 20, cost: 150, cooldown: 800, color: '#FF00FF', size: 20, speed: 6, cssClass: 'ink', effect: 'slow' }, { name: "Bola de Fogo", damage: 50, cost: 400, cooldown: 1200, color: '#FF4500', size: 25, speed: 7, cssClass: 'fire' }, { name: "Papergun", damage: 10, cost: 500, cooldown: 250, color: '#e9ecef', size: 10, speed: 12, cssClass: 'paper' } ];
     const baseBarricadeTypes = [ { id: 'barricade_wood', name: "Madeira", health: 10, cost: 15, width: 40, height: 60, color: '#a0522d', border: '2px solid #8b4513' }, { id: 'barricade_blue', name: "Azul", health: 20, cost: 30, width: 45, height: 65, color: '#4682b4', border: '2px solid #36648b' }, { id: 'barricade_stone', name: "Pedra", health: 35, cost: 60, width: 50, height: 70, color: '#808080', border: '3px solid #696969' }, { id: 'barricade_metal', name: "Metal", health: 80, cost: 120, width: 55, height: 75, color: '#c0c0c0', border: '4px solid #a9a9a9' } ];
@@ -275,6 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = document.createElement('div');
             item.className = 'modpack-list-item';
             const modCount = pack.mods ? pack.mods.length : 0;
+            const deleteButtonHTML = pack.isDefault 
+                ? '' 
+                : `<button class="mod-button danger modpack-delete-btn" data-index="${index}">X</button>`;
+            
             item.innerHTML = `
                 <span class="mod-list-item-name">${pack.name} (${modCount} mods)</span>
                 <div class="mod-list-item-controls">
@@ -284,7 +357,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="checkbox" class="modpack-toggle-check" data-index="${index}" ${pack.active ? 'checked' : ''}>
                         <span class="mod-toggle-slider"></span>
                     </label>
-                    <button class="mod-button danger modpack-delete-btn" data-index="${index}">X</button>
+                    ${deleteButtonHTML}
                 </div>`;
             modpackListContainer.appendChild(item);
         });
@@ -757,7 +830,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function showLobbyScreen() { if (!currentUser) { showCustomAlert("Você precisa estar logado para acessar o modo multiplayer."); return; } startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'flex'; }
     
     function renderModSelectionLists() {
-        // Renderiza lista de mods ativos
         modSelectionList.innerHTML = '';
         const activeLocalMods = allMods.filter(m => m.active);
         if (activeLocalMods.length === 0) {
@@ -771,7 +843,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     
-        // Renderiza lista de modpacks ativos
         modpackSelectionList.innerHTML = '';
         const activeModpacks = allModpacks.filter(p => p.active);
         if (activeModpacks.length === 0) {
@@ -780,7 +851,6 @@ document.addEventListener('DOMContentLoaded', () => {
             activeModpacks.forEach(pack => {
                 const item = document.createElement('div');
                 item.className = 'mod-selection-item';
-                // Usamos radio buttons para packs, pois só um pode ser usado por vez
                 item.innerHTML = `<input type="radio" name="modpack-selection" id="modpack-select-${pack.id}" data-modpack-id="${pack.id}"><label for="modpack-select-${pack.id}">${pack.name} (${pack.mods.length} mods)</label>`;
                 modpackSelectionList.appendChild(item);
             });
@@ -791,7 +861,6 @@ document.addEventListener('DOMContentLoaded', () => {
         multiplayerLobbyScreen.style.display = 'none';
         modSelectionScreen.style.display = 'flex';
         renderModSelectionLists();
-        // Garante que a aba de mods seja a padrão
         modSelectionTabMods.click();
     }
 
@@ -966,9 +1035,35 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUiForLogin();
     }
 
+    // ### INÍCIO: Nova função para inicializar o Modpack Padrão ###
+    function initializeDefaultModpack() {
+        // Verifica se os mods do pack já existem
+        const modsExist = NIGHTMARE_MODS.every(nm => allMods.some(m => m.id === nm.id));
+        if (!modsExist) {
+            NIGHTMARE_MODS.forEach(nm => {
+                // Adiciona apenas se não existir para evitar duplicatas
+                if (!allMods.some(m => m.id === nm.id)) {
+                    allMods.push(nm);
+                }
+            });
+            saveMods();
+            console.log("Mods do Nightmare Mode adicionados ao jogo.");
+        }
+
+        // Verifica se o modpack já existe
+        const packExists = allModpacks.some(p => p.id === NIGHTMARE_MODPACK.id);
+        if (!packExists) {
+            allModpacks.push(NIGHTMARE_MODPACK);
+            saveModpacks();
+            console.log("Modpack Nightmare Mode adicionado ao jogo.");
+        }
+    }
+    // ### FIM: Nova função ###
+
     // --- Inicialização ---
     loadMods();
     loadModpacks();
+    initializeDefaultModpack(); // <<-- CHAMADA DA NOVA FUNÇÃO
     showIntroScreen();
     checkAutoLogin();
 });
