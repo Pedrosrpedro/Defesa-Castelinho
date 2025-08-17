@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Elementos do DOM (Existentes) ---
+    // --- Elementos do DOM (Completos) ---
     const introScreen = document.getElementById('intro-screen');
     const loadingScreen = document.getElementById('loading-screen'), startScreen = document.getElementById('start-screen'), newGameButton = document.getElementById('new-game-button'), gameContainer = document.getElementById('game-container'), gameArea = document.getElementById('game-area'), castleHealthBar = document.getElementById('castle-health-bar'), castleHealthText = document.getElementById('castle-health-text'), moneyDisplay = document.getElementById('money-display'), gameMessage = document.getElementById('game-message'), restartButton = document.getElementById('restart-button'), buyButtons = document.querySelectorAll('.buy-button'), waveInfo = document.getElementById('wave-info'), grassElementsContainer = document.getElementById('grass-elements-container'), castleElement = document.getElementById('castle'), pauseButton = document.getElementById('pause-button'), shopToggleButton = document.getElementById('shop-toggle-button'), gameUI = document.getElementById('game-ui'), barricadeGhost = document.getElementById('barricade-ghost'), placementModeOverlay = document.getElementById('placement-mode-overlay'), cancelPlacementButton = document.getElementById('cancel-placement-button');
     const backToMenuButton = document.getElementById('back-to-menu-button');
@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const modScreen = document.getElementById('mod-screen');
     const modEditorScreen = document.getElementById('mod-editor-screen');
     const backToMenuFromModsButton = document.getElementById('back-to-menu-from-mods-button');
-    // CORREÇÃO 2: ID do botão corrigido de 'create-new-button' para 'create-new-mod-button'
     const createNewButton = document.getElementById('create-new-mod-button');
     const addModButton = document.getElementById('add-mod-button');
     const modCodeInput = document.getElementById('mod-code-input');
@@ -61,9 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const playWithAIButton = document.getElementById('play-with-ai-button');
     const backToMenuFromLobbyButton = document.getElementById('back-to-menu-from-lobby-button');
     const modSelectionScreen = document.getElementById('mod-selection-screen');
-    const modSelectionList = document.getElementById('mod-selection-list');
     const startAIGameWithModsButton = document.getElementById('start-ai-game-with-mods-button');
     const backToLobbyFromModSelectionButton = document.getElementById('back-to-lobby-from-mod-selection-button');
+    const modSelectionTabMods = document.getElementById('mod-selection-tab-mods');
+    const modSelectionTabPacks = document.getElementById('mod-selection-tab-packs');
+    const modSelectionListContainer = document.getElementById('mod-selection-list-container');
+    const modpackSelectionListContainer = document.getElementById('modpack-selection-list-container');
+    const modSelectionList = document.getElementById('mod-selection-list');
+    const modpackSelectionList = document.getElementById('modpack-selection-list');
     const castleAIElement = document.getElementById('castle-ai');
     const aiHudItem = document.getElementById('ai-hud-item');
     const castleHealthBarAI = document.getElementById('castle-health-bar-ai');
@@ -396,13 +400,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
     function populateMonsterDropdown(selectElement) { selectElement.innerHTML = ''; baseMonsterTypes.forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Base) ${m.name}`; selectElement.appendChild(option); }); allMods.filter(m => m.type === 'monster').forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Mod) ${m.name}`; selectElement.appendChild(option); }); }
     
-    // --- FUNÇÕES DO HUB ONLINE RESTAURADAS E MELHORADAS ---
+    // --- Funções do Hub Online (Completas e Corrigidas) ---
     async function showCustomModal(message, type = 'alert', defaultValue = '') { return new Promise(resolve => { customModalMessage.textContent = message; customModalActions.innerHTML = ''; if (type === 'prompt') { customModalInput.style.display = 'block'; customModalInput.value = defaultValue; } else { customModalInput.style.display = 'none'; } if (type === 'confirm' || type === 'prompt') { const confirmBtn = document.createElement('button'); confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK'; confirmBtn.className = 'main-menu-button'; confirmBtn.style.backgroundColor = '#28a745'; confirmBtn.style.fontSize = '0.8em'; confirmBtn.style.padding = '10px 20px'; const cancelBtn = document.createElement('button'); cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar'; cancelBtn.className = 'main-menu-button'; cancelBtn.style.backgroundColor = '#dc3545'; cancelBtn.style.fontSize = '0.8em'; cancelBtn.style.padding = '10px 20px'; confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); }; cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); }; customModalActions.appendChild(cancelBtn); customModalActions.appendChild(confirmBtn); } else { const okBtn = document.createElement('button'); okBtn.textContent = 'OK'; okBtn.className = 'main-menu-button'; okBtn.style.backgroundColor = '#007bff'; okBtn.style.fontSize = '0.8em'; okBtn.style.padding = '10px 20px'; okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); }; customModalActions.appendChild(okBtn); } customModalOverlay.style.display = 'flex'; if (type === 'prompt') customModalInput.focus(); }); }
     async function showCustomAlert(message) { return showCustomModal(message, 'alert'); }
     async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
     async function showCustomPrompt(message, defaultValue = '') { return showCustomModal(message, 'prompt', defaultValue); }
-    async function fetchOnlineMods() { try { const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } }); if (response.status === 404) return []; if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return data.record || []; } catch (error) { console.error("Falha ao carregar mods:", error); return []; } }
-    async function fetchOnlineModpacks() { try { const response = await fetch(`${MODPACK_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY } }); if (response.status === 404) return []; if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return data.record || []; } catch (error) { console.error("Falha ao carregar modpacks:", error); return []; } }
+    
+    async function fetchOnlineMods() { try { const response = await fetch(`${JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Meta': 'false' } }); if (response.status === 404) return []; if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return Array.isArray(data) ? data : []; } catch (error) { console.error("Falha ao carregar mods:", error); return []; } }
+    async function fetchOnlineModpacks() { try { const response = await fetch(`${MODPACK_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Meta': 'false' } }); if (response.status === 404) return []; if (!response.ok) throw new Error(`Erro: ${response.statusText}`); const data = await response.json(); return Array.isArray(data) ? data : []; } catch (error) { console.error("Falha ao carregar modpacks:", error); return []; } }
 
     async function renderOnlineHub() {
         const isModsTab = document.getElementById('hub-tab-mods').classList.contains('active');
@@ -434,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const itemElement = document.createElement('div');
             itemElement.className = 'online-mod-item';
             if (isModsTab) {
-                 itemElement.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${item.name}</span><span class="online-mod-type">${item.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${item.author || 'Anônimo'}</span><span>usado: ${item.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${item.id}" data-code="${item.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${item.modCode}">Copiar</button></div>`;
+                 itemElement.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${item.name}</span><span class="online-mod-type">${item.type.charAt(0).toUpperCase()}</span></div><div class="online-mod-info"><span>por: ${item.author || 'Anônimo'}</span><span>usado: ${item.usageCount || 0}x</span></div><div class="online-mod-actions"><button class="mod-button secondary online-mod-add-btn" data-mod-id="${item.id}" data-code="${item.modCode}">Adicionar</button><button class="mod-button info online-mod-copy-btn" data-code="${item.modCode}">Copiar</button><button class="mod-button action online-mod-edit-btn" data-code="${item.modCode}" data-name="${item.name}">Editar</button><button class="mod-button danger online-mod-delete-btn" data-mod-id="${item.id}">Excluir</button></div>`;
             } else {
                 itemElement.innerHTML = `<div class="online-mod-header"><span class="online-mod-name">${item.name}</span><span class="online-mod-type">PACK</span></div><div class="online-mod-info"><span>por: ${item.author || 'Anônimo'}</span><span>${item.mods.length} mods</span></div><div class="online-mod-actions"><button class="mod-button secondary online-pack-add-btn" data-pack-id="${item.id}">Adicionar Pack</button></div>`;
             }
@@ -462,6 +467,9 @@ document.addEventListener('DOMContentLoaded', () => {
     async function publishModpack(index) {
         const packToPublish = allModpacks[index];
         if (!packToPublish) return;
+        if (!packToPublish.mods || packToPublish.mods.length === 0) {
+            return showCustomAlert("Não é possível publicar um modpack vazio.");
+        }
         const authorName = (currentUser ? currentUser.username : await showCustomPrompt("Digite seu nome de autor:", "Anônimo"));
         if (!authorName) return;
         try {
@@ -472,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error(`Erro ao publicar: ${response.statusText}`);
             await showCustomAlert(`Modpack "${packToPublish.name}" publicado!`);
             if (document.getElementById('hub-tab-packs').classList.contains('active')) renderOnlineHub();
-        } catch (error) { console.error("Falha ao publicar modpack:", error); await showCustomAlert("Erro ao publicar o modpack."); }
+        } catch (error) { console.error("Falha ao publicar modpack:", error); await showCustomAlert(`Erro ao publicar o modpack: ${error.message}`); }
     }
 
     async function handleAddOnlineModpack(packId) {
@@ -494,6 +502,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function incrementModUsageCount(modId) { try { let onlineMods = await fetchOnlineMods(); const modIndex = onlineMods.findIndex(m => m.id === modId); if (modIndex > -1) { onlineMods[modIndex].usageCount = (onlineMods[modIndex].usageCount || 0) + 1; await fetch(JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(onlineMods) }); renderOnlineHub(); } } catch (error) { console.error("Falha ao atualizar uso:", error); } }
+    
+    async function editOnlineMod(code, originalName) {
+        try {
+            const jsonString = atob(code);
+            let modData = JSON.parse(jsonString);
+            modScreen.style.display = 'none';
+            modEditorScreen.style.display = 'flex';
+            initializeModEditor();
+            let newName = `${originalName}_edit1`;
+            let editCount = 1;
+            while (allMods.some(m => m.name === newName)) {
+                editCount++;
+                newName = `${originalName}_edit${editCount}`;
+            }
+            switchEditorTab(modData.type);
+            document.getElementById('mod-name').value = newName;
+            if (modData.type !== 'wave') {
+                rebuildPixelGrid(modData.gridWidth || 16, modData.gridHeight || 16);
+                document.querySelectorAll('#pixel-grid .pixel').forEach((p, i) => {
+                    p.style.backgroundColor = modData.pixelData[i] || 'transparent';
+                });
+                document.getElementById('mod-grid-width').value = modData.gridWidth || 16;
+                document.getElementById('mod-grid-height').value = modData.gridHeight || 16;
+                document.getElementById('mod-width').value = modData.width;
+                document.getElementById('mod-height').value = modData.height;
+            }
+            if (modData.type === 'monster') {
+                document.getElementById('mod-health').value = modData.health;
+                document.getElementById('mod-damage').value = modData.damage;
+                document.getElementById('mod-speed').value = modData.speed;
+                document.getElementById('mod-money').value = modData.money;
+                document.getElementById('mod-spawnWaves').value = modData.spawnWaves.join(',');
+                document.getElementById('mod-spawnCount').value = modData.spawnCount;
+                document.getElementById('mod-isFlying').value = modData.isFlying;
+            }
+            await showCustomAlert(`Editando cópia de "${originalName}". Salvo como "${newName}".`);
+        } catch (error) {
+            await showCustomAlert("Não foi possível carregar para edição.");
+            console.error(error);
+        }
+    }
+    
+    async function deleteOnlineModFromServer(modIdToDelete) {
+        try {
+            let onlineMods = await fetchOnlineMods();
+            const updatedMods = onlineMods.filter(mod => mod.id !== modIdToDelete);
+            const response = await fetch(JSONBIN_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' },
+                body: JSON.stringify(updatedMods)
+            });
+            if (!response.ok) {
+                throw new Error(`Erro ao atualizar o bin: ${response.statusText}`);
+            }
+            return true;
+        } catch (error) {
+            console.error("Falha ao excluir mod do servidor:", error);
+            return false;
+        }
+    }
+    
+    async function handleDeleteOnlineMod(modId) {
+        const password = await showCustomPrompt("Digite a senha de administrador para excluir o mod:", "");
+        if (password === null) return;
+        if (password === '123456') {
+            const success = await deleteOnlineModFromServer(modId);
+            if (success) {
+                await showCustomAlert("Mod excluído com sucesso da biblioteca online.");
+                renderOnlineHub();
+            } else {
+                await showCustomAlert("Ocorreu um erro ao tentar excluir o mod.");
+            }
+        } else {
+            await showCustomAlert("Senha incorreta. A exclusão foi cancelada.");
+        }
+    }
 
     async function fetchSocialData() { try { const response = await fetch(`${SOCIAL_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': SOCIAL_JSONBIN_API_KEY } }); if (response.status === 404) return {}; if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); const data = await response.json(); const record = data.record || {}; if (!record.conversations) record.conversations = {}; if (!record.groups) record.groups = {}; return record; } catch (error) { console.error("Falha ao buscar dados sociais:", error); showCustomAlert("Erro de conexão com o servidor. Tente mais tarde."); return null; } }
     async function updateSocialData(newData) { try { const response = await fetch(SOCIAL_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': SOCIAL_JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(newData) }); if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); return true; } catch (error) { console.error("Falha ao atualizar dados sociais:", error); showCustomAlert("Erro de conexão, suas alterações podem não ter sido salvas."); return false; } }
@@ -511,34 +595,35 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkForNotifications() { if (!currentUser || currentNotification) return; const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; if (!myData) return; if (myData.friendRequests && myData.friendRequests.length > 0) { const sender = myData.friendRequests[0]; showInteractiveNotification(`${sender} enviou um pedido de amizade!`, 'friendRequest', sender); return; } if (myData.groupInvites && myData.groupInvites.length > 0) { const { groupName, sender } = myData.groupInvites[0]; showInteractiveNotification(`${sender} te convidou para o grupo "${groupName}"!`, 'groupInvite', myData.groupInvites[0]); return; } }
     function startSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); checkForNotifications(); socialPollInterval = setInterval(checkForNotifications, 10000); }
     function stopSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); socialPollInterval = null; }
-    async function updatePlayerStatsAndTrophies() {
-    if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 };
-    const socialData = await fetchSocialData();
-    if (!socialData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
-    const myData = socialData[currentUser.username.toLowerCase()];
-    if (!myData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
-
-    const oldTrophies = myData.stats.trophies || 0;
-    myData.stats.gamesPlayed = (myData.stats.gamesPlayed || 0) + 1;
-    myData.stats.totalMoney = (myData.stats.totalMoney || 0) + money;
-    myData.stats.totalDiamonds = (myData.stats.totalDiamonds || 0) + diamonds;
-    myData.stats.totalWaves = (myData.stats.totalWaves || 0) + currentWave;
-
-    let newTrophies = oldTrophies;
-    // SÓ CALCULA SE JOGOU MAIS DE 0 PARTIDAS, EVITANDO DIVISÃO POR ZERO
-    if (myData.stats.gamesPlayed > 0) {
-        const avgMoney = myData.stats.totalMoney / myData.stats.gamesPlayed;
-        const avgDiamonds = myData.stats.totalDiamonds / myData.stats.gamesPlayed;
-        const avgWaves = myData.stats.totalWaves / myData.stats.gamesPlayed;
-        newTrophies = Math.floor((avgMoney / 10) + (avgDiamonds * 5) + (avgWaves * 2));
-    }
     
-    myData.stats.trophies = newTrophies;
-    currentUser.stats = myData.stats;
-    await updateSocialData(socialData);
-    updateUiForLogin();
-    return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies };
-}
+    async function updatePlayerStatsAndTrophies() {
+        if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 };
+        const socialData = await fetchSocialData();
+        if (!socialData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
+        const myData = socialData[currentUser.username.toLowerCase()];
+        if (!myData) return { trophiesGained: 0, newTotalTrophies: currentUser.stats.trophies };
+    
+        const oldTrophies = myData.stats.trophies || 0;
+        myData.stats.gamesPlayed = (myData.stats.gamesPlayed || 0) + 1;
+        myData.stats.totalMoney = (myData.stats.totalMoney || 0) + money;
+        myData.stats.totalDiamonds = (myData.stats.totalDiamonds || 0) + diamonds;
+        myData.stats.totalWaves = (myData.stats.totalWaves || 0) + currentWave;
+    
+        let newTrophies = oldTrophies;
+        if (myData.stats.gamesPlayed > 0) {
+            const avgMoney = myData.stats.totalMoney / myData.stats.gamesPlayed;
+            const avgDiamonds = myData.stats.totalDiamonds / myData.stats.gamesPlayed;
+            const avgWaves = myData.stats.totalWaves / myData.stats.gamesPlayed;
+            newTrophies = Math.floor((avgMoney / 10) + (avgDiamonds * 5) + (avgWaves * 2));
+        }
+        
+        myData.stats.trophies = newTrophies;
+        currentUser.stats = myData.stats;
+        await updateSocialData(socialData);
+        updateUiForLogin();
+        return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies };
+    }
+
     function createConversationId(user1, user2) { return [user1.toLowerCase(), user2.toLowerCase()].sort().join('_'); }
     async function openDmGroupsPanel() { const socialData = await fetchSocialData(); if (!socialData || !currentUser) { await showCustomAlert("Não foi possível carregar dados."); return; } dmGroupsOverlay.style.display = 'flex'; dmGroupsMainPanel.style.display = 'block'; chatViewPanel.style.display = 'none'; createGroupPanel.style.display = 'none'; renderDmAndGroupLists(socialData); }
     function renderDmAndGroupLists(socialData) { const myData = socialData[currentUser.username.toLowerCase()]; dmListContainer.innerHTML = ''; if (myData.friends && myData.friends.length > 0) { myData.friends.forEach(friendName => { const item = document.createElement('div'); item.className = 'dm-list-item'; item.textContent = friendName; item.dataset.friendName = friendName; dmListContainer.appendChild(item); }); } else { dmListContainer.innerHTML = '<p>Nenhum amigo para conversar.</p>'; } groupListContainer.innerHTML = ''; const myGroups = Object.entries(socialData.groups || {}).filter(([id, group]) => group.members.includes(currentUser.username)); if (myGroups.length > 0) { myGroups.forEach(([id, group]) => { const item = document.createElement('div'); item.className = 'group-list-item'; item.textContent = group.name; item.dataset.groupId = id; groupListContainer.appendChild(item); }); } else { groupListContainer.innerHTML = '<p>Você não está em nenhum grupo.</p>'; } }
@@ -552,30 +637,50 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleCreateGroup() { const groupName = createGroupNameInput.value.trim(); if (!groupName) { await showCustomAlert("O grupo precisa de um nome."); return; } const invitedFriends = Array.from(createGroupFriendsList.querySelectorAll('input:checked')).map(input => input.dataset.friendName); const socialData = await fetchSocialData(); const groupId = `group_${Date.now()}`; socialData.groups[groupId] = { name: groupName, owner: currentUser.username, members: [currentUser.username], chat: [] }; const notification = { groupId, groupName, sender: currentUser.username }; invitedFriends.forEach(friendName => { if (socialData[friendName.toLowerCase()]) { if (!socialData[friendName.toLowerCase()].groupInvites) socialData[friendName.toLowerCase()].groupInvites = []; socialData[friendName.toLowerCase()].groupInvites.push(notification); } }); const success = await updateSocialData(socialData); if (success) { await showCustomAlert(`Grupo "${groupName}" criado e convites enviados!`); createGroupNameInput.value = ''; dmGroupsOverlay.style.display = 'none'; } }
     async function handleGroupInviteResponse(notificationData, accept) { const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; myData.groupInvites = myData.groupInvites.filter(inv => inv.groupId !== notificationData.groupId); if (accept) { const group = socialData.groups[notificationData.groupId]; if (group && !group.members.includes(currentUser.username)) { group.members.push(currentUser.username); } } const success = await updateSocialData(socialData); if (success && accept) { await showCustomAlert(`Você entrou no grupo "${notificationData.groupName}"!`); } hideInteractiveNotification(); checkForNotifications(); }
     
-    // --- Funções do Jogo (Existentes) ---
+    // --- Funções do Jogo (Principais) ---
     function logDebugMessage(message, type = 'info') { if (!isDebugModeEnabled) return; const entry = document.createElement('div'); entry.className = `log-entry ${type}`; entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> ${message}`; debugLogContent.appendChild(entry); debugLogContent.scrollTop = debugLogContent.scrollHeight; }
     
-    function prepareActiveGameData(selectedModIds = null) {
-        let modsToProcess;
-        if (selectedModIds) {
-            modsToProcess = allMods.filter(m => selectedModIds.includes(m.id));
-        } else {
-            const activeIndividualMods = allMods.filter(m => m.active);
-            const activeModpackMods = allModpacks
-                .filter(pack => pack.active)
-                .flatMap(pack => pack.mods)
-                .map(modId => allMods.find(m => m.id === modId))
-                .filter(Boolean);
-            const allActiveModsMap = new Map();
-            activeIndividualMods.forEach(mod => allActiveModsMap.set(mod.id, mod));
-            activeModpackMods.forEach(mod => allActiveModsMap.set(mod.id, mod));
-            modsToProcess = Array.from(allActiveModsMap.values());
+    function prepareActiveGameData(options = {}) {
+        const { selectedModIds = [], selectedModpackIds = [] } = options;
+    
+        let modsToProcess = new Map();
+    
+        // Adiciona mods individuais selecionados
+        selectedModIds.forEach(id => {
+            const mod = allMods.find(m => m.id === id);
+            if (mod) modsToProcess.set(mod.id, mod);
+        });
+    
+        // Adiciona mods de modpacks selecionados
+        selectedModpackIds.forEach(packId => {
+            const pack = allModpacks.find(p => p.id === packId);
+            if (pack && pack.mods) {
+                pack.mods.forEach(modId => {
+                    const mod = allMods.find(m => m.id === modId);
+                    if (mod) modsToProcess.set(mod.id, mod);
+                });
+            }
+        });
+    
+        // Se nenhuma seleção foi feita, usa os ativos
+        if (modsToProcess.size === 0) {
+            allMods.filter(m => m.active).forEach(mod => modsToProcess.set(mod.id, mod));
+            allModpacks.filter(p => p.active).forEach(pack => {
+                if (pack.mods) {
+                    pack.mods.forEach(modId => {
+                        const mod = allMods.find(m => m.id === modId);
+                        if (mod) modsToProcess.set(mod.id, mod);
+                    });
+                }
+            });
         }
+    
         activeGameMonsterTypes = [...baseMonsterTypes];
         activeGameBarricadeTypes = [...baseBarricadeTypes];
         activeGameGuardianTypes = JSON.parse(JSON.stringify(baseGuardianTypes));
         customWaveDefinitions = {};
-        modsToProcess.forEach(mod => {
+    
+        Array.from(modsToProcess.values()).forEach(mod => {
             if (mod.type === 'monster') { activeGameMonsterTypes.push({ ...mod, elementCreator: () => createCustomModElement(mod), attackType: 'melee' }); }
             else if (mod.type === 'barricade') { activeGameBarricadeTypes.push({ ...mod, color: 'transparent', border: '2px solid #ccc', isCustom: true }); }
             else if (mod.type === 'guardian') { activeGameGuardianTypes[mod.id] = { name: mod.name, isCustom: true, modData: mod, evolutions: [{ cost: mod.cost, damage: mod.damage, cooldown: mod.cooldown, range: mod.range }], projectile: { speed: mod.projectileSpeed, size: mod.projectileSize, color: mod.projectileColor, cssClass: 'custom' } }; }
@@ -584,9 +689,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function initializeGame(mode = 'single', options = {}) {
-        const { savedState = null, selectedModIds = null, saveIndex = null } = options;
+        const { savedState = null, saveIndex = null } = options;
         gameMode = mode; loadedSaveSlotIndex = saveIndex;
-        prepareActiveGameData(selectedModIds);
+        prepareActiveGameData(options); // Passa todas as opções
         money = 20; diamonds = 0; strongMonsterKillCount = 0;
         currentWeaponIndex = 0; purchasedWeapons = new Array(weapons.length).fill(false); purchasedWeapons[0] = true;
         projectiles = []; monsterProjectiles = []; monsters = []; barricades = [];
@@ -643,14 +748,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const singlePlayerLost = gameMode === 'single' && castleHealth <= 0; const multiPlayerLost = gameMode === 'ai' && isPlayerCastleDestroyed && isCastleAIDestroyed; if (!isGameOver && (singlePlayerLost || multiPlayerLost)) { endGame("GAME OVER!"); }
     if (monstersSpawnedThisWave>=totalMonstersToSpawn && monsters.length === 0 && !isGameOver) { if (!isWaveClearMessageSent) { if (gameMode === 'ai') addChatMessage("IA", getRandomPhrase('waveEnd'), true); isWaveClearMessageSent = true; } startNextWave(); }
     }
-    async function endGame(message) { isGameOver = true; clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); castleAbilityIntervals.forEach(clearInterval); if(castleAbilityIntervalsAI) castleAbilityIntervalsAI.forEach(clearInterval); logDebugMessage(`Fim de jogo: ${message}`, 'error'); const { trophiesGained, newTotalTrophies } = await updatePlayerStatsAndTrophies(); gameOverTitle.textContent = message; if (currentUser && !isDebugModeEnabled && !isGodMode) { postGameStats.innerHTML = `Estatísticas da Partida:<br>Dinheiro: $${money} | Diamantes: ${diamonds} | Onda: ${currentWave}<br>Troféus Ganhos: ${trophiesGained > 0 ? '+' : ''}${trophiesGained} 🏆<br>Total de Troféus: ${Math.floor(newTotalTrophies)} 🏆`; postGameStats.style.display = 'block'; } else { postGameStats.style.display = 'none'; } gameMessage.style.display = 'flex'; }
+    async function endGame(message) { isGameOver = true; clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); castleAbilityIntervals.forEach(clearInterval); if(castleAbilityIntervalsAI) castleAbilityIntervalsAI.forEach(clearInterval); stopSocialPoll(); stopChatPoll(); logDebugMessage(`Fim de jogo: ${message}`, 'error'); const { trophiesGained, newTotalTrophies } = await updatePlayerStatsAndTrophies(); gameOverTitle.textContent = message; if (currentUser && !isDebugModeEnabled && !isGodMode) { postGameStats.innerHTML = `Estatísticas da Partida:<br>Dinheiro: $${money} | Diamantes: ${diamonds} | Onda: ${currentWave}<br>Troféus Ganhos: ${trophiesGained > 0 ? '+' : ''}${trophiesGained} 🏆<br>Total de Troféus: ${Math.floor(newTotalTrophies)} 🏆`; postGameStats.style.display = 'block'; } else { postGameStats.style.display = 'none'; } gameMessage.style.display = 'flex'; }
     function startGameLoop() { if (gameLoopInterval) clearInterval(gameLoopInterval); gameLoopInterval = setInterval(gameLoop, 1000 / 60); }
     function togglePause(forcePause = null) { isPaused = forcePause !== null ? forcePause : !isPaused; logDebugMessage(isPaused ? "Jogo Pausado" : "Jogo Retomado"); pauseButton.textContent = isPaused ? 'Continuar' : 'Pause'; if (isPaused) { clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); } else { startGameLoop(); if (monstersSpawnedThisWave < totalMonstersToSpawn) monsterSpawnInterval = setInterval(() => { if(monstersSpawnedThisWave < totalMonstersToSpawn) spawnMonster(); else clearInterval(monsterSpawnInterval); }, 500); } if (placingBarricade) barricadeGhost.style.display = isPaused ? 'block' : 'none'; }
     function showIntroScreen() { introScreen.style.display = 'flex'; loadingScreen.style.display = 'none'; startScreen.style.display = 'none'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; setTimeout(() => { introScreen.style.display = 'none'; showLoadingScreen(); }, 4000); }
     function showLoadingScreen() { loadingScreen.style.display = 'flex'; startScreen.style.display = 'none'; gameContainer.style.display = 'block'; setTimeout(() => { loadingScreen.style.display = 'none'; showStartScreen(); }, 1000); }
     function showStartScreen() { gameMessage.style.display = 'none'; startScreen.style.display = 'flex'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; playerCastleIndicator.style.display = 'none'; socialOverlay.style.display = 'none'; dmGroupsOverlay.style.display = 'none'; gameContainer.style.display = 'block'; renderSaveSlots(); }
     function showLobbyScreen() { if (!currentUser) { showCustomAlert("Você precisa estar logado para acessar o modo multiplayer."); return; } startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'flex'; }
-    function showModSelectionScreen() { multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'flex'; modSelectionList.innerHTML = ''; const activeLocalMods = allMods.filter(m => m.active); if(activeLocalMods.length === 0) { modSelectionList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum mod local ativo encontrado.</p>'; } else { activeLocalMods.forEach(mod => { const item = document.createElement('div'); item.className = 'mod-selection-item'; item.innerHTML = `<input type="checkbox" id="mod-select-${mod.id}" data-mod-id="${mod.id}" checked><label for="mod-select-${mod.id}">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</label>`; modSelectionList.appendChild(item); }); } }
+    
+    function renderModSelectionLists() {
+        // Renderiza lista de mods ativos
+        modSelectionList.innerHTML = '';
+        const activeLocalMods = allMods.filter(m => m.active);
+        if (activeLocalMods.length === 0) {
+            modSelectionList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum mod local ativo encontrado.</p>';
+        } else {
+            activeLocalMods.forEach(mod => {
+                const item = document.createElement('div');
+                item.className = 'mod-selection-item';
+                item.innerHTML = `<input type="checkbox" id="mod-select-${mod.id}" data-mod-id="${mod.id}" checked><label for="mod-select-${mod.id}">[${mod.type.charAt(0).toUpperCase()}] ${mod.name}</label>`;
+                modSelectionList.appendChild(item);
+            });
+        }
+    
+        // Renderiza lista de modpacks ativos
+        modpackSelectionList.innerHTML = '';
+        const activeModpacks = allModpacks.filter(p => p.active);
+        if (activeModpacks.length === 0) {
+            modpackSelectionList.innerHTML = '<p style="text-align:center; color: #888;">Nenhum modpack local ativo encontrado.</p>';
+        } else {
+            activeModpacks.forEach(pack => {
+                const item = document.createElement('div');
+                item.className = 'mod-selection-item';
+                // Usamos radio buttons para packs, pois só um pode ser usado por vez
+                item.innerHTML = `<input type="radio" name="modpack-selection" id="modpack-select-${pack.id}" data-modpack-id="${pack.id}"><label for="modpack-select-${pack.id}">${pack.name} (${pack.mods.length} mods)</label>`;
+                modpackSelectionList.appendChild(item);
+            });
+        }
+    }
+    
+    function showModSelectionScreen() {
+        multiplayerLobbyScreen.style.display = 'none';
+        modSelectionScreen.style.display = 'flex';
+        renderModSelectionLists();
+        // Garante que a aba de mods seja a padrão
+        modSelectionTabMods.click();
+    }
+
     function startGame(mode, options = {}) { startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; initializeGame(mode, options); }
     function processCommand(commandStr) { logDebugMessage(`> ${commandStr}`, 'command'); const parts = commandStr.toLowerCase().split(' '); const command = parts[0]; const args = parts.slice(1); switch(command) { case 'money': money = parseInt(args[0]) || money; updateMoneyDisplay(); logDebugMessage(`Dinheiro definido para $${money}`); break; case 'diamonds': diamonds = parseInt(args[0]) || diamonds; updateDiamondDisplay(); logDebugMessage(`Diamantes definidos para ${diamonds}`); break; case 'wave': const waveNum = parseInt(args[0]); if(waveNum > 0) { monsters.forEach(m => m.element?.remove()); monsters = []; currentWave = waveNum - 1; startNextWave(); logDebugMessage(`Pulando para a onda ${waveNum}`); } else { logDebugMessage('Uso: wave [número > 0]', 'error');} break; case 'spawn': const monsterName = args[0] || ''; const amount = parseInt(args[1]) || 1; const monsterType = activeGameMonsterTypes.find(m => m.name.toLowerCase().includes(monsterName)); if (monsterType) { for (let i = 0; i < amount; i++) { spawnMonster(monsterType.id); } logDebugMessage(`${amount}x ${monsterType.name} spawnado(s).`); } else { logDebugMessage(`Monstro '${monsterName}' não encontrado.`, 'error'); } break; case 'health': const newHealth = parseInt(args[0]) || MAX_CASTLE_HEALTH; castleHealth = newHealth; if(gameMode === 'ai') castleHealthAI = parseInt(args[0]) || MAX_CASTLE_HEALTH_AI; updateCastleHealthDisplay(false); if(gameMode === 'ai') updateCastleHealthDisplay(true); logDebugMessage(`Vida dos castelos definida para ${args[0]}.`); break; case 'god': isGodMode = !isGodMode; logDebugMessage(`Modo Deus ${isGodMode ? 'ATIVADO' : 'DESATIVADO'}.`, 'godmode'); break; case 'killall': monsters.forEach(m => m.health = 0); logDebugMessage(`Todos os monstros foram derrotados.`); break; case 'help': logDebugMessage("Comandos: money, diamonds, wave, spawn, health, god, killall, help"); break; default: logDebugMessage(`Comando '${command}' desconhecido.`, 'error'); break; } }
     function getSaveGames() { try { const saves = localStorage.getItem('castleDefenseSaves'); return saves ? JSON.parse(saves) : []; } catch (e) { console.error("Erro ao ler jogos salvos:", e); localStorage.removeItem('castleDefenseSaves'); return []; } }
@@ -683,7 +827,7 @@ document.addEventListener('DOMContentLoaded', () => {
     newGameButton.addEventListener('click', () => startGame('single'));
     pauseButton.addEventListener('click', () => togglePause());
     shopToggleButton.addEventListener('click', () => { if (placingBarricade) return; const isExp = gameUI.classList.toggle('expanded'); gameUI.classList.toggle('collapsed', !isExp); shopToggleButton.textContent = isExp ? 'Fechar Loja' : 'Loja'; if (gameMode === 'ai') chatEmoteContainer.style.display = isExp ? 'none' : 'flex'; });
-    backToMenuNavButton.addEventListener('click', async () => { const playerIsPlaying = !isGameOver && currentWave > 0; if (playerIsPlaying) { if (loadedSaveSlotIndex !== null) { await saveCurrentGame(loadedSaveSlotIndex); } else if (gameMode === 'single') { const wantToSave = await showCustomConfirm("Deseja salvar seu progresso antes de sair?"); if (wantToSave) await saveCurrentGame(); } else { const wantToLeave = await showCustomConfirm("Tem certeza que quer voltar ao menu? O progresso da partida será perdido."); if (!wantToLeave) return; } } clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); showStartScreen(); });
+    backToMenuNavButton.addEventListener('click', async () => { const playerIsPlaying = !isGameOver && currentWave > 0; if (playerIsPlaying) { if (loadedSaveSlotIndex !== null) { await saveCurrentGame(loadedSaveSlotIndex); } else if (gameMode === 'single') { const wantToSave = await showCustomConfirm("Deseja salvar seu progresso antes de sair?"); if (wantToSave) await saveCurrentGame(); } else { const wantToLeave = await showCustomConfirm("Tem certeza que quer voltar ao menu? O progresso da partida será perdido."); if (!wantToLeave) return; } } clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); stopSocialPoll(); stopChatPoll(); showStartScreen(); });
     savePanelToggle.addEventListener('click', () => savedGamesPanel.classList.toggle('collapsed'));
     saveSlotsContainer.addEventListener('click', async e => { const slot = e.target.closest('.save-slot:not(.empty)'); const deleteBtn = e.target.closest('.save-slot-delete-button'); if (deleteBtn) { e.stopPropagation(); const index = parseInt(deleteBtn.dataset.index); let saves = getSaveGames(); const wantToDelete = await showCustomConfirm(`Tem certeza que deseja apagar o jogo "${saves[index].name}"?`); if (wantToDelete) { saves.splice(index, 1); saveGameList(saves); renderSaveSlots(); } } else if (slot) { const index = parseInt(slot.dataset.index); const saves = getSaveGames(); if (saves[index]) { startGame('single', {savedState: saves[index], saveIndex: index}); } } });
     const commands = [ { cmd: 'money 50000', desc: 'Adiciona X de dinheiro.' }, { cmd: 'diamonds 200', desc: 'Adiciona X de diamante.' }, { cmd: 'wave 15', desc: 'Pula para a onda desejada.' }, { cmd: 'spawn zumbi 10', desc: 'Exemplo: Spawna 10 zumbis.' }, { cmd: 'health 999', desc: 'Define a vida do castelo para o número desejado.' }, { cmd: 'god', desc: 'Ativa/Desativa a invencibilidade.' }, { cmd: 'killall', desc: 'Derrota todos os monstros.' }, { cmd: 'help', desc: 'Mostra esta lista de ajuda.' } ];
@@ -691,75 +835,18 @@ document.addEventListener('DOMContentLoaded', () => {
     commands.forEach(c => { const entry = document.createElement('div'); entry.className = 'command-entry'; entry.innerHTML = `<div class="command-desc"><code>${c.cmd.split(' ')[0]}</code> - ${c.desc}</div><button class="copy-command-btn" data-command="${c.cmd}"><div class="clipboard-icon"></div><span class="copied-icon">✓</span></button>`; commandHelpContent.appendChild(entry); });
     document.querySelectorAll('.copy-command-btn').forEach(btn => { btn.addEventListener('click', (e) => { const button = e.currentTarget; const commandToCopy = button.dataset.command; navigator.clipboard.writeText(commandToCopy).then(() => { const clipboardIcon = button.querySelector('.clipboard-icon'); const copiedIcon = button.querySelector('.copied-icon'); clipboardIcon.style.display = 'none'; copiedIcon.style.display = 'inline'; setTimeout(() => { clipboardIcon.style.display = 'block'; copiedIcon.style.display = 'none'; }, 1000); }); }); });
     toggleFullscreenButton.addEventListener('click', () => { if (!document.fullscreenElement) { gameContainer.requestFullscreen().catch(err => { showCustomAlert(`Não foi possível entrar em tela cheia: ${err.message}`); }); } else { document.exitFullscreen(); } });
-    
-    // CORREÇÃO 3: Listener do botão de Mods atualizado para renderizar as listas
-    modsButton.addEventListener('click', () => {
-        startScreen.style.display = 'none';
-        modScreen.style.display = 'flex';
-        loadMods();
-        loadModpacks();
-        renderModList();
-        renderModpackList();
-        renderOnlineHub();
-        switchModManagerTab('local');
-    });
-
+    modsButton.addEventListener('click', () => { startScreen.style.display = 'none'; modScreen.style.display = 'flex'; loadMods(); loadModpacks(); renderModList(); renderModpackList(); renderOnlineHub(); switchModManagerTab('local'); });
     backToMenuFromModsButton.addEventListener('click', showStartScreen);
-    
-    createNewButton.addEventListener('click', async () => {
-        if (currentModTab === 'local') {
-            modScreen.style.display = 'none';
-            modEditorScreen.style.display = 'flex';
-            initializeModEditor();
-        } else {
-            await openModpackEditor();
-        }
-    });
-
+    createNewButton.addEventListener('click', async () => { if (currentModTab === 'local') { modScreen.style.display = 'none'; modEditorScreen.style.display = 'flex'; initializeModEditor(); } else { await openModpackEditor(); } });
     cancelModCreationButton.addEventListener('click', () => { modEditorScreen.style.display = 'none'; modScreen.style.display = 'flex'; renderModList(); });
     addModButton.addEventListener('click', async () => { const code = modCodeInput.value.trim(); if (!code) return showCustomAlert('Por favor, cole um código de mod.'); try { const jsonString = atob(code); const modData = JSON.parse(jsonString); if (!modData.id || !modData.type || !modData.name) throw new Error("Código de mod inválido."); if (allMods.some(m => m.id === modData.id)) return showCustomAlert('Um mod com este ID já existe!'); allMods.push(modData); saveMods(); renderModList(); modCodeInput.value = ''; await showCustomAlert(`Mod "${modData.name}" adicionado!`); } catch (error) { await showCustomAlert('Erro ao adicionar o mod. Código inválido. \n' + error.message); } });
     modListContainer.addEventListener('click', async (e) => { const check = e.target.closest('.mod-toggle-check'); const delBtn = e.target.closest('.mod-delete-btn'); const publishBtn = e.target.closest('.mod-publish-btn'); if (check) { const index = parseInt(check.dataset.index); if (allMods[index]) { allMods[index].active = check.checked; saveMods(); } } else if (delBtn) { const index = parseInt(delBtn.dataset.index); if (allMods[index]) { const wantToDelete = await showCustomConfirm(`Deseja excluir o mod "${allMods[index].name}"?`); if(wantToDelete) { allMods.splice(index, 1); saveMods(); renderModList(); } } } else if (publishBtn) { const index = parseInt(publishBtn.dataset.index); await publishMod(index); } });
-    
     modTabLocal.addEventListener('click', () => switchModManagerTab('local'));
     modTabPacks.addEventListener('click', () => switchModManagerTab('packs'));
-    cancelModpackCreationButton.addEventListener('click', () => {
-        modpackEditorOverlay.style.display = 'none';
-        currentModpackEditing = null;
-    });
+    cancelModpackCreationButton.addEventListener('click', () => { modpackEditorOverlay.style.display = 'none'; currentModpackEditing = null; });
     saveModpackButton.addEventListener('click', saveModpack);
-
-    modpackListContainer.addEventListener('click', async (e) => {
-        const check = e.target.closest('.modpack-toggle-check');
-        const delBtn = e.target.closest('.modpack-delete-btn');
-        const editBtn = e.target.closest('.modpack-edit-btn');
-        const publishBtn = e.target.closest('.modpack-publish-btn');
-        if(check) {
-            const index = parseInt(check.dataset.index);
-            if(allModpacks[index]) {
-                allModpacks[index].active = check.checked;
-                saveModpacks();
-            }
-        } else if (delBtn) {
-            const index = parseInt(delBtn.dataset.index);
-            if(allModpacks[index]) {
-                const wantToDelete = await showCustomConfirm(`Deseja excluir o modpack "${allModpacks[index].name}"?`);
-                if(wantToDelete) {
-                    allModpacks.splice(index, 1);
-                    saveModpacks();
-                    renderModpackList();
-                }
-            }
-        } else if (editBtn) {
-            const index = parseInt(editBtn.dataset.index);
-            await openModpackEditor(index);
-        } else if (publishBtn) {
-            const index = parseInt(publishBtn.dataset.index);
-            await publishModpack(index);
-        }
-    });
-
+    modpackListContainer.addEventListener('click', async (e) => { const check = e.target.closest('.modpack-toggle-check'); const delBtn = e.target.closest('.modpack-delete-btn'); const editBtn = e.target.closest('.modpack-edit-btn'); const publishBtn = e.target.closest('.modpack-publish-btn'); if(check) { const index = parseInt(check.dataset.index); if(allModpacks[index]) { allModpacks[index].active = check.checked; saveModpacks(); } } else if (delBtn) { const index = parseInt(delBtn.dataset.index); if(allModpacks[index]) { const wantToDelete = await showCustomConfirm(`Deseja excluir o modpack "${allModpacks[index].name}"?`); if(wantToDelete) { allModpacks.splice(index, 1); saveModpacks(); renderModpackList(); } } } else if (editBtn) { const index = parseInt(editBtn.dataset.index); await openModpackEditor(index); } else if (publishBtn) { const index = parseInt(publishBtn.dataset.index); await publishModpack(index); } });
     document.querySelector('#mod-editor-screen .editor-tabs').addEventListener('click', (e) => { const tab = e.target.closest('.editor-tab'); if (tab) switchEditorTab(tab.dataset.type); });
-    
     colorPalette.addEventListener('click', (e) => { const colorBox = e.target.closest('.color-box'); if (colorBox) { editorCurrentColor = colorBox.dataset.color; document.querySelectorAll('#color-palette .color-box').forEach(b => b.classList.remove('selected')); colorBox.classList.add('selected'); } });
     pencilToolBtn.addEventListener('click', () => { editorCurrentTool = 'pencil'; pencilToolBtn.classList.add('selected'); bucketToolBtn.classList.remove('selected'); eraserToolBtn.classList.remove('selected'); });
     bucketToolBtn.addEventListener('click', () => { editorCurrentTool = 'bucket'; bucketToolBtn.classList.add('selected'); pencilToolBtn.classList.remove('selected'); eraserToolBtn.classList.remove('selected'); });
@@ -775,28 +862,43 @@ document.addEventListener('DOMContentLoaded', () => {
     onlinePanelToggle.addEventListener('click', () => onlineModsPanel.classList.toggle('collapsed'));
     onlineModSearch.addEventListener('input', renderOnlineHub);
     onlineModSort.addEventListener('change', renderOnlineHub);
-    onlineModList.addEventListener('click', e => {
-        const addBtn = e.target.closest('.online-mod-add-btn');
-        const copyBtn = e.target.closest('.online-mod-copy-btn');
-        const addPackBtn = e.target.closest('.online-pack-add-btn');
-        if (addBtn) { modCodeInput.value = addBtn.dataset.code; addModButton.click(); const modId = addBtn.dataset.modId; if(modId) incrementModUsageCount(modId); }
-        if (copyBtn) { navigator.clipboard.writeText(copyBtn.dataset.code).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1500); }); }
-        if (addPackBtn) { handleAddOnlineModpack(addPackBtn.dataset.packId); }
-    });
-    document.getElementById('hub-tab-mods').addEventListener('click', () => {
-        document.getElementById('hub-tab-packs').classList.remove('active');
-        document.getElementById('hub-tab-mods').classList.add('active');
-        renderOnlineHub();
-    });
-    document.getElementById('hub-tab-packs').addEventListener('click', () => {
-        document.getElementById('hub-tab-mods').classList.remove('active');
-        document.getElementById('hub-tab-packs').classList.add('active');
-        renderOnlineHub();
-    });
+    onlineModList.addEventListener('click', e => { const addBtn = e.target.closest('.online-mod-add-btn'); const copyBtn = e.target.closest('.online-mod-copy-btn'); const editBtn = e.target.closest('.online-mod-edit-btn'); const deleteBtn = e.target.closest('.online-mod-delete-btn'); const addPackBtn = e.target.closest('.online-pack-add-btn'); if (addBtn) { modCodeInput.value = addBtn.dataset.code; addModButton.click(); const modId = addBtn.dataset.modId; if(modId) incrementModUsageCount(modId); } if (copyBtn) { navigator.clipboard.writeText(copyBtn.dataset.code).then(() => { copyBtn.textContent = 'Copiado!'; setTimeout(() => { copyBtn.textContent = 'Copiar'; }, 1500); }); } if (editBtn) { editOnlineMod(editBtn.dataset.code, editBtn.dataset.name); } if (deleteBtn) { handleDeleteOnlineMod(deleteBtn.dataset.modId); } if (addPackBtn) { handleAddOnlineModpack(addPackBtn.dataset.packId); } });
+    document.getElementById('hub-tab-mods').addEventListener('click', () => { document.getElementById('hub-tab-packs').classList.remove('active'); document.getElementById('hub-tab-mods').classList.add('active'); renderOnlineHub(); });
+    document.getElementById('hub-tab-packs').addEventListener('click', () => { document.getElementById('hub-tab-mods').classList.remove('active'); document.getElementById('hub-tab-packs').classList.add('active'); renderOnlineHub(); });
     playWithAIButton.addEventListener('click', showModSelectionScreen);
     backToMenuFromLobbyButton.addEventListener('click', showStartScreen);
     backToLobbyFromModSelectionButton.addEventListener('click', showLobbyScreen);
-    startAIGameWithModsButton.addEventListener('click', () => { const selectedModIds = Array.from(document.querySelectorAll('#mod-selection-list input:checked')).map(input => input.dataset.modId); startGame('ai', { selectedModIds: selectedModIds }); });
+    
+    startAIGameWithModsButton.addEventListener('click', () => {
+        const isModsTabActive = modSelectionTabMods.classList.contains('active');
+        let gameOptions = {};
+    
+        if (isModsTabActive) {
+            gameOptions.selectedModIds = Array.from(document.querySelectorAll('#mod-selection-list input:checked')).map(input => input.dataset.modId);
+        } else {
+            const selectedPackRadio = document.querySelector('#modpack-selection-list input:checked');
+            if (selectedPackRadio) {
+                gameOptions.selectedModpackIds = [selectedPackRadio.dataset.modpackId];
+            }
+        }
+    
+        startGame('ai', gameOptions);
+    });
+
+    modSelectionTabMods.addEventListener('click', () => {
+        modSelectionTabPacks.classList.remove('active');
+        modSelectionTabMods.classList.add('active');
+        modpackSelectionListContainer.classList.remove('active');
+        modSelectionListContainer.classList.add('active');
+    });
+
+    modSelectionTabPacks.addEventListener('click', () => {
+        modSelectionTabMods.classList.remove('active');
+        modSelectionTabPacks.classList.add('active');
+        modSelectionListContainer.classList.remove('active');
+        modpackSelectionListContainer.classList.add('active');
+    });
+
     chatToggleButton.addEventListener('click', () => chatPanel.classList.toggle('hidden'));
     emoteToggleButton.addEventListener('click', () => { emotePicker.style.display = emotePicker.style.display === 'flex' ? 'none' : 'flex'; });
     document.addEventListener('click', e => { if (!emotePicker.contains(e.target) && !emoteToggleButton.contains(e.target)) emotePicker.style.display = 'none'; });
@@ -816,8 +918,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     multiplayerButton.addEventListener('click', () => {
-        if (!currentUser) { openDmGroupsPanel(); }
-        else { showLobbyScreen(); }
+        if (!currentUser) {
+            socialOverlay.style.display = 'flex';
+            friendsPanel.style.display = 'none';
+            authPanel.style.display = 'block';
+            toggleAuthMode(true);
+        } else { 
+            showLobbyScreen(); 
+        }
     });
     document.querySelectorAll('.social-panel-close-button').forEach(btn => btn.addEventListener('click', () => { socialOverlay.style.display = 'none'; dmGroupsOverlay.style.display = 'none'; }));
     authToggleLink.addEventListener('click', () => toggleAuthMode());
