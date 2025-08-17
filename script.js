@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelModpackCreationButton = document.getElementById('cancel-modpack-creation-button');
     const saveModpackButton = document.getElementById('save-modpack-button');
 
-    // ### INÍCIO: Definição dos Mods e Modpack Padrão "NIGHTMARE MODE" ###
+    // ### INÍCIO: Definição dos Mods e Modpacks Padrão ###
 
     const NIGHTMARE_MODS = [
         {
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gridWidth: 16,
             gridHeight: 16,
             abilities: [{ type: 'regen', amount: 1, interval: 1000 }],
-            pixelData: ['transparent','transparent','transparent','transparent','#2e0a2e','#3a0c3a','#3a0c3a','#2e0a2e','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2e0a2e','#3a0c3a','#460e46','#521052','#521052','#460e46','#3a0c3a','#2e0a2e','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#691469','#751675','#751675','#691469','#521052','#460e46','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#691469','#811881','#811881','#811881','#691469','#521052','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','#460e46','#691469','#811881','#811881','#9d1c9d','#811881','#811881','#691469','#460e46','#3a0c3a','transparent','transparent','transparent','transparent','#521052','#751675','#8d1a8d','#9d1c9d','#9d1c9d','#8d1a8d','#811881','#691469','#521052','#460e46','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#811881','#9d1c9d','#ff0000','#9d1c9d','#9d1c9d','#811881','#691469','#460e46','#3a0c3a','transparent','transparent','transparent','#2e0a2e','#460e46','#691469','#811881','#9d1c9d','#9d1c9d','#9d1c9d','#811881','#811881','#691469','#460e46','#2e0a2e','transparent','transparent','transparent','transparent','#3a0c3a','#521052','#691469','#811881','#8d1a8d','#811881','#691469','#521052','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2e0a2e','#460e46','#521052','#691469','#521052','#460e46','#2e0a2e','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3a0c3a','#3a0c3a','#3a0c3a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','#2E0A2E','#3A0C3A','#3A0C3A','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2E0A2E','#3A0C3A','#460E46','#521052','#521052','#460E46','#3A0C3A','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#751675','#751675','#691469','#521052','#460E46','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#811881','#811881','#811881','#691469','#521052','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','#460E46','#691469','#811881','#811881','#9D1C9D','#811881','#811881','#691469','#460E46','#3A0C3A','transparent','transparent','transparent','transparent','#521052','#751675','#8D1A8D','#9D1C9D','#9D1C9D','#8D1A8D','#811881','#691469','#521052','#460E46','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#811881','#9D1C9D','#FF0000','#9D1C9D','#9D1C9D','#811881','#691469','#460E46','#3A0C3A','transparent','transparent','transparent','#2E0A2E','#460E46','#691469','#811881','#9D1C9D','#9D1C9D','#9D1C9D','#811881','#811881','#691469','#460E46','#2E0A2E','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#811881','#8D1A8D','#811881','#691469','#521052','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2E0A2E','#460E46','#521052','#691469','#521052','#460E46','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#3A0C3A','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'nightmare_spectre',
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 55,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#3c3c3c','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2b2b2b','#3c3c3c','#ffffff','#ffffff','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#3c3c3c','#3c3c3c','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#1a1a1a','transparent','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2B2B2B','#3C3C3C','#FFFFFF','#FFFFFF','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#3C3C3C','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#1A1A1A','transparent','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'nightmare_abyss_eye',
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gridHeight: 16,
             attackType: 'ranged',
             projectile: { type: 'corrupting_bolt', damage: 15, speed: 5, cooldown: 3000, range: 450 },
-            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','#1a1a1a','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#3c3c3c','#3c3c3c','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#3c3c3c','#4f4f4f','#691469','#691469','#4f4f4f','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','#2b2b2b','#4f4f4f','#691469','#8d1a8d','#8d1a8d','#8d1a8d','#691469','#4f4f4f','#2b2b2b','transparent','transparent','transparent','transparent','#2b2b2b','#691469','#8d1a8d','#ff0000','#ff0000','#8d1a8d','#8d1a8d','#691469','#2b2b2b','transparent','transparent','transparent','transparent','#3c3c3c','#691469','#8d1a8d','#ff0000','#000000','#ff0000','#8d1a8d','#691469','#3c3c3c','transparent','transparent','transparent','transparent','#3c3c3c','#691469','#8d1a8d','#ff0000','#ff0000','#8d1a8d','#8d1a8d','#691469','#3c3c3c','transparent','transparent','transparent','transparent','#2b2b2b','#691469','#8d1a8d','#8d1a8d','#8d1a8d','#8d1a8d','#8d1a8d','#691469','#2b2b2b','transparent','transparent','transparent','transparent','#2b2b2b','#4f4f4f','#691469','#691469','#691469','#691469','#691469','#4f4f4f','#2b2b2b','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#3c3c3c','#4f4f4f','#4f4f4f','#4f4f4f','#3c3c3c','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#2b2b2b','#2b2b2b','#2b2b2b','#2b2b2b','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1a1a1a','#1a1a1a','#1a1a1a','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','#1A1A1A','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#3C3C3C','#3C3C3C','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#3C3C3C','#4F4F4F','#691469','#691469','#4F4F4F','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','#2B2B2B','#4F4F4F','#691469','#8D1A8D','#8D1A8D','#8D1A8D','#691469','#4F4F4F','#2B2B2B','transparent','transparent','transparent','transparent','#2B2B2B','#691469','#8D1A8D','#FF0000','#FF0000','#8D1A8D','#8D1A8D','#691469','#2B2B2B','transparent','transparent','transparent','transparent','#3C3C3C','#691469','#8D1A8D','#FF0000','#000000','#FF0000','#8D1A8D','#691469','#3C3C3C','transparent','transparent','transparent','transparent','#3C3C3C','#691469','#8D1A8D','#FF0000','#FF0000','#8D1A8D','#8D1A8D','#691469','#3C3C3C','transparent','transparent','transparent','transparent','#2B2B2B','#691469','#8D1A8D','#8D1A8D','#8D1A8D','#8D1A8D','#8D1A8D','#691469','#2B2B2B','transparent','transparent','transparent','transparent','#2B2B2B','#4F4F4F','#691469','#691469','#691469','#691469','#691469','#4F4F4F','#2B2B2B','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#3C3C3C','#4F4F4F','#4F4F4F','#4F4F4F','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         }
     ];
 
@@ -196,8 +196,306 @@ document.addEventListener('DOMContentLoaded', () => {
         name: 'NIGHTMARE MODE',
         mods: ['nightmare_abomination', 'nightmare_spectre', 'nightmare_abyss_eye'],
         active: false,
-        isDefault: true // Propriedade especial para identificação
+        isDefault: true
     };
+
+    // ### INÍCIO: MODPACK "GOLD RUSH" ###
+    const GOLD_RUSH_MODS = [
+        {
+            id: 'gr_thief_goblin',
+            type: 'monster',
+            name: 'Goblin Ladrão',
+            health: 15,
+            damage: 0, // Causa dano especial (roubo)
+            speed: 2.5,
+            money: 1,
+            spawnWaves: [3, 6, 9, 12, 15],
+            spawnCount: 3,
+            isFlying: false,
+            width: 30,
+            height: 40,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'steal_money', percentage: 0.1 }], // Rouba 10%
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','#228B22','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#006400','#006400','#006400','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#3CB371','#000000','#000000','#3CB371','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#3CB371','#3CB371','#3CB371','#228B22','transparent','transparent','transparent','#D2691E','#A0522D','transparent','transparent','transparent','#D2691E','#A0522D','#006400','#228B22','#228B22','#A0522D','#D2691E','transparent','transparent','#D2691E','#A0522D','#A0522D','transparent','transparent','#D2691E','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#D2691E','transparent','#A0522D','#FFD700','#FFD700','#A0522D','transparent','#D2691E','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#FFD700','#B8860B','#FFD700','#A0522D','#D2691E','#FFD700','#FFD700','#B8860B','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#FFD700','#FFD700','#FFD700','#A0522D','#D2691E','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#A0522D','#A0522D','#A0522D','#D2691E','#A0522D','#B8860B','#B8860B','#B8860B','#B8860B','#B8860B','#B8860B','#D2691E','transparent','#D2691E','#D2691E','#D2691E','transparent','transparent','#228B22','#228B22','#228B22','#228B22','#228B22','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#006400','#006400','transparent','transparent','#006400','#006400','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'gr_golden_golem',
+            type: 'monster',
+            name: 'Golem Dourado',
+            health: 2000,
+            damage: 2,
+            speed: 0.2,
+            money: 800,
+            spawnWaves: [10, 20],
+            spawnCount: 1,
+            isFlying: false,
+            width: 70,
+            height: 70,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','#808080','#696969','#696969','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#696969','#FFD700','#B8860B','#696969','#696969','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#FFD700','#FFD700','#B8860B','#B8860B','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#808080','#808080','#808080','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#A9A9A9','#808080','#808080','#808080','#808080','#A9A9A9','#FFD700','#B8860B','#696969','transparent','transparent','transparent','#808080','#FFD700','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#B8860B','#FFD700','#808080','transparent','transparent','transparent','#696969','#B8860B','#A9A9A9','#C0C0C0','#C0C0C0','#A9A9A9','#A9A9A9','#FFD700','#B8860B','#696969','transparent','transparent','transparent','#808080','#FFD700','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#B8860B','#FFD700','#808080','transparent','transparent','transparent','#696969','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#696969','transparent','transparent','transparent','transparent','transparent','#696969','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#FFD700','#B8860B','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#808080','#808080','#808080','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#696969','transparent','transparent','#696969','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'gr_mimic',
+            type: 'monster',
+            name: 'Mímico',
+            health: 120,
+            damage: 25,
+            speed: 1.5,
+            money: 150,
+            spawnWaves: [8, 14, 18],
+            spawnCount: 1,
+            isFlying: false,
+            width: 45,
+            height: 40,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'disguise' }], // Habilidade especial para a lógica do jogo
+            pixelData: ['transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','#8B4513','#FFD700','#FFD700','#A0522D','#A0522D','#A0522D','#A0522D','#FFD700','#FFD700','#8B4513','transparent','transparent','transparent','transparent','#A0522D','#FFD700','#8B4513','#D2691E','#D2691E','#D2691E','#D2691E','#8B4513','#FFD700','#A0522D','transparent','transparent','transparent','transparent','#A0522D','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#A0522D','transparent','transparent','transparent','transparent','#A0522D','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#A0522D','transparent','transparent','transparent','transparent','#8B4513','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#8B4513','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#FFFFFF','#FFFFFF','#A0522D','#A0522D','#FFFFFF','#FFFFFF','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#FFFFFF','#FFFFFF','#8B4513','#8B4513','#FFFFFF','#FFFFFF','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'gr_bait_barricade',
+            type: 'barricade',
+            name: 'Barricada Isca',
+            health: 25,
+            cost: 10,
+            width: 40,
+            height: 40,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#FFD700','#FFD700','#FFD700','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#FFD700','#B8860B','#FFD700','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#FFD700','#FFD700','#FFD700','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'gr_mercenary',
+            type: 'guardian',
+            name: 'Mercenário',
+            cost: 800,
+            damage: 250,
+            cooldown: 3000,
+            range: 500,
+            projectileSpeed: 15,
+            projectileSize: 12,
+            projectileColor: '#FF4500',
+            width: 40,
+            height: 50,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','#2F4F4F','#2F4F4F','#2F4F4F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#36454F','#36454F','#36454F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#C0C0C0','#808080','#808080','#C0C0C0','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#36454F','#C0C0C0','#C0C0C0','#C0C0C0','#C0C0C0','#36454F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#DEB887','#FFE4C4','#FFE4C4','#DEB887','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#36454F','#DEB887','#8B0000','#DEB887','#36454F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#36454F','#DEB887','#DEB887','#36454F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#36454F','#36454F','#36454F','#36454F','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#36454F','#transparent','#transparent','#36454F','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','transparent','transparent','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        }
+    ];
+    const GOLD_RUSH_MODPACK = {
+        id: 'default_gold_rush',
+        name: 'GOLD RUSH',
+        mods: ['gr_thief_goblin', 'gr_golden_golem', 'gr_mimic', 'gr_bait_barricade', 'gr_mercenary'],
+        active: false,
+        isDefault: true
+    };
+    // ### FIM: MODPACK "GOLD RUSH" ###
+
+    // ### INÍCIO: MODPACK "CYBER SIEGE" ###
+    const CYBER_SIEGE_MODS = [
+        {
+            id: 'cs_attack_drone',
+            type: 'monster',
+            name: 'Drone de Ataque',
+            health: 20,
+            damage: 1,
+            speed: 1.8,
+            money: 8,
+            spawnWaves: [4, 7, 11, 15],
+            spawnCount: 5,
+            isFlying: true,
+            width: 35,
+            height: 35,
+            gridWidth: 16,
+            gridHeight: 16,
+            attackType: 'ranged',
+            projectile: { type: 'laser_bolt', damage: 3, speed: 8, cooldown: 1200, range: 350 },
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#505050','#606060','#707070','#707070','#606060','#505050','transparent','transparent','transparent','transparent','transparent','transparent','#707070','#808080','#909090','#909090','#808080','#707070','transparent','#404040','#404040','transparent','transparent','transparent','#404040','#505050','#909090','#FF0000','#909090','#505050','#404040','transparent','#505050','#505050','transparent','transparent','#505050','#606060','#808080','#A0A0A0','#A0A0A0','#808080','#606060','#505050','transparent','transparent','transparent','transparent','transparent','#505050','#606060','#707070','#707070','#606060','#505050','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'cs_brute_unit',
+            type: 'monster',
+            name: 'Unidade Brutamontes',
+            health: 250,
+            damage: 8,
+            speed: 0.4,
+            money: 40,
+            spawnWaves: [9, 13, 17, 21],
+            spawnCount: 2,
+            isFlying: false,
+            width: 60,
+            height: 55,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'energy_shield', shieldHealth: 150 }],
+            pixelData: ['transparent','transparent','#404040','#505050','#606060','#606060','#505050','#404040','#404040','#505050','#606060','#606060','#505050','#404040','transparent','transparent','transparent','#505050','#707070','#808080','#909090','#909090','#808080','#707070','#707070','#808080','#909090','#909090','#808080','#707070','#505050','transparent','transparent','#606060','#808080','#A0A0A0','#A0A0A0','#A0A0A0','#A0A0A0','#808080','#808080','#A0A0A0','#A0A0A0','#A0A0A0','#A0A0A0','#808080','#606060','transparent','transparent','#606060','#808080','#00FFFF','#00FFFF','#00FFFF','#A0A0A0','#808080','#808080','#A0A0A0','#00FFFF','#00FFFF','#00FFFF','#808080','#606060','transparent','transparent','#505050','#707070','#808080','#A0A0A0','#A0A0A0','#808080','#707070','#707070','#808080','#A0A0A0','#A0A0A0','#808080','#707070','#505050','transparent','transparent','#404040','#606060','#707070','#808080','#808080','#707070','#606060','#606060','#707070','#808080','#808080','#707070','#606060','#404040','transparent','transparent','transparent','#404040','#505050','#606060','#606060','#505050','#404040','#404040','#505050','#606060','#606060','#505050','#404040','transparent','transparent','transparent','transparent','#303030','#404040','#404040','#303030','transparent','transparent','transparent','#303030','#404040','#404040','#303030','transparent','transparent','transparent','transparent','#202020','#303030','#303030','#202020','transparent','transparent','transparent','#202020','#303030','#303030','#202020','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'cs_emp_disruptor',
+            type: 'monster',
+            name: 'Disruptor PEM',
+            health: 80,
+            damage: 0,
+            speed: 0.9,
+            money: 30,
+            spawnWaves: [12, 16, 20],
+            spawnCount: 1,
+            isFlying: false,
+            width: 50,
+            height: 40,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'emp_blast', range: 250, duration: 5000 }],
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#404040','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#404040','#303030','transparent','transparent','#303030','#505050','#606060','#606060','#606060','#606060','#606060','#606060','#606060','#606060','#606060','#505050','#303030','transparent','transparent','#404050','#606070','#808090','#00BFFF','#00BFFF','#808090','#808090','#00BFFF','#00BFFF','#808090','#606070','#404050','transparent','transparent','transparent','#404050','#606070','#808090','#808090','#808090','#606070','#606070','#808090','#808090','#808090','#606070','#404050','transparent','transparent','transparent','#303030','#505050','#606060','#606060','#505050','#505050','#606060','#606060','#505050','#303030','transparent','transparent','transparent','transparent','#303030','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#303030','transparent','transparent','transparent','transparent','#303030','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'cs_plasma_turret',
+            type: 'guardian',
+            name: 'Torre de Plasma',
+            cost: 220,
+            damage: 60, // Alto dano para quebrar escudos
+            cooldown: 2500,
+            range: 300,
+            projectileSpeed: 4,
+            projectileSize: 20,
+            projectileColor: '#00FF00',
+            width: 40,
+            height: 50,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#707070','#707070','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#808080','#909090','#808080','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#00FF00','#00FF00','#00FF00','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#00FF00','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#505050','#606060','#707070','#707070','#606060','#505050','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#505050','#505050','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#404040','#404040','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'cs_tesla_cannon',
+            type: 'guardian',
+            name: 'Canhão Tesla',
+            cost: 300,
+            damage: 15,
+            cooldown: 1800,
+            range: 280,
+            projectileSpeed: 20, // Raio é quase instantâneo
+            projectileSize: 5,
+            projectileColor: '#00FFFF',
+            abilities: [{ type: 'chain_lightning', chains: 3, bounceRange: 100 }],
+            width: 40,
+            height: 50,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','#00FFFF','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#00FFFF','#C0C0C0','#00FFFF','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#00FFFF','#C0C0C0','#C0C0C0','#C0C0C0','#00FFFF','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#808080','#A0A0A0','#808080','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#606060','#808080','#606060','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#505050','#606060','#707070','#707070','#606060','#505050','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#505050','#505050','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#404040','#404040','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        }
+    ];
+    const CYBER_SIEGE_MODPACK = {
+        id: 'default_cyber_siege',
+        name: 'CYBER SIEGE',
+        mods: ['cs_attack_drone', 'cs_brute_unit', 'cs_emp_disruptor', 'cs_plasma_turret', 'cs_tesla_cannon'],
+        active: false,
+        isDefault: true
+    };
+    // ### FIM: MODPACK "CYBER SIEGE" ###
+
+    // ### INÍCIO: MODPACK "ELEMENTAL FURY" ###
+    const ELEMENTAL_FURY_MODS = [
+        {
+            id: 'ef_magma_elemental',
+            type: 'monster',
+            name: 'Elemental de Magma',
+            health: 150,
+            damage: 5,
+            speed: 0.6,
+            money: 25,
+            spawnWaves: [5, 10, 15, 20],
+            spawnCount: 3,
+            isFlying: false,
+            width: 45,
+            height: 55,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'immunity', damageType: 'fire' }, { type: 'lava_trail' }],
+            pixelData: ['transparent','transparent','transparent','#401000','#8B0000','#FF4500','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FFA500','#FFA500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FF4500','#FF4500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#FFA500','#FFFF00','#FFFF00','#FFA500','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#FFA500','#FFA500','#FFA500','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FF4500','#FF4500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#401000','#8B0000','#FFA500','#FFA500','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#401000','#8B0000','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#401000','#401000','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#8B0000','transparent','transparent','#8B0000','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','#FFA500','#401000','transparent','transparent','#401000','#FFA500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'ef_ice_golem',
+            type: 'monster',
+            name: 'Golem de Gelo',
+            health: 300,
+            damage: 10,
+            speed: 0.3,
+            money: 50,
+            spawnWaves: [12, 18, 22],
+            spawnCount: 1,
+            isFlying: false,
+            width: 60,
+            height: 65,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'immunity', effectType: 'slow' }, { type: 'frost_nova', chance: 0.2 }],
+            pixelData: ['transparent','transparent','transparent','#F0F8FF','#FFFFFF','#FFFFFF','#F0F8FF','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#ADD8E6','#F0F8FF','#FFFFFF','#FFFFFF','#F0F8FF','#ADD8E6','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#ADD8E6','#F0F8FF','#FFFFFF','#F0F8FF','#ADD8E6','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#ADD8E6','#ADD8E6','#ADD8E6','#ADD8E6','#87CEEB','transparent','transparent','transparent','transparent','transparent','#B0E0E6','#87CEEB','#ADD8E6','#ADD8E6','#ADD8E6','#ADD8E6','#87CEEB','#B0E0E6','transparent','transparent','transparent','#F0F8FF','#B0E0E6','#87CEEB','#87CEEB','#87CEEB','#87CEEB','#87CEEB','#B0E0E6','#F0F8FF','transparent','transparent','#FFFFFF','#F0F8FF','#B0E0E6','#B0E0E6','#B0E0E6','#B0E0E6','#B0E0E6','#B0E0E6','#F0F8FF','#FFFFFF','transparent','transparent','#ADD8E6','#F0F8FF','#B0E0E6','#B0E0E6','#B0E0E6','#B0E0E6','#B0E0E6','#F0F8FF','#ADD8E6','transparent','transparent','transparent','transparent','#ADD8E6','#F0F8FF','#B0E0E6','#B0E0E6','#F0F8FF','#ADD8E6','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#ADD8E6','#ADD8E6','#ADD8E6','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B0E0E6','#87CEEB','transparent','transparent','#87CEEB','#B0E0E6','transparent','transparent','transparent','transparent','transparent','transparent','#F0F8FF','#ADD8E6','transparent','transparent','#ADD8E6','#F0F8FF','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'ef_storm_spirit',
+            type: 'monster',
+            name: 'Espírito da Tempestade',
+            health: 70,
+            damage: 3,
+            speed: 1.2,
+            money: 35,
+            spawnWaves: [9, 14, 19],
+            spawnCount: 2,
+            isFlying: true,
+            width: 40,
+            height: 60,
+            gridWidth: 16,
+            gridHeight: 16,
+            abilities: [{ type: 'blink', interval: 4000, duration: 1500 }],
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','#FFFF00','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#C0C0C0','#FFFFFF','#FFFFFF','#C0C0C0','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#C0C0C0','#FFFFFF','#D3D3D3','#D3D3D3','#FFFFFF','#C0C0C0','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#C0C0C0','#FFFFFF','#FFFFFF','#C0C0C0','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#C0C0C0','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#C0C0C0','#C0C0C0','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#A9A9A9','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#C0C0C0','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','transparent','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'ef_fire_mage',
+            type: 'guardian',
+            name: 'Mago de Fogo',
+            cost: 250,
+            damage: 20,
+            cooldown: 2000,
+            range: 320,
+            projectileSpeed: 8,
+            projectileSize: 15,
+            projectileColor: '#FF4500',
+            abilities: [{ type: 'apply_burn', dps: 5, duration: 3000 }],
+            width: 40,
+            height: 50,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','#8B0000','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B22222','#FF4500','#FF4500','#B22222','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B22222','#FF4500','#FFA500','#FF4500','#B22222','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#6A5ACD','#6A5ACD','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#DEB887','#FFFF00','#DEB887','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#6A5ACD','#DEB887','#6A5ACD','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#800080','#4B0082','#4B0082','#800080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#800080','#800080','#4B0082','#4B0082','#4B0082','#800080','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#800080','#4B0082','#4B0082','#800080','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#4B0082','transparent','transparent','#4B0082','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        },
+        {
+            id: 'ef_freezing_tower',
+            type: 'guardian',
+            name: 'Torre Congelante',
+            cost: 180,
+            damage: 10,
+            cooldown: 2200,
+            range: 250,
+            projectileSpeed: 6,
+            projectileSize: 18,
+            projectileColor: '#00FFFF',
+            abilities: [{ type: 'area_slow', radius: 60, slowFactor: 0.5 }],
+            width: 40,
+            height: 50,
+            gridWidth: 16,
+            gridHeight: 16,
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#ADD8E6','#ADD8E6','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#F0F8FF','#FFFFFF','#F0F8FF','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#87CEEB','#00FFFF','#87CEEB','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#87CEEB','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#5F9EA0','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#5F9EA0','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','#1E90FF','#4682B4','#5F9EA0','#5F9EA0','#4682B4','#1E90FF','transparent','transparent','transparent','transparent','transparent','#0000CD','#1E90FF','#4682B4','#4682B4','#1E90FF','#0000CD','transparent','transparent','transparent','transparent','transparent','#00008B','#0000CD','#1E90FF','#1E90FF','#0000CD','#00008B','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+        }
+    ];
+    const ELEMENTAL_FURY_MODPACK = {
+        id: 'default_elemental_fury',
+        name: 'ELEMENTAL FURY',
+        mods: ['ef_magma_elemental', 'ef_ice_golem', 'ef_storm_spirit', 'ef_fire_mage', 'ef_freezing_tower'],
+        active: false,
+        isDefault: true
+    };
+    // ### FIM: MODPACK "ELEMENTAL FURY" ###
 
     // ### FIM: Definição dos Mods ###
 
@@ -1035,35 +1333,40 @@ document.addEventListener('DOMContentLoaded', () => {
         updateUiForLogin();
     }
 
-    // ### INÍCIO: Nova função para inicializar o Modpack Padrão ###
-    function initializeDefaultModpack() {
-        // Verifica se os mods do pack já existem
-        const modsExist = NIGHTMARE_MODS.every(nm => allMods.some(m => m.id === nm.id));
-        if (!modsExist) {
-            NIGHTMARE_MODS.forEach(nm => {
-                // Adiciona apenas se não existir para evitar duplicatas
-                if (!allMods.some(m => m.id === nm.id)) {
-                    allMods.push(nm);
-                }
-            });
-            saveMods();
-            console.log("Mods do Nightmare Mode adicionados ao jogo.");
-        }
+    function initializeDefaultModpacks() {
+        const allDefaultMods = [
+            ...NIGHTMARE_MODS,
+            ...GOLD_RUSH_MODS,
+            ...CYBER_SIEGE_MODS,
+            ...ELEMENTAL_FURY_MODS
+        ];
 
-        // Verifica se o modpack já existe
-        const packExists = allModpacks.some(p => p.id === NIGHTMARE_MODPACK.id);
-        if (!packExists) {
-            allModpacks.push(NIGHTMARE_MODPACK);
-            saveModpacks();
-            console.log("Modpack Nightmare Mode adicionado ao jogo.");
-        }
+        allDefaultMods.forEach(mod => {
+            if (!allMods.some(m => m.id === mod.id)) {
+                allMods.push(mod);
+            }
+        });
+        saveMods();
+
+        const allDefaultModpacks = [
+            NIGHTMARE_MODPACK,
+            GOLD_RUSH_MODPACK,
+            CYBER_SIEGE_MODPACK,
+            ELEMENTAL_FURY_MODPACK
+        ];
+
+        allDefaultModpacks.forEach(pack => {
+            if (!allModpacks.some(p => p.id === pack.id)) {
+                allModpacks.push(pack);
+            }
+        });
+        saveModpacks();
     }
-    // ### FIM: Nova função ###
 
     // --- Inicialização ---
     loadMods();
     loadModpacks();
-    initializeDefaultModpack(); // <<-- CHAMADA DA NOVA FUNÇÃO
+    initializeDefaultModpacks();
     showIntroScreen();
     checkAutoLogin();
 });
