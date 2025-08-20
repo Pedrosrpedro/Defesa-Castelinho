@@ -1162,6 +1162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (user && user.password === password) { 
             currentUser = { username: username, ...user }; 
             bobs = currentUser.bobs || 0;
+            calculateOfflineBobs(); // Calcula os Bobs ganhos enquanto estava offline
             localStorage.setItem('castleDefenseUser', JSON.stringify({ username, password })); 
             updateUiForLogin(); 
             socialOverlay.style.display = 'none'; 
