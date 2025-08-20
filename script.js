@@ -1208,6 +1208,44 @@ document.addEventListener('DOMContentLoaded', () => {
     async function checkForNotifications() { if (!currentUser || currentNotification) return; const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; if (!myData) return; if (myData.friendRequests && myData.friendRequests.length > 0) { const sender = myData.friendRequests[0]; showInteractiveNotification(`${sender} enviou um pedido de amizade!`, 'friendRequest', sender); return; } if (myData.groupInvites && myData.groupInvites.length > 0) { const { groupName, sender } = myData.groupInvites[0]; showInteractiveNotification(`${sender} te convidou para o grupo "${groupName}"!`, 'groupInvite', myData.groupInvites[0]); return; } }
     function startSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); checkForNotifications(); socialPollInterval = setInterval(checkForNotifications, 10000); }
     function stopSocialPoll() { if (socialPollInterval) clearInterval(socialPollInterval); socialPollInterval = null; }
+
+// --- Função para Calcular Bobs Offline ---
+
+function calculateOfflineBobs() {
+    if (!currentUser || !currentUser.mineData) return;
+
+    // Taxa de Bobs por hora para cada nível da mina (ajuste conforme necessário)
+    const bobsPerHour = {
+        1: 20,   // Nível 1 gera 20 Bobs/hora
+        2: 50,   // Nível 2 gera 50 Bobs/hora
+        3: 120,  // Nível 3 gera 120 Bobs/hora
+        4: 300   // Nível 4 gera 300 Bobs/hora
+    };
+
+    const mineLevel = currentUser.mineData.level || 1;
+    const rate = bobsPerHour[mineLevel] || 0;
+    const lastCollected = currentUser.mineData.lastCollectedTimestamp || Date.now();
+    const now = Date.now();
+    
+    // Calcula a diferença em horas
+    const hoursPassed = (now - lastCollected) / (1000 * 60 * 60);
+
+    // Calcula os Bobs ganhos (com um limite máximo de 24 horas de ganho)
+    const maxHours = 24;
+    const effectiveHours = Math.min(hoursPassed, maxHours);
+    const bobsEarned = Math.floor(effectiveHours * rate);
+
+    if (bobsEarned > 0) {
+        bobs += bobsEarned; // Adiciona os bobs ganhos
+        currentUser.bobs = bobs; // Atualiza o objeto do usuário
+        
+        // Mostra uma mensagem para o jogador
+        showCustomAlert(`Você ganhou ${bobsEarned} Bobs enquanto estava fora!`);
+    }
+
+    // Atualiza o tempo da última coleta para agora
+    currentUser.mineData.lastCollectedTimestamp = now;
+}
     
     async function updatePlayerStatsAndTrophies() {
         if (!currentUser || isGodMode || isDebugModeEnabled) return { trophiesGained: 0, newTotalTrophies: currentUser ? currentUser.stats.trophies : 0 };
