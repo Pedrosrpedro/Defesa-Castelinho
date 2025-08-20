@@ -1222,6 +1222,94 @@ document.addEventListener('DOMContentLoaded', () => {
         return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies };
     }
 
+// --- Função de Troféus ---
+
+// Verifica os troféus do jogador para desbloquear recompensas (função de exemplo)
+function checkTrophyUnlocks() {
+    if (!currentUser) return;
+
+    const trophies = Math.floor(currentUser.stats.trophies);
+
+    // Exemplo: Desbloqueia algo com 100 troféus
+    if (trophies >= 100) {
+        // Você poderia adicionar uma classe a um elemento, mostrar um ícone, etc.
+        // Ex: socialProfileButton.classList.add('veteran-player');
+    }
+    // Adicione mais verificações aqui para outras recompensas
+}```
+
+---
+
+#### **Bloco 3: Lógica Principal da IA**
+
+Este é o bloco mais importante. Ele corrige o erro `runAILogic is not defined` e restaura completamente o comportamento da IA, fazendo-a comprar guardiões, evoluí-los e melhorar o castelo.
+
+```javascript
+// --- Lógica da Inteligência Artificial ---
+
+function runAILogic() {
+    if (isPaused || isGameOver || isCastleAIDestroyed) return;
+
+    // Prioridade 1: Comprar guardiões se tiver slots vazios
+    const emptySlotIndex = guardianSlotsAI.findIndex(slot => slot === null);
+    if (emptySlotIndex !== -1) {
+        const affordableGuardians = Object.keys(activeGameGuardianTypes).filter(id => {
+            const type = activeGameGuardianTypes[id];
+            return money >= type.evolutions[0].cost;
+        });
+
+        if (affordableGuardians.length > 0) {
+            const randomGuardianId = affordableGuardians[Math.floor(Math.random() * affordableGuardians.length)];
+            const type = activeGameGuardianTypes[randomGuardianId];
+            
+            money -= type.evolutions[0].cost;
+            const newGuardian = { typeId: randomGuardianId, level: 1, lastAttackTime: 0 };
+            
+            // Tenta colocar no inventário da IA (se houvesse um), por agora coloca direto no slot
+             guardianSlotsAI[emptySlotIndex] = newGuardian;
+
+            addChatMessage("IA", `Contratei um ${type.name}!`, true);
+            updateMoneyDisplay();
+            updateGuardianVisuals(); // Atualiza os guardiões na tela
+            return; // Termina a ação da IA por este ciclo
+        }
+    }
+
+    // Prioridade 2: Evoluir um guardião aleatório que não esteja no nível máximo
+    const evolvableGuardians = guardianSlotsAI.map((g, index) => ({ guardian: g, index: index }))
+        .filter(item => {
+            if (!item.guardian) return false;
+            const type = activeGameGuardianTypes[item.guardian.typeId];
+            if (type.isCustom || item.guardian.level >= type.evolutions.length) return false; // Nível máximo
+            const nextEvoCost = type.evolutions[item.guardian.level].cost;
+            return money >= nextEvoCost;
+        });
+
+    if (evolvableGuardians.length > 0) {
+        const toEvolve = evolvableGuardians[Math.floor(Math.random() * evolvableGuardians.length)];
+        const guardian = toEvolve.guardian;
+        const type = activeGameGuardianTypes[guardian.typeId];
+        const cost = type.evolutions[guardian.level].cost;
+
+        money -= cost;
+        guardian.level++;
+        addChatMessage("IA", `Meu ${type.name} está mais forte!`, true);
+        updateMoneyDisplay();
+        return;
+    }
+
+    // Prioridade 3: Melhorar o castelo
+    const castlePath = castles[currentCastleTypeAI];
+    if (currentCastleEvolutionAI < castlePath.length - 1) {
+        const nextLevel = castlePath[currentCastleEvolutionAI + 1];
+        if (money >= nextLevel.cost) {
+            evolveCurrentCastle(true); // O 'true' indica que é para a IA
+            addChatMessage("IA", "Reforcei meu castelo!", true);
+            return;
+        }
+    }
+}
+    
     function createConversationId(user1, user2) { return [user1.toLowerCase(), user2.toLowerCase()].sort().join('_'); }
     async function openDmGroupsPanel() { const socialData = await fetchSocialData(); if (!socialData || !currentUser) { await showCustomAlert("Não foi possível carregar dados."); return; } dmGroupsOverlay.style.display = 'flex'; dmGroupsMainPanel.style.display = 'block'; chatViewPanel.style.display = 'none'; createGroupPanel.style.display = 'none'; renderDmAndGroupLists(socialData); }
     function renderDmAndGroupLists(socialData) { const myData = socialData[currentUser.username.toLowerCase()]; dmListContainer.innerHTML = ''; if (myData.friends && myData.friends.length > 0) { myData.friends.forEach(friendName => { const item = document.createElement('div'); item.className = 'dm-list-item'; item.textContent = friendName; item.dataset.friendName = friendName; dmListContainer.appendChild(item); }); } else { dmListContainer.innerHTML = '<p>Nenhum amigo para conversar.</p>'; } groupListContainer.innerHTML = ''; const myGroups = Object.entries(socialData.groups || {}).filter(([id, group]) => group.members.includes(currentUser.username)); if (myGroups.length > 0) { myGroups.forEach(([id, group]) => { const item = document.createElement('div'); item.className = 'group-list-item'; item.textContent = group.name; item.dataset.groupId = id; groupListContainer.appendChild(item); }); } else { groupListContainer.innerHTML = '<p>Você não está em nenhum grupo.</p>'; } }
