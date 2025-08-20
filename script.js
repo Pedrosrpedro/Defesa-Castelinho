@@ -1127,18 +1127,34 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchSocialData() { try { const response = await fetch(`${SOCIAL_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': SOCIAL_JSONBIN_API_KEY } }); if (response.status === 404) return {}; if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); const data = await response.json(); const record = data.record || {}; if (!record.conversations) record.conversations = {}; if (!record.groups) record.groups = {}; return record; } catch (error) { console.error("Falha ao buscar dados sociais:", error); showCustomAlert("Erro de conexão com o servidor. Tente mais tarde."); return null; } }
     async function updateSocialData(newData) { try { const response = await fetch(SOCIAL_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': SOCIAL_JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(newData) }); if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); return true; } catch (error) { console.error("Falha ao atualizar dados sociais:", error); showCustomAlert("Erro de conexão, suas alterações podem não ter sido salvas."); return false; } }
     function updateUiForLogin() { 
-        if (currentUser) { 
-            socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase(); 
-            trophyCounter.style.display = 'flex'; 
-            trophyValue.textContent = Math.floor(currentUser.stats.trophies); 
-            multiplayerButton.classList.remove('disabled'); 
-        } else { 
-            socialProfileButton.textContent = '👤'; 
-            trophyCounter.style.display = 'none'; 
-            multiplayerButton.classList.add('disabled'); 
-        } 
-        checkTrophyUnlocks();
-    }
+    if (currentUser) { 
+        socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase(); 
+        trophyCounter.style.display = 'flex'; 
+        trophyValue.textContent = Math.floor(currentUser.stats.trophies); 
+        multiplayerButton.classList.remove('disabled'); 
+        
+        // --- ADICIONE ESTA PARTE ---
+        // Verifica se o jogador tem troféus suficientes para ver a Mina e a Loja do Bob
+        if (currentUser.stats.trophies >= 50) {
+            bobsMineButton.style.display = 'block'; // Mostra o botão da Mina
+            bobsShopButton.style.display = 'block'; // Mostra o botão da Loja
+        } else {
+            bobsMineButton.style.display = 'none'; // Esconde se não tiver troféus
+            bobsShopButton.style.display = 'none';
+        }
+        // --- FIM DA PARTE ADICIONADA ---
+
+    } else { 
+        socialProfileButton.textContent = '👤'; 
+        trophyCounter.style.display = 'none'; 
+        multiplayerButton.classList.add('disabled'); 
+        
+        // Esconde os botões se o jogador estiver deslogado
+        bobsMineButton.style.display = 'none';
+        bobsShopButton.style.display = 'none';
+    } 
+    checkTrophyUnlocks(); // Esta função já existe e agora vai funcionar
+}
     async function handleLogin(username, password) { 
         const socialData = await fetchSocialData(); 
         if (!socialData) return; 
