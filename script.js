@@ -1700,6 +1700,61 @@ function showBobsMineScreen() {
             });
         }
     }
+
+    // Esta função será chamada quando o botão de upgrade da mina for clicado
+async function handleMineUpgrade() {
+    // Primeiro, verificamos se o usuário está logado, pois os dados da mina são salvos na conta
+    if (!currentUser) {
+        await showCustomAlert("Você precisa estar logado para melhorar a mina.");
+        return;
+    }
+
+    // Define os custos para cada nível de upgrade. Você pode ajustar esses valores.
+    const upgradeCosts = {
+        // Custo para ir do nível 1 para o 2
+        1: 100, 
+        // Custo para ir do nível 2 para o 3
+        2: 500,  
+        // Custo para ir do nível 3 para o 4
+        3: 2000 
+        // Adicione mais níveis se quiser
+    };
+
+    const currentLevel = currentUser.mineData.level || 1;
+    const cost = upgradeCosts[currentLevel];
+
+    // Verifica se existe um próximo nível para evoluir
+    if (cost === undefined) {
+        await showCustomAlert("Sua mina já está no nível máximo!");
+        return;
+    }
+
+    // Verifica se o jogador tem "Bobs" suficientes
+    if (bobs >= cost) {
+        // Subtrai o custo
+        bobs -= cost;
+        // Aumenta o nível da mina
+        currentUser.mineData.level++;
+
+        // Atualiza a interface do usuário
+        updateBobsDisplay(); 
+        // (Opcional) Você pode querer criar uma função para atualizar a tela da mina também
+        // updateMineScreen(); 
+
+        await showCustomAlert(`Mina melhorada para o nível ${currentUser.mineData.level}!`);
+
+        // Salva o progresso no servidor (importante!)
+        const socialData = await fetchSocialData();
+        if (socialData && socialData[currentUser.username.toLowerCase()]) {
+            socialData[currentUser.username.toLowerCase()].mineData = currentUser.mineData;
+            socialData[currentUser.username.toLowerCase()].bobs = bobs;
+            await updateSocialData(socialData);
+        }
+    } else {
+        // Se não tiver "Bobs" suficientes
+        await showCustomAlert(`Você precisa de ${cost} Bobs para melhorar a mina.`);
+    }
+}
     
     function showModSelectionScreen() {
         multiplayerLobbyScreen.style.display = 'none';
