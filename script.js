@@ -1755,6 +1755,212 @@ async function handleMineUpgrade() {
         await showCustomAlert(`Você precisa de ${cost} Bobs para melhorar a mina.`);
     }
 }
+
+function showBobsShopScreen() {
+    startScreen.style.display = 'none'; // Esconde a tela de início
+    bobsShopScreen.style.display = 'flex'; // Mostra a tela da loja
+    
+    // É uma boa prática atualizar a loja sempre que ela é aberta
+    renderBobsShopItems(); 
+}
+
+    // --- Funções para a Loja e Inventário do Bob ---
+
+// Renderiza os itens na loja do Bob
+function renderBobsShopItems() {
+    bobsShopItemsContainer.innerHTML = ''; // Limpa a loja antes de adicionar os itens
+    for (const id in BOBS_SHOP_ITEMS) {
+        const item = BOBS_SHOP_ITEMS[id];
+        const canAfford = bobs >= item.cost;
+        const itemHTML = `
+            <div class="bobs-shop-item">
+                <div class="item-icon">${item.icon}</div>
+                <div class="item-details">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-cost">${item.cost} Bobs</span>
+                </div>
+                <div class="item-actions">
+                    <button class="mod-button secondary buy-spell-info-btn" data-spell-id="${id}">Info</button>
+                    <button class="main-menu-button buy-spell-button" data-spell-id="${id}" ${canAfford ? '' : 'disabled'}>
+                        Comprar
+                    </button>
+                </div>
+            </div>
+        `;
+        bobsShopItemsContainer.innerHTML += itemHTML;
+    }
+}
+
+// Função para comprar um feitiço/item
+async function handleBuySpell(spellId) {
+    if (!currentUser) {
+        await showCustomAlert("Você precisa estar logado para comprar itens.");
+        return;
+    }
+    const item = BOBS_SHOP_ITEMS[spellId];
+    if (bobs >= item.cost) {
+        bobs -= item.cost;
+
+        // Adiciona o item ao inventário do jogador
+        if (!currentUser.spellInventory) {
+            currentUser.spellInventory = {};
+        }
+        currentUser.spellInventory[spellId] = (currentUser.spellInventory[spellId] || 0) + 1;
+
+        updateBobsDisplay();
+        renderBobsShopItems(); // Atualiza os botões da loja
+        await showCustomAlert(`Você comprou: ${item.name}!`);
+
+        // Salva os dados na nuvem
+        const socialData = await fetchSocialData();
+        if (socialData && socialData[currentUser.username.toLowerCase()]) {
+            socialData[currentUser.username.toLowerCase()].bobs = bobs;
+            socialData[currentUser.username.toLowerCase()].spellInventory = currentUser.spellInventory;
+            await updateSocialData(socialData);
+        }
+    } else {
+        await showCustomAlert("Bobs insuficientes!");
+    }
+}
+
+// Mostra a janela de informações do item
+function showSpellInfo(spellId) {
+    const item = BOBS_SHOP_ITEMS[spellId];
+    itemInfoTitle.textContent = item.name;
+    itemInfoDescription.textContent = item.description;
+    itemInfoUsage.textContent = `Como usar: ${item.usage}`;
+    itemInfoModalOverlay.style.display = 'flex';
+}
+
+// Esconde a janela de informações
+function hideSpellInfo() {
+    itemInfoModalOverlay.style.display = 'none';
+}
+
+// Mostra ou esconde o inventário de itens do Bob
+function toggleBobsInventory() {
+    const isOpen = bobsInventoryPanel.classList.toggle('open');
+    if (isOpen) {
+        renderBobsInventory();
+    }
+}
+
+// Renderiza os itens que o jogador possui no inventário
+function renderBobsInventory() {
+    bobsInventoryContent.innerHTML = '';
+    if (!currentUser || !currentUser.spellInventory || Object.keys(currentUser.spellInventory).length === 0) {
+        bobsInventoryContent.innerHTML = '<p style="text-align: center; color: #888;">Inventário vazio.</p>';
+        return;
+    }
+    for (const spellId in currentUser.spellInventory) {
+        const count = currentUser.spellInventory[spellId];
+        if (count > 0) {
+            const item = BOBS_SHOP_ITEMS[spellId];
+            const card = document.createElement('div');
+            card.className = 'inventory-item-card';
+            card.dataset.spellId = spellId;
+            card.dataset.spellType = item.type;
+            card.innerHTML = `
+                <div class="item-icon">${item.icon}</div>
+                <div class="item-name">${item.name}</div>
+                <div class="item-count">x${count}</div>
+            `;
+            bobsInventoryContent.appendChild(card);
+        }
+    }
+}
+
+// Lida com o clique em um item do inventário
+async function handleInventoryItemClick(spellId, spellType) {
+    const item = BOBS_SHOP_ITEMS[spellId];
+    if (spellType === 'instant') {
+        // Usa o item instantaneamente
+        await executeInstantSpell(spellId);
+    } else if (spellType === 'targeted') {
+        // Entra no modo de mira para usar o item
+        placingSpell = spellId;
+        toggleBobsInventory(); // Fecha o inventário
+        togglePause(true); // Pausa o jogo
+        placementModeOverlay.style.display = 'flex';
+        document.getElementById('placement-message').textContent = `Dê um clique duplo para usar ${item.name}!`;
+        placementModeOverlay.style.cursor = 'crosshair';
+    }
+}
+
+// Executa feitiços de efeito instantâneo (como poções)
+async function executeInstantSpell(spellId) {
+    if (!currentUser || !currentUser.spellInventory || !currentUser.spellInventory[spellId]) {
+        return;
+    }
+     const effect = BOBS_SHOP_ITEMS[spellId].effect;
+    
+    // Lógica dos efeitos
+    if (effect.type === 'rage_buff') {
+        isRageActive = true;
+        // Adiciona um efeito visual
+        document.querySelectorAll('.guardian, .castle-soldier').forEach(g => g.classList.add('rage-active'));
+        castleElement.classList.add('rage-active');
+        
+        // Define um temporizador para remover o efeito
+        if (rageTimeout) clearTimeout(rageTimeout);
+        rageTimeout = setTimeout(() => {
+            isRageActive = false;
+            document.querySelectorAll('.guardian, .castle-soldier').forEach(g => g.classList.remove('rage-active'));
+            castleElement.classList.remove('rage-active');
+        }, effect.duration);
+    } else if (effect.type === 'max_health_increase') {
+        MAX_CASTLE_HEALTH += effect.amount;
+        castleHealth += effect.amount; // Também cura a mesma quantidade
+        updateCastleHealthDisplay(false);
+    }
+    
+    // Reduz a quantidade do item no inventário
+    currentUser.spellInventory[spellId]--;
+    renderBobsInventory();
+    
+    // Salva a alteração
+    const socialData = await fetchSocialData();
+    if (socialData && socialData[currentUser.username.toLowerCase()]) {
+        socialData[currentUser.username.toLowerCase()].spellInventory = currentUser.spellInventory;
+        await updateSocialData(socialData);
+    }
+}
+
+// Executa feitiços que precisam de um alvo no mapa
+async function executeTargetedSpell(spellId, event) {
+    const r = gameContainer.getBoundingClientRect();
+    const x = event.clientX - r.left;
+    const y = event.clientY - r.top;
+    const effect = BOBS_SHOP_ITEMS[spellId].effect;
+
+    // Lógica dos efeitos de alvo
+    if (effect.type === 'area_stun') {
+        monsters.forEach(m => {
+            const distSq = Math.pow((m.x + m.element.offsetWidth / 2) - x, 2) + Math.pow((m.y + m.element.offsetHeight / 2) - y, 2);
+            if (distSq <= effect.radius * effect.radius) {
+                damageMonster(m, effect.damage);
+                m.stunnedUntil = Date.now() + effect.duration; // Atordoa o monstro
+            }
+        });
+    } else if (effect.type === 'rain_damage') {
+        // Lógica para chuva de flechas, etc.
+    }
+
+    // Sai do modo de mira
+    placingSpell = null;
+    placementModeOverlay.style.display = 'none';
+    togglePause(false);
+
+    // Reduz a quantidade do item no inventário
+    currentUser.spellInventory[spellId]--;
+    
+    // Salva a alteração
+    const socialData = await fetchSocialData();
+    if (socialData && socialData[currentUser.username.toLowerCase()]) {
+        socialData[currentUser.username.toLowerCase()].spellInventory = currentUser.spellInventory;
+        await updateSocialData(socialData);
+    }
+}
     
     function showModSelectionScreen() {
         multiplayerLobbyScreen.style.display = 'none';
