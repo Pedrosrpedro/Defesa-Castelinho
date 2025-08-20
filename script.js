@@ -1,15 +1,44 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     // --- Elementos do DOM (Completos) ---
     const introScreen = document.getElementById('intro-screen');
-    const loadingScreen = document.getElementById('loading-screen'), startScreen = document.getElementById('start-screen'), newGameButton = document.getElementById('new-game-button'), gameContainer = document.getElementById('game-container'), gameArea = document.getElementById('game-area'), castleHealthBar = document.getElementById('castle-health-bar'), castleHealthText = document.getElementById('castle-health-text'), moneyDisplay = document.getElementById('money-display'), gameMessage = document.getElementById('game-message'), restartButton = document.getElementById('restart-button'), buyButtons = document.querySelectorAll('.buy-button'), waveInfo = document.getElementById('wave-info'), grassElementsContainer = document.getElementById('grass-elements-container'), castleElement = document.getElementById('castle'), pauseButton = document.getElementById('pause-button'), shopToggleButton = document.getElementById('shop-toggle-button'), gameUI = document.getElementById('game-ui'), barricadeGhost = document.getElementById('barricade-ghost'), placementModeOverlay = document.getElementById('placement-mode-overlay'), cancelPlacementButton = document.getElementById('cancel-placement-button');
+    const loadingScreen = document.getElementById('loading-screen');
+    const startScreen = document.getElementById('start-screen');
+    const newGameButton = document.getElementById('new-game-button');
+    const gameContainer = document.getElementById('game-container');
+    const gameArea = document.getElementById('game-area');
+    const castleHealthBar = document.getElementById('castle-health-bar');
+    const castleHealthText = document.getElementById('castle-health-text');
+    const moneyDisplay = document.getElementById('money-display');
+    const gameMessage = document.getElementById('game-message');
+    const restartButton = document.getElementById('restart-button');
+    const buyButtons = document.querySelectorAll('.buy-button');
+    const waveInfo = document.getElementById('wave-info');
+    const grassElementsContainer = document.getElementById('grass-elements-container');
+    const castleElement = document.getElementById('castle');
+    const pauseButton = document.getElementById('pause-button');
+    const shopToggleButton = document.getElementById('shop-toggle-button');
+    const gameUI = document.getElementById('game-ui');
+    const barricadeGhost = document.getElementById('barricade-ghost');
+    const placementModeOverlay = document.getElementById('placement-mode-overlay');
+    const cancelPlacementButton = document.getElementById('cancel-placement-button');
     const backToMenuButton = document.getElementById('back-to-menu-button');
     const backToMenuNavButton = document.getElementById('back-to-menu-nav-button');
     const castleShopContainer = document.getElementById('castle-shop');
-    const soldier1 = document.getElementById('soldier1'), soldier2 = document.getElementById('soldier2');
-    const enableDebugButton = document.getElementById('enable-debug-button'), toggleLogButton = document.getElementById('toggle-log-button'), debugLogOverlay = document.getElementById('debug-log-overlay'), closeLogButton = document.getElementById('close-log-button'), debugLogContent = document.getElementById('debug-log-content'), commandInput = document.getElementById('command-input'), sendCommandButton = document.getElementById('command-submit-button');
+    const soldier1 = document.getElementById('soldier1');
+    const soldier2 = document.getElementById('soldier2');
+    const enableDebugButton = document.getElementById('enable-debug-button');
+    const toggleLogButton = document.getElementById('toggle-log-button');
+    const debugLogOverlay = document.getElementById('debug-log-overlay');
+    const closeLogButton = document.getElementById('close-log-button');
+    const debugLogContent = document.getElementById('debug-log-content');
+    const commandInput = document.getElementById('command-input');
+    const sendCommandButton = document.getElementById('command-submit-button');
     const diamondDisplaySpan = document.querySelector('#diamond-display span');
-    const helpButton = document.getElementById('help-button'), commandHelpOverlay = document.getElementById('command-help-overlay'), closeHelpButton = document.getElementById('close-help-button'), commandHelpContent = document.getElementById('command-help-content');
+    const bobsDisplaySpan = document.querySelector('#bobs-display span');
+    const helpButton = document.getElementById('help-button');
+    const commandHelpOverlay = document.getElementById('command-help-overlay');
+    const closeHelpButton = document.getElementById('close-help-button');
+    const commandHelpContent = document.getElementById('command-help-content');
     const toggleFullscreenButton = document.getElementById('toggle-fullscreen-button');
     const guardianShopContainer = document.getElementById('guardian-shop');
     const guardianPlacementArea = document.getElementById('guardian-placement-area');
@@ -132,6 +161,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const addModsToPackList = document.getElementById('add-mods-to-pack-list');
     const cancelModpackCreationButton = document.getElementById('cancel-modpack-creation-button');
     const saveModpackButton = document.getElementById('save-modpack-button');
+    const bobsMineButton = document.getElementById('bobs-mine-button');
+    const bobsMineScreen = document.getElementById('bobs-mine-screen');
+    const bobsMineCounterValue = document.getElementById('bobs-mine-value');
+    const backToMenuFromMine = document.getElementById('back-to-menu-from-mine');
+    const mineLevel1Area = document.getElementById('mine-level-1-area');
+    const mineLevel2Area = document.getElementById('mine-level-2-area');
+    const upgradeMineButton = document.getElementById('upgrade-mine-button');
+    const bobsShopButton = document.getElementById('bobs-shop-button');
+    const bobsShopScreen = document.getElementById('bobs-shop-screen');
+    const bobsShopCounterValue = document.getElementById('bobs-shop-value');
+    const backToMenuFromShop = document.getElementById('back-to-menu-from-shop');
+    const bobsShopItemsContainer = document.getElementById('bobs-shop-items-container');
+    const bobsInventoryToggleButton = document.getElementById('bobs-inventory-toggle-button');
+    const bobsInventoryPanel = document.getElementById('bobs-inventory-panel');
+    const closeBobsInventoryButton = document.getElementById('close-bobs-inventory-button');
+    const bobsInventoryContent = document.getElementById('bobs-inventory-content');
+    const placementReticle = document.getElementById('placement-reticle');
+    const itemInfoModalOverlay = document.getElementById('item-info-modal-overlay');
+    const itemInfoTitle = document.getElementById('item-info-title');
+    const itemInfoDescription = document.getElementById('item-info-description');
+    const itemInfoUsage = document.getElementById('item-info-usage');
+    const itemInfoCloseButton = document.getElementById('item-info-close-button');
 
     // ### INÍCIO: Definição dos Mods e Modpacks Padrão ###
 
@@ -152,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gridWidth: 16,
             gridHeight: 16,
             abilities: [{ type: 'regen', amount: 1, interval: 1000 }],
-            pixelData: ['transparent','transparent','transparent','transparent','#2E0A2E','#3A0C3A','#3A0C3A','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2E0A2E','#3A0C3A','#460E46','#521052','#521052','#460E46','#3A0C3A','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#751675','#751675','#691469','#521052','#460E46','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#811881','#811881','#811881','#691469','#521052','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','#460E46','#691469','#811881','#811881','#9D1C9D','#811881','#811881','#691469','#460E46','#3A0C3A','transparent','transparent','transparent','transparent','#521052','#751675','#8D1A8D','#9D1C9D','#9D1C9D','#8D1A8D','#811881','#691469','#521052','#460E46','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#811881','#9D1C9D','#FF0000','#9D1C9D','#9D1C9D','#811881','#691469','#460E46','#3A0C3A','transparent','transparent','transparent','#2E0A2E','#460E46','#691469','#811881','#9D1C9D','#9D1C9D','#9D1C9D','#811881','#811881','#691469','#460E46','#2E0A2E','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#811881','#8D1A8D','#811881','#691469','#521052','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2E0A2E','#460E46','#521052','#691469','#521052','#460E46','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#3A0C3A','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','#2E0A2E','#3A0C3A','#3A0C3A','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2E0A2E','#3A0C3A','#460E46','#521052','#521052','#460E46','#3A0C3A','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#751675','#751675','#691469','#521052','#460E46','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#811881','#811881','#811881','#691469','#521052','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','#460E46','#691469','#811881','#811881','#9D1C9D','#811881','#811881','#691469','#460E46','#3A0C3A','transparent','transparent','transparent','transparent','#521052','#751675','#8D1A8D','#9D1C9D','#9D1C9D','#8D1A8D','#811881','#691469','#521052','#460E46','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#811881','#9D1C9D','#FF0000','#9D1C9D','#9D1C9D','#811881','#691469','#460E46','#3A0C3A','transparent','transparent','transparent','#2E0A2E','#460E46','#691469','#811881','#9D1C9D','#9D1C9D','#9D1C9D','#811881','#811881','#691469','#460E46','#2E0A2E','transparent','transparent','transparent','transparent','#3A0C3A','#521052','#691469','#811881','#8D1A8D','#811881','#691469','#521052','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2E0A2E','#460E46','#521052','#691469','#521052','#460E46','#2E0A2E','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#3A0C3A','#3A0C3A','#3A0C3A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'nightmare_spectre',
@@ -169,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 55,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2B2B2B','#3C3C3C','#FFFFFF','#FFFFFF','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#3C3C3C','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#1A1A1A','transparent','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2B2B2B','#3C3C3C','#FFFFFF','#FFFFFF','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#3C3C3C','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#1A1A1A','transparent','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'nightmare_abyss_eye',
@@ -191,7 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
             pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','#1A1A1A','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#3C3C3C','#3C3C3C','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#3C3C3C','#4F4F4F','#691469','#691469','#4F4F4F','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','#2B2B2B','#4F4F4F','#691469','#8D1A8D','#8D1A8D','#8D1A8D','#691469','#4F4F4F','#2B2B2B','transparent','transparent','transparent','transparent','#2B2B2B','#691469','#8D1A8D','#FF0000','#FF0000','#8D1A8D','#8D1A8D','#691469','#2B2B2B','transparent','transparent','transparent','transparent','#3C3C3C','#691469','#8D1A8D','#FF0000','#000000','#FF0000','#8D1A8D','#691469','#3C3C3C','transparent','transparent','transparent','transparent','#3C3C3C','#691469','#8D1A8D','#FF0000','#FF0000','#8D1A8D','#8D1A8D','#691469','#3C3C3C','transparent','transparent','transparent','transparent','#2B2B2B','#691469','#8D1A8D','#8D1A8D','#8D1A8D','#8D1A8D','#8D1A8D','#691469','#2B2B2B','transparent','transparent','transparent','transparent','#2B2B2B','#4F4F4F','#691469','#691469','#691469','#691469','#691469','#4F4F4F','#2B2B2B','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#3C3C3C','#4F4F4F','#4F4F4F','#4F4F4F','#3C3C3C','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#2B2B2B','#2B2B2B','#2B2B2B','#2B2B2B','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#1A1A1A','#1A1A1A','#1A1A1A','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         }
     ];
-
     const NIGHTMARE_MODPACK = {
         id: 'default_nightmare_mode',
         name: 'NIGHTMARE MODE',
@@ -199,15 +249,13 @@ document.addEventListener('DOMContentLoaded', () => {
         active: false,
         isDefault: true
     };
-
-    // ### INÍCIO: MODPACK "GOLD RUSH" ###
     const GOLD_RUSH_MODS = [
         {
             id: 'gr_thief_goblin',
             type: 'monster',
             name: 'Goblin Ladrão',
             health: 15,
-            damage: 0, // Causa dano especial (roubo)
+            damage: 0,
             speed: 2.5,
             money: 1,
             spawnWaves: [3, 6, 9, 12, 15],
@@ -217,8 +265,8 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 40,
             gridWidth: 16,
             gridHeight: 16,
-            abilities: [{ type: 'steal_money', percentage: 0.1 }], // Rouba 10%
-            pixelData: ['transparent','transparent','transparent','transparent','transparent','#228B22','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#006400','#006400','#006400','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#3CB371','#000000','#000000','#3CB371','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#3CB371','#3CB371','#3CB371','#228B22','transparent','transparent','transparent','#D2691E','#A0522D','transparent','transparent','transparent','#D2691E','#A0522D','#006400','#228B22','#228B22','#A0522D','#D2691E','transparent','transparent','#D2691E','#A0522D','#A0522D','transparent','transparent','#D2691E','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#D2691E','transparent','#A0522D','#FFD700','#FFD700','#A0522D','transparent','#D2691E','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#FFD700','#B8860B','#FFD700','#A0522D','#D2691E','#FFD700','#FFD700','#B8860B','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#FFD700','#FFD700','#FFD700','#A0522D','#D2691E','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#A0522D','#A0522D','#A0522D','#D2691E','#A0522D','#B8860B','#B8860B','#B8860B','#B8860B','#B8860B','#B8860B','#D2691E','transparent','#D2691E','#D2691E','#D2691E','transparent','transparent','#228B22','#228B22','#228B22','#228B22','#228B22','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#006400','#006400','transparent','transparent','#006400','#006400','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            abilities: [{ type: 'steal_money', percentage: 0.1 }],
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','#228B22','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#006400','#006400','#006400','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#3CB371','#000000','#000000','#3CB371','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#228B22','#3CB371','#3CB371','#3CB371','#228B22','transparent','transparent','transparent','#D2691E','#A0522D','transparent','transparent','transparent','#D2691E','#A0522D','#006400','#228B22','#228B22','#A0522D','#D2691E','transparent','transparent','#D2691E','#A0522D','#A0522D','transparent','transparent','#D2691E','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#D2691E','transparent','#A0522D','#FFD700','#FFD700','#A0522D','transparent','#D2691E','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#FFD700','#B8860B','#FFD700','#A0522D','#D2691E','#FFD700','#FFD700','#B8860B','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#FFD700','#FFD700','#FFD700','#A0522D','#D2691E','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#FFD700','#D2691E','#A0522D','#A0522D','#A0522D','#A0522D','#D2691E','#A0522D','#B8860B','#B8860B','#B8860B','#B8860B','#B8860B','#B8860B','#D2691E','transparent','#D2691E','#D2691E','#D2691E','transparent','transparent','#228B22','#228B22','#228B22','#228B22','#228B22','#228B22','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#006400','#006400','transparent','transparent','#006400','#006400','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'gr_golden_golem',
@@ -235,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 70,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','#808080','#696969','#696969','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#696969','#FFD700','#B8860B','#696969','#696969','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#FFD700','#FFD700','#B8860B','#B8860B','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#808080','#808080','#808080','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#A9A9A9','#808080','#808080','#808080','#808080','#A9A9A9','#FFD700','#B8860B','#696969','transparent','transparent','transparent','#808080','#FFD700','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#B8860B','#FFD700','#808080','transparent','transparent','transparent','#696969','#B8860B','#A9A9A9','#C0C0C0','#C0C0C0','#A9A9A9','#A9A9A9','#FFD700','#B8860B','#696969','transparent','transparent','transparent','#808080','#FFD700','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#B8860B','#FFD700','#808080','transparent','transparent','transparent','#696969','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#696969','transparent','transparent','transparent','transparent','transparent','#696969','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#FFD700','#B8860B','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#808080','#808080','#808080','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#696969','transparent','transparent','#696969','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','#808080','#696969','#696969','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#696969','#FFD700','#B8860B','#696969','#696969','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#FFD700','#FFD700','#B8860B','#B8860B','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A9A9A9','#808080','#808080','#808080','#808080','#808080','#A9A9A9','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#A9A9A9','#808080','#808080','#808080','#808080','#A9A9A9','#FFD700','#B8860B','#696969','transparent','transparent','transparent','#808080','#FFD700','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#B8860B','#FFD700','#808080','transparent','transparent','transparent','#696969','#B8860B','#A9A9A9','#C0C0C0','#C0C0C0','#A9A9A9','#A9A9A9','#FFD700','#B8860B','#696969','transparent','transparent','transparent','#808080','#FFD700','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#B8860B','#FFD700','#808080','transparent','transparent','transparent','#696969','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#696969','transparent','transparent','transparent','transparent','transparent','#696969','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#A9A9A9','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#808080','#A9A9A9','#FFD700','#B8860B','#A9A9A9','#808080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#808080','#808080','#808080','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#696969','#696969','transparent','transparent','#696969','#696969','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'gr_mimic',
@@ -252,8 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 40,
             gridWidth: 16,
             gridHeight: 16,
-            abilities: [{ type: 'disguise' }], // Habilidade especial para a lógica do jogo
-            pixelData: ['transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','#8B4513','#FFD700','#FFD700','#A0522D','#A0522D','#A0522D','#A0522D','#FFD700','#FFD700','#8B4513','transparent','transparent','transparent','transparent','#A0522D','#FFD700','#8B4513','#D2691E','#D2691E','#D2691E','#D2691E','#8B4513','#FFD700','#A0522D','transparent','transparent','transparent','transparent','#A0522D','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#A0522D','transparent','transparent','transparent','transparent','#A0522D','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#A0522D','transparent','transparent','transparent','transparent','#8B4513','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#8B4513','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#FFFFFF','#FFFFFF','#A0522D','#A0522D','#FFFFFF','#FFFFFF','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#FFFFFF','#FFFFFF','#8B4513','#8B4513','#FFFFFF','#FFFFFF','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            abilities: [{ type: 'disguise' }],
+            pixelData: ['transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','#8B4513','#FFD700','#FFD700','#A0522D','#A0522D','#A0522D','#A0522D','#FFD700','#FFD700','#8B4513','transparent','transparent','transparent','transparent','#A0522D','#FFD700','#8B4513','#D2691E','#D2691E','#D2691E','#D2691E','#8B4513','#FFD700','#A0522D','transparent','transparent','transparent','transparent','#A0522D','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#A0522D','transparent','transparent','transparent','transparent','#A0522D','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#D2691E','#A0522D','transparent','transparent','transparent','transparent','#8B4513','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#000000','#8B4513','transparent','transparent','transparent','transparent','transparent','#A0522D','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#FFFFFF','#FFFFFF','#A0522D','#A0522D','#FFFFFF','#FFFFFF','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#FFFFFF','#FFFFFF','#8B4513','#8B4513','#FFFFFF','#FFFFFF','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'gr_bait_barricade',
@@ -282,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 50,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','transparent','#2F4F4F','#2F4F4F','#2F4F4F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#36454F','#36454F','#36454F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#C0C0C0','#808080','#808080','#C0C0C0','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#36454F','#C0C0C0','#C0C0C0','#C0C0C0','#C0C0C0','#36454F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#DEB887','#FFE4C4','#FFE4C4','#DEB887','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#36454F','#DEB887','#8B0000','#DEB887','#36454F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#36454F','#DEB887','#DEB887','#36454F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#36454F','#36454F','#36454F','#36454F','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#36454F','#transparent','#transparent','#36454F','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','transparent','transparent','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','#2F4F4F','#2F4F4F','#2F4F4F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#36454F','#36454F','#36454F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#C0C0C0','#808080','#808080','#C0C0C0','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#36454F','#C0C0C0','#C0C0C0','#C0C0C0','#C0C0C0','#36454F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#DEB887','#FFE4C4','#FFE4C4','#DEB887','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#36454F','#DEB887','#8B0000','#DEB887','#36454F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#2F4F4F','#36454F','#DEB887','#DEB887','#36454F','#2F4F4F','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','#8B4513','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#36454F','#36454F','#36454F','#36454F','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#36454F','#transparent','#transparent','#36454F','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#A0522D','#A0522D','transparent','transparent','#A0522D','#A0522D','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         }
     ];
     const GOLD_RUSH_MODPACK = {
@@ -292,9 +340,6 @@ document.addEventListener('DOMContentLoaded', () => {
         active: false,
         isDefault: true
     };
-    // ### FIM: MODPACK "GOLD RUSH" ###
-
-    // ### INÍCIO: MODPACK "CYBER SIEGE" ###
     const CYBER_SIEGE_MODS = [
         {
             id: 'cs_attack_drone',
@@ -356,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             type: 'guardian',
             name: 'Torre de Plasma',
             cost: 220,
-            damage: 60, // Alto dano para quebrar escudos
+            damage: 60,
             cooldown: 2500,
             range: 300,
             projectileSpeed: 4,
@@ -366,7 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 50,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#707070','#707070','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#808080','#909090','#808080','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#00FF00','#00FF00','#00FF00','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#00FF00','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#505050','#606060','#707070','#707070','#606060','#505050','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#505050','#505050','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#404040','#404040','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#707070','#707070','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#606060','#808080','#909090','#808080','#606060','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#00FF00','#00FF00','#00FF00','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#00FF00','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#404040','#505050','#606060','#505050','#404040','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#505050','#606060','#707070','#707070','#606060','#505050','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#505050','#505050','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','#303030','#404040','#404040','#404040','#404040','#303030','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'cs_tesla_cannon',
@@ -376,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
             damage: 15,
             cooldown: 1800,
             range: 280,
-            projectileSpeed: 20, // Raio é quase instantâneo
+            projectileSpeed: 20,
             projectileSize: 5,
             projectileColor: '#00FFFF',
             abilities: [{ type: 'chain_lightning', chains: 3, bounceRange: 100 }],
@@ -394,9 +439,6 @@ document.addEventListener('DOMContentLoaded', () => {
         active: false,
         isDefault: true
     };
-    // ### FIM: MODPACK "CYBER SIEGE" ###
-
-    // ### INÍCIO: MODPACK "ELEMENTAL FURY" ###
     const ELEMENTAL_FURY_MODS = [
         {
             id: 'ef_magma_elemental',
@@ -414,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
             gridWidth: 16,
             gridHeight: 16,
             abilities: [{ type: 'immunity', damageType: 'fire' }, { type: 'lava_trail' }],
-            pixelData: ['transparent','transparent','transparent','#401000','#8B0000','#FF4500','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FFA500','#FFA500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FF4500','#FF4500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#FFA500','#FFFF00','#FFFF00','#FFA500','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#FFA500','#FFA500','#FFA500','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FF4500','#FF4500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#401000','#8B0000','#FFA500','#FFA500','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#401000','#8B0000','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#401000','#401000','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#8B0000','transparent','transparent','#8B0000','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','#FFA500','#401000','transparent','transparent','#401000','#FFA500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','#401000','#8B0000','#FF4500','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FFA500','#FFA500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FF4500','#FF4500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#FFA500','#FFFF00','#FFFF00','#FFA500','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#FFA500','#FFA500','#FFA500','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#FF4500','#FF4500','#FF4500','#FF4500','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#401000','#8B0000','#FFA500','#FFA500','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#401000','#8B0000','#8B0000','#401000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#8B0000','#401000','#401000','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#FF4500','#8B0000','transparent','transparent','#8B0000','#FF4500','transparent','transparent','transparent','transparent','transparent','transparent','#FFA500','#401000','transparent','transparent','#401000','#FFA500','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'ef_ice_golem',
@@ -468,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 50,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','transparent','#8B0000','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B22222','#FF4500','#FF4500','#B22222','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B22222','#FF4500','#FFA500','#FF4500','#B22222','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#6A5ACD','#6A5ACD','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#DEB887','#FFFF00','#DEB887','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#6A5ACD','#DEB887','#6A5ACD','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#800080','#4B0082','#4B0082','#800080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#800080','#800080','#4B0082','#4B0082','#4B0082','#800080','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#800080','#4B0082','#4B0082','#800080','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#4B0082','transparent','transparent','#4B0082','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','#8B0000','#8B0000','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B22222','#FF4500','#FF4500','#B22222','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#B22222','#FF4500','#FFA500','#FF4500','#B22222','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#6A5ACD','#6A5ACD','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#DEB887','#FFFF00','#DEB887','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#6A5ACD','#DEB887','#6A5ACD','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#800080','#4B0082','#4B0082','#800080','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#800080','#800080','#4B0082','#4B0082','#4B0082','#800080','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#800080','#4B0082','#4B0082','#800080','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','#4B0082','#4B0082','transparent','transparent','#4B0082','#4B0082','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         },
         {
             id: 'ef_freezing_tower',
@@ -486,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
             height: 50,
             gridWidth: 16,
             gridHeight: 16,
-            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#ADD8E6','#ADD8E6','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#F0F8FF','#FFFFFF','#F0F8FF','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#87CEEB','#00FFFF','#87CEEB','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#87CEEB','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#5F9EA0','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#5F9EA0','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','#1E90FF','#4682B4','#5F9EA0','#5F9EA0','#4682B4','#1E90FF','transparent','transparent','transparent','transparent','transparent','#0000CD','#1E90FF','#4682B4','#4682B4','#1E90FF','#0000CD','transparent','transparent','transparent','transparent','transparent','#00008B','#0000CD','#1E90FF','#1E90FF','#0000CD','#00008B','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
+            pixelData: ['transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#ADD8E6','#ADD8E6','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#87CEEB','#F0F8FF','#FFFFFF','#F0F8FF','#87CEEB','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#87CEEB','#00FFFF','#87CEEB','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#87CEEB','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#5F9EA0','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','transparent','#4682B4','#5F9EA0','#5F9EA0','#5F9EA0','#4682B4','transparent','transparent','transparent','transparent','transparent','transparent','#1E90FF','#4682B4','#5F9EA0','#5F9EA0','#4682B4','#1E90FF','transparent','transparent','transparent','transparent','transparent','#0000CD','#1E90FF','#4682B4','#4682B4','#1E90FF','#0000CD','transparent','transparent','transparent','transparent','transparent','#00008B','#0000CD','#1E90FF','#1E90FF','#0000CD','#00008B','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent','transparent']
         }
     ];
     const ELEMENTAL_FURY_MODPACK = {
@@ -496,9 +538,6 @@ document.addEventListener('DOMContentLoaded', () => {
         active: false,
         isDefault: true
     };
-    // ### FIM: MODPACK "ELEMENTAL FURY" ###
-
-    // ### FIM: Definição dos Mods ###
 
     // --- Configurações do Jogo ---
     const weapons = [ { name: "Cuspe", damage: 2, cost: 0, cooldown: 500, color: '#add8e6', size: 8, speed: 8, cssClass: 'spit' }, { name: "Pedra", damage: 8, cost: 50, cooldown: 400, color: '#8B4513', size: 12, speed: 10, cssClass: 'stone' }, { name: "Bomba de Tinta", damage: 20, cost: 150, cooldown: 800, color: '#FF00FF', size: 20, speed: 6, cssClass: 'ink', effect: 'slow' }, { name: "Bola de Fogo", damage: 50, cost: 400, cooldown: 1200, color: '#FF4500', size: 25, speed: 7, cssClass: 'fire' }, { name: "Papergun", damage: 10, cost: 500, cooldown: 250, color: '#e9ecef', size: 10, speed: 12, cssClass: 'paper' } ];
@@ -519,6 +558,50 @@ document.addEventListener('DOMContentLoaded', () => {
         'machine_gun': { id: 'machine_gun', name: 'Metralha', evolutions: [ { cost: 400, damage: 4, cooldown: 150, range: 250 }, { cost: 650, damage: 6, cooldown: 120, range: 280 }, { cost: 900, damage: 8, cooldown: 100, range: 300 }, { cost: 1500, damage: 11, cooldown: 90, range: 320 } ], projectile: { speed: 15, size: 6, color: '#ffc107', cssClass: 'bullet' }, width: 40, height: 50 },
         'heavy_crossbow': { id: 'heavy_crossbow', name: 'Besta P.', evolutions: [ { cost: 350, damage: 60, cooldown: 3500, range: 500 }, { cost: 600, damage: 100, cooldown: 3200, range: 550 }, { cost: 1000, damage: 150, cooldown: 3000, range: 600 }, { cost: 1800, damage: 220, cooldown: 2900, range: 650 } ], projectile: { speed: 12, size: 10, color: '#5d4037', cssClass: 'crossbow_bolt' }, width: 40, height: 50 },
     };
+    const BOBS_SHOP_ITEMS = {
+        zap: {
+            name: "Raio",
+            description: "Atordoa e causa dano a inimigos em uma pequena área.",
+            usage: "Abra o inventário, selecione o Raio e dê um clique duplo na área onde deseja lançá-lo.",
+            cost: 150, icon: "⚡", type: 'targeted',
+            effect: { type: 'area_stun', damage: 15, radius: 60, duration: 2000 }
+        },
+        arrows: {
+            name: "Flechas",
+            description: "Uma chuva de flechas atinge uma grande área, causando dano a todos os inimigos no local.",
+            usage: "Abra o inventário, selecione as Flechas e dê um clique duplo na área alvo.",
+            cost: 200, icon: "🏹", type: 'targeted',
+            effect: { type: 'rain_damage', damagePerArrow: 5, radius: 100, arrowCount: 15 }
+        },
+        rage: {
+            name: "Fúria",
+            description: "Aumenta o dano de todas as suas defesas (guardiões e castelo) em 50% por 10 segundos.",
+            usage: "Abra o inventário e clique na poção para ativá-la instantaneamente.",
+            cost: 400, icon: "😡", type: 'instant',
+            effect: { type: 'rage_buff', multiplier: 1.5, duration: 10000 }
+        },
+        survival1: {
+            name: "Sobrevida I",
+            description: "Aumenta a vida máxima do seu castelo em +5 permanentemente. O efeito é imediato.",
+            usage: "Abra o inventário e clique na poção para consumi-la e ganhar o bônus.",
+            cost: 300, icon: "❤️", type: 'instant',
+            effect: { type: 'max_health_increase', amount: 5 }
+        },
+        survival2: {
+            name: "Sobrevida II",
+            description: "Aumenta a vida máxima do seu castelo em +10 permanentemente.",
+            usage: "Abra o inventário e clique na poção para consumi-la e ganhar o bônus.",
+            cost: 550, icon: "🧡", type: 'instant',
+            effect: { type: 'max_health_increase', amount: 10 }
+        },
+        survival3: {
+            name: "Sobrevida III",
+            description: "Aumenta a vida máxima do seu castelo em +20 permanentemente.",
+            usage: "Abra o inventário e clique na poção para consumi-la e ganhar o bônus.",
+            cost: 1000, icon: "💛", type: 'instant',
+            effect: { type: 'max_health_increase', amount: 20 }
+        }
+    };
     const guardianSlotPositions = [ { x: 105, y: 30 }, { x: 120, y: 50 }, { x: 105, y: 70 }];
     const aiPhrases = {
         start: ["Vamos lá! Boa sorte para nós.", "Que comece a defesa!", "Espero que você seja um bom parceiro.", "Vamos mostrar pra eles!", "Pela honra do nosso castelo!", "Que nossas defesas sejam impenetráveis."],
@@ -536,11 +619,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let castleHealth, MAX_CASTLE_HEALTH, castleAbilityIntervals;
     let currentCastleType, currentCastleEvolution;
     let money, projectiles, monsterProjectiles, monsters, barricades, purchasedWeapons;
-    let diamonds, strongMonsterKillCount;
+    let diamonds, strongMonsterKillCount, bobs;
     let gameLoopInterval, monsterSpawnInterval, isGameOver, isPaused, currentWave, isWaveClearMessageSent;
     let monstersKilledThisWave, totalMonstersToSpawn, monstersSpawnedThisWave, lastMonsterSpawnTime;
     let currentWeaponIndex, lastShotTime, placingBarricade;
     let isDebugModeEnabled = false, isGodMode = false;
+    let placingSpell = null;
+    let isRageActive = false;
+    let rageTimeout = null;
     let guardianSlots, guardianInventory, selectedGuardianInventoryIndex;
     let currentWaveSpawnList = [];
     let loadedSaveSlotIndex = null;
@@ -560,23 +646,16 @@ document.addEventListener('DOMContentLoaded', () => {
     let newlyCreatedMod = null;
     let editorGridSize = { width: 16, height: 16 };
     const editorPaletteColors = ['#000000', '#FFFFFF', '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#808080', '#C0C0C0', '#800000', '#008000', '#000080', '#808000', '#800080', '#008080', '#a0522d', '#8B4513', '#228B22', '#556b2f', 'transparent', '#ffc0cb', '#ff69b4', '#ff1493', '#d2691e', '#a52a2a', '#6b4423', '#f5deb3', '#ffdab9', '#e6e6fa', '#d8bfd8', '#b0c4de', '#add8e6', '#90ee90', '#3cb371', '#66cdaa', '#f0e68c', '#eee8aa', '#fafad2', '#d3d3d3', '#a9a9a9'];
-    
-    // NOVO: Configurações e estado do sistema de sprites
     const SPRITE_PATH = 'sprites/';
-    const spriteStatus = new Map(); // 'loading', 'loaded', 'failed'
-
-    // --- Configurações do JSONBin.io ---
+    const spriteStatus = new Map();
     const JSONBIN_ID = '685aeeb38960c979a5b0b5f8';
     const JSONBIN_API_KEY = '$2a$10$4tbHfolQwMBQAiybZXK0ruCq0xYIPmFuq8NMAqrP89muVvvgQavta';
     const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
-
     const MODPACK_JSONBIN_ID = '68a0dc33ae596e708fcbaabd';
     const MODPACK_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${MODPACK_JSONBIN_ID}`;
-
     const SOCIAL_JSONBIN_ID = '685c74f28960c979a5b17276';
     const SOCIAL_JSONBIN_API_KEY = '$2a$10$4tbHfolQwMBQAiybZXK0ruCq0xYIPmFuq8NMAqrP89muVvvgQavta';
     const SOCIAL_JSONBIN_URL = `https://api.jsonbin.io/v3/b/${SOCIAL_JSONBIN_ID}`;
-
     let currentUser = null;
     let isAuthPanelInLoginMode = false;
     let socialPollInterval = null;
@@ -585,7 +664,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let chatPollInterval = null;
 
     // --- Funções de "Desenho" e Criação de Elementos ---
-    // MODIFICADO: Funções de criação de elementos agora verificam se um sprite existe.
     function createGoblinElement() { 
         if (spriteStatus.get('goblin') === 'loaded') {
             const img = document.createElement('img');
@@ -679,9 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function createBarricadeElement(type) { const e=document.createElement('div'); e.classList.add('barricade','spawning'); e.style.cssText=`width:${type.width}px;height:${type.height}px;background-color:${type.color};border:${type.border};border-radius:3px;position:absolute;box-sizing:border-box`; e.addEventListener('animationend', () => e.classList.remove('spawning'), { once: true }); const hc=document.createElement('div'); hc.style.cssText="position:absolute;top:-10px;left:0;width:100%;height:4px;background-color:#555;overflow:hidden;border-radius:2px"; const hb=document.createElement('div'); hb.classList.add('barricade-health-bar'); hb.style.cssText="width:100%;height:100%;background-color:#00ff00;transition:width .1s"; hc.appendChild(hb); e.appendChild(hc); return e; }
     function generateGrassElements() { grassElementsContainer.innerHTML=''; for(let i=0;i<150;i++){ const e=document.createElement('div'); const s=Math.random()*8+4; const castleAreaWidth = gameMode === 'ai' ? 160 : 80; e.style.cssText=`position:absolute;width:${s}px;height:${s*(Math.random()*.8+1)}px;background-color:hsl(${Math.random()*20+90},${Math.random()*20+50}%,${Math.random()*10+30}%);border-radius:${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}% / ${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}% ${Math.random()*50}%;opacity:${Math.random()*.4+.3};filter:blur(${Math.random()*2}px);z-index:1;left:${Math.random()*(gameContainer.offsetWidth-castleAreaWidth-150)+castleAreaWidth}px;top:${Math.random()*gameContainer.offsetHeight}px`; grassElementsContainer.appendChild(e); } }
     
-    // MODIFICADO: Esta função agora também verifica se um sprite existe.
     function createCustomModElement(modData) {
-        // Se um sprite para este mod foi carregado com sucesso, use-o.
         if (spriteStatus.get(modData.id) === 'loaded') {
             const img = document.createElement('img');
             img.src = `${SPRITE_PATH}${modData.id}.png`;
@@ -691,7 +767,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return img;
         }
 
-        // Caso contrário, use a renderização original com pixelData.
         const container = document.createElement('div');
         container.classList.add('custom-mod-render');
         container.style.width = `${modData.width}px`;
@@ -870,7 +945,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function switchEditorTab(type) { editorCurrentType = type; document.querySelectorAll('#mod-editor-screen .editor-tab').forEach(t => t.classList.remove('active')); document.querySelector(`#mod-editor-screen .editor-tab[data-type="${type}"]`).classList.add('active'); document.querySelectorAll('.editor-panel-for-type').forEach(p => p.classList.remove('active')); if (type === 'wave') { waveEditorPanel.classList.add('active'); } else { pixelEditorPanel.classList.add('active'); } let inputsHTML = `<div class="stat-input-group"><label for="mod-name">Nome:</label><input type="text" id="mod-name" value="Meu ${type}"></div>`; if (type === 'monster' || type === 'guardian' || type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label>Resolução do Desenho:</label><div class="grid-size-inputs"><input type="number" id="mod-grid-width" value="16" min="4" max="64"><span>x</span><input type="number" id="mod-grid-height" value="16" min="4" max="64"><button id="apply-grid-size-btn" class="mod-button secondary" style="padding: 4px 8px; font-size: 0.8em;">OK</button></div></div><div class="stat-input-group"><label for="mod-width">Largura (px):</label><input type="number" id="mod-width" value="40"></div><div class="stat-input-group"><label for="mod-height">Altura (px):</label><input type="number" id="mod-height" value="40"></div>`; } if (type === 'monster') { inputsHTML += `<div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="25"></div><div class="stat-input-group"><label for="mod-damage">Dano (corpo a corpo):</label><input type="number" id="mod-damage" value="2"></div><div class="stat-input-group"><label for="mod-speed">Velocidade:</label><input type="number" id="mod-speed" step="0.1" value="1.0"></div><div class="stat-input-group"><label for="mod-money">Dinheiro (drop):</label><input type="number" id="mod-money" value="10"></div><div class="stat-input-group"><label for="mod-spawnWaves">Aparece nas Ondas (ex: 5,10,15):</label><input type="text" id="mod-spawnWaves" placeholder="5, 10, 15" value="1"></div><div class="stat-input-group"><label for="mod-spawnCount">Quantidade (em cada onda):</label><input type="number" id="mod-spawnCount" value="3"></div><div class="stat-input-group"><label for="mod-isFlying">É Voador:</label><select id="mod-isFlying"><option value="false">Não</option><option value="true">Sim</option></select></div>`; } else if (type === 'guardian') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="100"></div><div class="stat-input-group"><label for="mod-damage">Dano:</label><input type="number" id="mod-damage" value="10"></div><div class="stat-input-group"><label for="mod-cooldown">Cooldown (ms):</label><input type="number" id="mod-cooldown" value="1500"></div><div class="stat-input-group"><label for="mod-range">Alcance (px):</label><input type="number" id="mod-range" value="300"></div><div class="stat-input-group"><label for="mod-projectileSpeed">Vel. Projétil:</label><input type="number" id="mod-projectileSpeed" value="8"></div><div class="stat-input-group"><label for="mod-projectileSize">Tam. Projétil (px):</label><input type="number" id="mod-projectileSize" value="10"></div><div class="stat-input-group"><label for="mod-projectileColor">Cor Projétil:</label><input type="color" id="mod-projectileColor" value="#ffff00"></div>`; } else if (type === 'barricade') { inputsHTML += `<div class="stat-input-group"><label for="mod-cost">Custo (Dinheiro):</label><input type="number" id="mod-cost" value="50"></div><div class="stat-input-group"><label for="mod-health">Vida:</label><input type="number" id="mod-health" value="50"></div>`; } else if (type === 'wave') { inputsHTML += `<div class="stat-input-group"><label for="mod-waveNumber">Número da Onda:</label><input type="number" id="mod-waveNumber" value="1"></div>`; } statInputsContainer.innerHTML = inputsHTML; if (document.getElementById('apply-grid-size-btn')) { document.getElementById('apply-grid-size-btn').addEventListener('click', () => { const w = parseInt(document.getElementById('mod-grid-width').value); const h = parseInt(document.getElementById('mod-grid-height').value); if (w > 0 && h > 0) { rebuildPixelGrid(w, h); } }); } }
     function populateMonsterDropdown(selectElement) { selectElement.innerHTML = ''; baseMonsterTypes.forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Base) ${m.name}`; selectElement.appendChild(option); }); allMods.filter(m => m.type === 'monster').forEach(m => { const option = document.createElement('option'); option.value = m.id; option.textContent = `(Mod) ${m.name}`; selectElement.appendChild(option); }); }
     
-    // --- Funções do Hub Online (Completas e Corrigidas) ---
+    // --- Funções do Hub Online ---
     async function showCustomModal(message, type = 'alert', defaultValue = '') { return new Promise(resolve => { customModalMessage.textContent = message; customModalActions.innerHTML = ''; if (type === 'prompt') { customModalInput.style.display = 'block'; customModalInput.value = defaultValue; } else { customModalInput.style.display = 'none'; } if (type === 'confirm' || type === 'prompt') { const confirmBtn = document.createElement('button'); confirmBtn.textContent = (type === 'confirm') ? 'Sim' : 'OK'; confirmBtn.className = 'main-menu-button'; confirmBtn.style.backgroundColor = '#28a745'; confirmBtn.style.fontSize = '0.8em'; confirmBtn.style.padding = '10px 20px'; const cancelBtn = document.createElement('button'); cancelBtn.textContent = (type === 'confirm') ? 'Não' : 'Cancelar'; cancelBtn.className = 'main-menu-button'; cancelBtn.style.backgroundColor = '#dc3545'; cancelBtn.style.fontSize = '0.8em'; cancelBtn.style.padding = '10px 20px'; confirmBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? customModalInput.value : true); }; cancelBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(type === 'prompt' ? null : false); }; customModalActions.appendChild(cancelBtn); customModalActions.appendChild(confirmBtn); } else { const okBtn = document.createElement('button'); okBtn.textContent = 'OK'; okBtn.className = 'main-menu-button'; okBtn.style.backgroundColor = '#007bff'; okBtn.style.fontSize = '0.8em'; okBtn.style.padding = '10px 20px'; okBtn.onclick = () => { customModalOverlay.style.display = 'none'; resolve(true); }; customModalActions.appendChild(okBtn); } customModalOverlay.style.display = 'flex'; if (type === 'prompt') customModalInput.focus(); }); }
     async function showCustomAlert(message) { return showCustomModal(message, 'alert'); }
     async function showCustomConfirm(message) { return showCustomModal(message, 'confirm'); }
@@ -1051,9 +1126,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchSocialData() { try { const response = await fetch(`${SOCIAL_JSONBIN_URL}/latest`, { headers: { 'X-Master-Key': SOCIAL_JSONBIN_API_KEY } }); if (response.status === 404) return {}; if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); const data = await response.json(); const record = data.record || {}; if (!record.conversations) record.conversations = {}; if (!record.groups) record.groups = {}; return record; } catch (error) { console.error("Falha ao buscar dados sociais:", error); showCustomAlert("Erro de conexão com o servidor. Tente mais tarde."); return null; } }
     async function updateSocialData(newData) { try { const response = await fetch(SOCIAL_JSONBIN_URL, { method: 'PUT', headers: { 'Content-Type': 'application/json', 'X-Master-Key': SOCIAL_JSONBIN_API_KEY, 'X-Bin-Versioning': 'false' }, body: JSON.stringify(newData) }); if (!response.ok) throw new Error(`Erro de rede: ${response.statusText}`); return true; } catch (error) { console.error("Falha ao atualizar dados sociais:", error); showCustomAlert("Erro de conexão, suas alterações podem não ter sido salvas."); return false; } }
-    function updateUiForLogin() { if (currentUser) { socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase(); trophyCounter.style.display = 'flex'; trophyValue.textContent = Math.floor(currentUser.stats.trophies); multiplayerButton.classList.remove('disabled'); } else { socialProfileButton.textContent = '👤'; trophyCounter.style.display = 'none'; multiplayerButton.classList.add('disabled'); } }
-    async function handleLogin(username, password) { const socialData = await fetchSocialData(); if (!socialData) return; const user = socialData[username.toLowerCase()]; if (user && user.password === password) { currentUser = { username: username, ...user }; localStorage.setItem('castleDefenseUser', JSON.stringify({ username, password })); updateUiForLogin(); socialOverlay.style.display = 'none'; await showCustomAlert(`Bem-vindo de volta, ${username}!`); startSocialPoll(); } else { await showCustomAlert("Nome de usuário ou senha incorretos."); } }
-    async function handleCreateAccount(username, password) { if (username.length < 3 || password.length < 4) { await showCustomAlert("Usuário deve ter no mínimo 3 caracteres e senha no mínimo 4."); return; } const socialData = await fetchSocialData(); if (!socialData) return; if (socialData[username.toLowerCase()]) { await showCustomAlert("Este nome de usuário já existe."); return; } socialData[username.toLowerCase()] = { password: password, friends: [], friendRequests: [], groupInvites: [], stats: { totalMoney: 0, totalDiamonds: 0, totalWaves: 0, gamesPlayed: 0, trophies: 0 } }; const success = await updateSocialData(socialData); if (success) { await showCustomAlert("Conta criada com sucesso! Agora você pode logar."); toggleAuthMode(true); } }
+    function updateUiForLogin() { 
+        if (currentUser) { 
+            socialProfileButton.textContent = currentUser.username.charAt(0).toUpperCase(); 
+            trophyCounter.style.display = 'flex'; 
+            trophyValue.textContent = Math.floor(currentUser.stats.trophies); 
+            multiplayerButton.classList.remove('disabled'); 
+        } else { 
+            socialProfileButton.textContent = '👤'; 
+            trophyCounter.style.display = 'none'; 
+            multiplayerButton.classList.add('disabled'); 
+        } 
+        checkTrophyUnlocks();
+    }
+    async function handleLogin(username, password) { 
+        const socialData = await fetchSocialData(); 
+        if (!socialData) return; 
+        const user = socialData[username.toLowerCase()]; 
+        if (user && user.password === password) { 
+            currentUser = { username: username, ...user }; 
+            bobs = currentUser.bobs || 0;
+            localStorage.setItem('castleDefenseUser', JSON.stringify({ username, password })); 
+            updateUiForLogin(); 
+            socialOverlay.style.display = 'none'; 
+            await showCustomAlert(`Bem-vindo de volta, ${username}!`); 
+            startSocialPoll(); 
+        } else { 
+            await showCustomAlert("Nome de usuário ou senha incorretos."); 
+        } 
+    }
+    async function handleCreateAccount(username, password) { 
+        if (username.length < 3 || password.length < 4) { 
+            await showCustomAlert("Usuário deve ter no mínimo 3 caracteres e senha no mínimo 4."); 
+            return; 
+        } 
+        const socialData = await fetchSocialData(); 
+        if (!socialData) return; 
+        if (socialData[username.toLowerCase()]) { 
+            await showCustomAlert("Este nome de usuário já existe."); 
+            return; 
+        } 
+        socialData[username.toLowerCase()] = { 
+            password: password, 
+            friends: [], 
+            friendRequests: [], 
+            groupInvites: [], 
+            stats: { totalMoney: 0, totalDiamonds: 0, totalWaves: 0, gamesPlayed: 0, trophies: 0 },
+            mineData: { level: 1, lastCollectedTimestamp: Date.now() },
+            spellInventory: {}
+        }; 
+        const success = await updateSocialData(socialData); 
+        if (success) { 
+            await showCustomAlert("Conta criada com sucesso! Agora você pode logar."); 
+            toggleAuthMode(true); 
+        } 
+    }
     function handleLogout() { currentUser = null; localStorage.removeItem('castleDefenseUser'); updateUiForLogin(); socialOverlay.style.display = 'none'; stopSocialPoll(); }
     function toggleAuthMode(forceLogin) { isAuthPanelInLoginMode = forceLogin !== undefined ? forceLogin : !isAuthPanelInLoginMode; if (isAuthPanelInLoginMode) { authTitle.textContent = "Logar na Conta"; authSubmitButton.textContent = "Logar"; authToggleLink.textContent = "Não tem uma conta? Crie uma agora"; } else { authTitle.textContent = "Criar Conta"; authSubmitButton.textContent = "Criar Conta"; authToggleLink.textContent = "Já tem uma conta? Clique para logar"; } authUsernameInput.value = ''; authPasswordInput.value = ''; }
     async function renderFriendsPanel() { friendsPanelTitle.textContent = `Amigos de ${currentUser.username}`; friendsListContainer.innerHTML = '<p>Carregando amigos...</p>'; const socialData = await fetchSocialData(); if (!socialData || !currentUser) { friendsListContainer.innerHTML = '<p style="color: #f44336;">Erro ao carregar dados.</p>'; return; } const myData = socialData[currentUser.username.toLowerCase()]; if (!myData || !myData.friends || myData.friends.length === 0) { friendsListContainer.innerHTML = '<p>Você ainda não tem amigos.</p>'; return; } friendsListContainer.innerHTML = ''; myData.friends.forEach(friendName => { const friendData = socialData[friendName.toLowerCase()]; const trophies = friendData ? Math.floor(friendData.stats.trophies) : '???'; const item = document.createElement('div'); item.className = 'friend-item'; item.innerHTML = `<div class="friend-info"><span>${friendName}</span> - <span class="trophy-icon">🏆</span><span>${trophies}</span></div><div class="friend-actions"><button class="mod-button secondary message-friend-btn" data-friend-name="${friendName}">✉️</button><button class="mod-button danger remove-friend-btn" data-friend-name="${friendName}">❌</button></div>`; friendsListContainer.appendChild(item); }); }
@@ -1091,6 +1218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUser.stats = myData.stats;
         await updateSocialData(socialData);
         updateUiForLogin();
+        checkTrophyUnlocks();
         return { trophiesGained: newTrophies - oldTrophies, newTotalTrophies: newTrophies };
     }
 
@@ -1110,7 +1238,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Funções do Jogo (Principais) ---
     function logDebugMessage(message, type = 'info') { if (!isDebugModeEnabled) return; const entry = document.createElement('div'); entry.className = `log-entry ${type}`; entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> ${message}`; debugLogContent.appendChild(entry); debugLogContent.scrollTop = debugLogContent.scrollHeight; }
     
-    // NOVO: Função para pré-carregar todos os sprites de monstros e guardiões
     function preloadAllSprites() {
         const allEntityTypes = [
             ...activeGameMonsterTypes,
@@ -1138,13 +1265,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
         let modsToProcess = new Map();
     
-        // Adiciona mods individuais selecionados
         selectedModIds.forEach(id => {
             const mod = allMods.find(m => m.id === id);
             if (mod) modsToProcess.set(mod.id, mod);
         });
     
-        // Adiciona mods de modpacks selecionados
         selectedModpackIds.forEach(packId => {
             const pack = allModpacks.find(p => p.id === packId);
             if (pack && pack.mods) {
@@ -1155,7 +1280,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     
-        // Se nenhuma seleção foi feita, usa os ativos
         if (modsToProcess.size === 0) {
             allMods.filter(m => m.active).forEach(mod => modsToProcess.set(mod.id, mod));
             allModpacks.filter(p => p.active).forEach(pack => {
@@ -1174,26 +1298,26 @@ document.addEventListener('DOMContentLoaded', () => {
         customWaveDefinitions = {};
     
         Array.from(modsToProcess.values()).forEach(mod => {
-            // MODIFICADO: usa createCustomModElement para todos os monstros modded
             if (mod.type === 'monster') { activeGameMonsterTypes.push({ ...mod, elementCreator: () => createCustomModElement(mod) }); }
             else if (mod.type === 'barricade') { activeGameBarricadeTypes.push({ ...mod, color: 'transparent', border: '2px solid #ccc', isCustom: true }); }
             else if (mod.type === 'guardian') { activeGameGuardianTypes[mod.id] = { name: mod.name, isCustom: true, modData: mod, evolutions: [{ cost: mod.cost, damage: mod.damage, cooldown: mod.cooldown, range: mod.range }], projectile: { speed: mod.projectileSpeed, size: mod.projectileSize, color: mod.projectileColor, cssClass: 'custom' } }; }
             else if (mod.type === 'wave') { customWaveDefinitions[mod.waveNumber] = mod.spawns; }
         });
 
-        // NOVO: Chama a função para pré-carregar os sprites
         preloadAllSprites();
     }
 
     function initializeGame(mode = 'single', options = {}) {
         const { savedState = null, saveIndex = null } = options;
         gameMode = mode; loadedSaveSlotIndex = saveIndex;
-        prepareActiveGameData(options); // Passa todas as opções
-        money = 20; diamonds = 0; strongMonsterKillCount = 0;
+        prepareActiveGameData(options);
+        money = 20; diamonds = 0; bobs = currentUser ? (currentUser.bobs || 0) : 0; strongMonsterKillCount = 0;
         currentWeaponIndex = 0; purchasedWeapons = new Array(weapons.length).fill(false); purchasedWeapons[0] = true;
         projectiles = []; monsterProjectiles = []; monsters = []; barricades = [];
         guardianSlots = [null, null, null]; guardianInventory = []; selectedGuardianInventoryIndex = null;
         isGameOver = false; isPaused = false; isGodMode = false;
+        isRageActive = false; if (rageTimeout) clearTimeout(rageTimeout);
+        placingSpell = null;
         pauseButton.textContent = 'Pause';
         currentWave = 0; monstersKilledThisWave = 0; isWaveClearMessageSent = true;
         placingBarricade = null; barricadeGhost.style.display = 'none';
@@ -1202,25 +1326,108 @@ document.addEventListener('DOMContentLoaded', () => {
         castleAbilityIntervals = []; isPlayerCastleDestroyed = false; playerRespawnTimer = 0; playerRespawnTimerElement.style.display = 'none';
         aiHudItem.style.display = gameMode === 'ai' ? 'flex' : 'none'; castleAIElement.style.display = gameMode === 'ai' ? 'block' : 'none'; chatEmoteContainer.style.display = gameMode === 'ai' ? 'flex' : 'none'; chatMessages.innerHTML = ''; aiRespawnTimerElement.style.display = 'none';
         playerCastleIndicator.style.display = 'block'; playerCastleIndicator.textContent = currentUser ? currentUser.username : 'Você';
+        bobsInventoryToggleButton.style.display = 'flex';
         if (gameMode === 'ai') { castleElement.style.height = '45%'; castleElement.style.top = '25%'; castleElement.style.transform = 'translateY(-50%)'; castleAIElement.style.left = '0px'; castleAIElement.style.height = '45%'; castleAIElement.style.top = '75%'; castleAIElement.style.transform = 'translateY(-50%)'; playerRespawnTimerElement.style.top = castleElement.style.top; playerRespawnTimerElement.style.height = castleElement.style.height; aiRespawnTimerElement.style.top = castleAIElement.style.top; aiRespawnTimerElement.style.height = castleAIElement.style.height; playerCastleIndicator.style.top = `calc(${castleElement.style.top} - 25px)`; playerCastleIndicator.style.left = `5px`; } else { castleElement.style.height = '100%'; castleElement.style.top = '0'; castleElement.style.transform = 'none'; playerCastleIndicator.style.top = `10px`; playerCastleIndicator.style.left = `5px`; }
         if (gameMode === 'ai') { castleAbilityIntervalsAI = []; isCastleAIDestroyed = false; aiRespawnTimer = 0; guardianInventoryAI = []; guardianSlotsAI = [null, null, null]; updateCastle('wood', 0, { isInitial: true, isAI: true }); }
-        if (savedState) { loadGameFromState(savedState); } else { updateGuardianVisuals(); updateGuardianPanel(); updateCastle('wood', 0, { isInitial: true, isAI: false }); updateDiamondDisplay(); generateGrassElements(); startNextWave(); }
+        if (savedState) { loadGameFromState(savedState); } else { updateGuardianVisuals(); updateGuardianPanel(); updateCastle('wood', 0, { isInitial: true, isAI: false }); updateDiamondDisplay(); updateBobsDisplay(); generateGrassElements(); startNextWave(); }
         startGameLoop();
         if (aiLogicInterval) clearInterval(aiLogicInterval); if (aiAttackInterval) clearInterval(aiAttackInterval);
         if (gameMode === 'ai' && !savedState) { const randomStartPhrase = aiPhrases.start[Math.floor(Math.random() * aiPhrases.start.length)]; setTimeout(() => addChatMessage("IA", randomStartPhrase, true), 2000); aiLogicInterval = setInterval(runAILogic, 2500); aiAttackInterval = setInterval(() => { if(isPaused || isGameOver || isCastleAIDestroyed) return; const target = findNearestMonster(castleAIElement.offsetLeft, castleAIElement.offsetTop + castleAIElement.offsetHeight/2, 9999); if(target) createProjectile(target, weapons[0], { from: 'ai_base', sourceElement: castleAIElement }); }, 1200); }
         gameUI.classList.add('collapsed'); gameUI.classList.remove('expanded'); guardianManagementPanel.classList.remove('open'); shopToggleButton.textContent = 'Loja';
     }
-    function updateCastle(type, evolutionLevel, options = {}) { const { isInitial = false, loadedHealth = null, isAI = false } = options; const newLevel = castles[type][evolutionLevel]; if (!newLevel) return; const castleTarget = isAI ? castleAIElement : castleElement; let abilityIntervals = isAI ? castleAbilityIntervalsAI : castleAbilityIntervals; abilityIntervals.forEach(clearInterval); abilityIntervals = []; if (isAI) { currentCastleTypeAI = type; currentCastleEvolutionAI = evolutionLevel; MAX_CASTLE_HEALTH_AI = newLevel.maxHealth; if (loadedHealth !== null) castleHealthAI = loadedHealth; else if (isInitial) castleHealthAI = MAX_CASTLE_HEALTH_AI; castleAIElement.innerHTML = castleElement.innerHTML; } else { currentCastleType = type; currentCastleEvolution = evolutionLevel; MAX_CASTLE_HEALTH = newLevel.maxHealth; if (loadedHealth !== null) castleHealth = loadedHealth; else if (isInitial) castleHealth = MAX_CASTLE_HEALTH; } castleTarget.className = newLevel.cssClass; if (!isAI) { const areSoldiersVisible = type === 'stone'; soldier1.style.display = areSoldiersVisible ? 'block' : 'none'; soldier1.style.top = (castleTarget.offsetTop + 10) + 'px'; soldier1.style.left = (castleTarget.offsetLeft + 20) + 'px'; soldier2.style.display = areSoldiersVisible ? 'block' : 'none'; soldier2.style.top = (castleTarget.offsetTop + 10) + 'px'; soldier2.style.left = (castleTarget.offsetLeft + 50) + 'px'; } newLevel.abilities.forEach(ab => { let i; if (ab.type === 'regen') { i = setInterval(() => { if (isPaused || isGameOver) return; if(isAI) { if (!isCastleAIDestroyed && castleHealthAI < MAX_CASTLE_HEALTH_AI) { castleHealthAI = Math.min(MAX_CASTLE_HEALTH_AI, castleHealthAI + ab.amount); updateCastleHealthDisplay(true); } } else { if (!isPlayerCastleDestroyed && castleHealth < MAX_CASTLE_HEALTH) { castleHealth = Math.min(MAX_CASTLE_HEALTH, castleHealth + ab.amount); updateCastleHealthDisplay(false); } } }, ab.interval); } else if (ab.type === 'auto-attack') { i = setInterval(() => { if (isPaused || isGameOver || (isAI ? isCastleAIDestroyed : isPlayerCastleDestroyed)) return; const sourceX = castleTarget.offsetLeft + castleTarget.offsetWidth; const sourceY = castleTarget.offsetTop + castleTarget.offsetHeight / 2; const target = findNearestMonster(sourceX, sourceY, 9999); if (target) { const weaponTemplate = weapons[ab.weaponIndex]; const projectileWeapon = {...weaponTemplate, damage: ab.damage || weaponTemplate.damage }; createProjectile(target, projectileWeapon, {from: 'castle', sourceElement: castleTarget }); if (!isAI && areSoldiersVisible) { [soldier1, soldier2].forEach(s => { s.classList.add('shooting'); setTimeout(() => s.classList.remove('shooting'), 200); }); } } }, ab.interval); } else if (ab.type === 'generate-money') { i = setInterval(() => { if (!isPaused && !isGameOver) { money += ab.amount; updateMoneyDisplay(); logDebugMessage(`+ $${ab.amount} do castelo ${isAI ? 'da IA' : ''}`); } }, ab.interval); } if (i) abilityIntervals.push(i); }); if (isAI) castleAbilityIntervalsAI = abilityIntervals; else castleAbilityIntervals = abilityIntervals; updateCastleHealthDisplay(isAI); updateMoneyDisplay(); }
+    function updateCastle(type, evolutionLevel, options = {}) { 
+        const { isInitial = false, loadedHealth = null, isAI = false, loadedMaxHealth = null } = options; 
+        const newLevel = castles[type][evolutionLevel]; 
+        if (!newLevel) return; 
+        const castleTarget = isAI ? castleAIElement : castleElement; 
+        let abilityIntervals = isAI ? castleAbilityIntervalsAI : castleAbilityIntervals; 
+        abilityIntervals.forEach(clearInterval); 
+        abilityIntervals = []; 
+        if (isAI) { 
+            currentCastleTypeAI = type; 
+            currentCastleEvolutionAI = evolutionLevel; 
+            MAX_CASTLE_HEALTH_AI = newLevel.maxHealth; 
+            if (loadedHealth !== null) castleHealthAI = loadedHealth; 
+            else if (isInitial) castleHealthAI = MAX_CASTLE_HEALTH_AI; 
+            castleAIElement.innerHTML = castleElement.innerHTML; 
+        } else { 
+            currentCastleType = type; 
+            currentCastleEvolution = evolutionLevel; 
+            MAX_CASTLE_HEALTH = loadedMaxHealth !== null ? loadedMaxHealth : newLevel.maxHealth; 
+            if (loadedHealth !== null) castleHealth = loadedHealth; 
+            else if (isInitial) castleHealth = MAX_CASTLE_HEALTH; 
+        } 
+        castleTarget.className = newLevel.cssClass; 
+        if (!isAI) { 
+            const areSoldiersVisible = type === 'stone'; 
+            soldier1.style.display = areSoldiersVisible ? 'block' : 'none'; 
+            soldier1.style.top = (castleTarget.offsetTop + 10) + 'px'; 
+            soldier1.style.left = (castleTarget.offsetLeft + 20) + 'px'; 
+            soldier2.style.display = areSoldiersVisible ? 'block' : 'none'; 
+            soldier2.style.top = (castleTarget.offsetTop + 10) + 'px'; 
+            soldier2.style.left = (castleTarget.offsetLeft + 50) + 'px'; 
+        } 
+        newLevel.abilities.forEach(ab => { 
+            let i; 
+            if (ab.type === 'regen') { 
+                i = setInterval(() => { 
+                    if (isPaused || isGameOver) return; 
+                    if(isAI) { 
+                        if (!isCastleAIDestroyed && castleHealthAI < MAX_CASTLE_HEALTH_AI) { 
+                            castleHealthAI = Math.min(MAX_CASTLE_HEALTH_AI, castleHealthAI + ab.amount); 
+                            updateCastleHealthDisplay(true); 
+                        } 
+                    } else { 
+                        if (!isPlayerCastleDestroyed && castleHealth < MAX_CASTLE_HEALTH) { 
+                            castleHealth = Math.min(MAX_CASTLE_HEALTH, castleHealth + ab.amount); 
+                            updateCastleHealthDisplay(false); 
+                        } 
+                    } 
+                }, ab.interval); 
+            } else if (ab.type === 'auto-attack') { 
+                i = setInterval(() => { 
+                    if (isPaused || isGameOver || (isAI ? isCastleAIDestroyed : isPlayerCastleDestroyed)) return; 
+                    const sourceX = castleTarget.offsetLeft + castleTarget.offsetWidth; 
+                    const sourceY = castleTarget.offsetTop + castleTarget.offsetHeight / 2; 
+                    const target = findNearestMonster(sourceX, sourceY, 9999); 
+                    if (target) { 
+                        const weaponTemplate = weapons[ab.weaponIndex]; 
+                        const projectileWeapon = {...weaponTemplate, damage: ab.damage || weaponTemplate.damage }; 
+                        if (isRageActive && !isAI) {
+                            projectileWeapon.damage *= BOBS_SHOP_ITEMS.rage.effect.multiplier;
+                        }
+                        createProjectile(target, projectileWeapon, {from: 'castle', sourceElement: castleTarget }); 
+                        if (!isAI && areSoldiersVisible) { 
+                            [soldier1, soldier2].forEach(s => { s.classList.add('shooting'); setTimeout(() => s.classList.remove('shooting'), 200); }); 
+                        } 
+                    } 
+                }, ab.interval); 
+            } else if (ab.type === 'generate-money') { 
+                i = setInterval(() => { 
+                    if (!isPaused && !isGameOver) { 
+                        money += ab.amount; 
+                        updateMoneyDisplay(); 
+                        logDebugMessage(`+ $${ab.amount} do castelo ${isAI ? 'da IA' : ''}`); 
+                    } 
+                }, ab.interval); 
+            } 
+            if (i) abilityIntervals.push(i); 
+        }); 
+        if (isAI) castleAbilityIntervalsAI = abilityIntervals; 
+        else castleAbilityIntervals = abilityIntervals; 
+        updateCastleHealthDisplay(isAI); 
+        updateMoneyDisplay(); 
+    }
     function evolveCurrentCastle(isAI = false) { let castleType = isAI ? currentCastleTypeAI : currentCastleType; let evolution = isAI ? currentCastleEvolutionAI : currentCastleEvolution; const castlePath = castles[castleType]; if (evolution >= castlePath.length - 1) return false; const nextLevel = castlePath[evolution + 1]; if (money >= nextLevel.cost) { money -= nextLevel.cost; logDebugMessage(`Castelo ${isAI ? '(IA)' : ''} evoluído para: ${castleType} Nv.${(isAI ? currentCastleEvolutionAI : currentCastleEvolution) + 2}`, 'purchase'); updateCastle(castleType, (isAI ? ++currentCastleEvolutionAI : ++currentCastleEvolution), {isAI: isAI}); return true; } return false; }
     function findNearestMonster(sourceX, sourceY, range) { let nearest = null; let minDistSq = range * range; for (const m of monsters) { const distSq = Math.pow(m.x - sourceX, 2) + Math.pow(m.y - sourceY, 2); if (distSq < minDistSq) { minDistSq = distSq; nearest = m; } } return nearest; }
     function findClosestCastle(monster) { if (gameMode !== 'ai') return { element: castleElement, isAI: false, isDestroyed: () => isPlayerCastleDestroyed }; const targetPlayer = Math.random() > 0.5; if (targetPlayer) { if (isPlayerCastleDestroyed) return { element: castleAIElement, isAI: true, isDestroyed: () => isCastleAIDestroyed }; return { element: castleElement, isAI: false, isDestroyed: () => isPlayerCastleDestroyed }; } else { if (isCastleAIDestroyed) return { element: castleElement, isAI: false, isDestroyed: () => isPlayerCastleDestroyed }; return { element: castleAIElement, isAI: true, isDestroyed: () => isCastleAIDestroyed }; } }
     function updateCastleHealthDisplay(isAI) { const health = isAI ? castleHealthAI : castleHealth; const maxHealth = isAI ? MAX_CASTLE_HEALTH_AI : MAX_CASTLE_HEALTH; const bar = isAI ? castleHealthBarAI : castleHealthBar; const text = isAI ? castleHealthTextAI : castleHealthText; const p = (health / maxHealth) * 100; bar.style.width = `${Math.max(0, p)}%`; bar.style.backgroundColor = p > 50 ? '#28a745' : p > 20 ? '#ffc107' : '#dc3545'; text.textContent = `${Math.max(0, Math.ceil(health))}/${maxHealth}`; }
     function updateMoneyDisplay() { moneyDisplay.textContent = `Dinheiro: $${money}`; updateShopButtons(); updateGuardianPanel(); }
     function updateDiamondDisplay() { diamondDisplaySpan.textContent = diamonds; updateShopButtons(); }
+    function updateBobsDisplay() { if (bobsDisplaySpan) { bobsDisplaySpan.textContent = Math.floor(bobs); } }
     function updateShopButtons() { document.querySelectorAll('.buy-button[data-item-type="weapon"], .buy-button[data-item-type="special"]').forEach(btn => { const type = btn.dataset.itemType; const id = btn.dataset.itemId; if (type === 'weapon') { const weaponId = parseInt(id); const item = weapons[weaponId]; const isPurchased = purchasedWeapons[weaponId]; if (weaponId === currentWeaponIndex) { btn.textContent = `${item.name} (Equipada)`; btn.style.backgroundColor = '#28a745'; btn.style.color = 'white'; btn.disabled = true; } else if (isPurchased) { btn.textContent = `Equipar ${item.name}`; btn.style.backgroundColor = '#007bff'; btn.style.color = 'white'; btn.disabled = false; } else { btn.textContent = `Comprar ${item.name} ($${item.cost})`; btn.style.backgroundColor = 'white'; btn.style.color = 'black'; btn.disabled = money < item.cost; } } else if (type === 'special') { const item = specialItems[id]; if (item) { const canAfford = diamonds >= item.cost; const needsHeal = (!isPlayerCastleDestroyed && castleHealth < MAX_CASTLE_HEALTH) || (gameMode === 'ai' && !isCastleAIDestroyed && castleHealthAI < MAX_CASTLE_HEALTH_AI); btn.textContent = `${item.name} (💎 ${item.cost})`; btn.disabled = !canAfford || !needsHeal; } } }); const barricadeShop = document.getElementById('barricade-shop'); const barricadeHeader = barricadeShop.querySelector('h3'); barricadeShop.innerHTML = ''; if (barricadeHeader) barricadeShop.appendChild(barricadeHeader); activeGameBarricadeTypes.forEach((item) => { const btn = document.createElement('button'); btn.className = 'buy-button'; btn.dataset.itemType = 'barricade'; btn.dataset.itemId = item.id; btn.textContent = `${item.name} ($${item.cost})`; btn.disabled = money < item.cost; barricadeShop.appendChild(btn); }); const castleShopHeader = castleShopContainer.querySelector('h3'); castleShopContainer.innerHTML = ''; if(castleShopHeader) castleShopContainer.appendChild(castleShopHeader); for (const id in castles) { const castlePath = castles[id]; const baseLevel = castlePath[0]; const isSelected = id === currentCastleType; const level = isSelected ? currentCastleEvolution + 1 : 1; const maxLevel = castlePath.length; const isMaxLevel = isSelected && level >= maxLevel; let mainCostText = ''; if (baseLevel.costType === 'diamond') { mainCostText = `💎 ${baseLevel.cost}`; } else { mainCostText = `$${baseLevel.cost > 0 ? baseLevel.cost : 'Grátis'}`; } let evoCostText = 'MAX'; let evoDisabledClass = 'disabled'; if (isSelected && !isMaxLevel) { evoCostText = `$${castlePath[level].cost}`; if (money >= castlePath[level].cost) { evoDisabledClass = ''; } } const itemHTML = `<div class="castle-shop-item ${isSelected ? 'selected' : ''}" data-castle-id="${id}"><div class="castle-main-btn"><span class="castle-name">${baseLevel.name}</span><span class="castle-cost">${mainCostText}</span></div><div class="castle-side-btns"><div class="castle-level-btn"><div class="level-indicator-bg"><div class="level-indicator-fill level-${level}"></div></div><span>${isMaxLevel ? 'MAX' : 'LVL ' + level}</span></div><div class="castle-evo-btn ${isSelected ? evoDisabledClass : 'disabled'}" data-castle-id="${id}"><span>${evoCostText}</span><span>EVO</span></div></div></div>`; castleShopContainer.innerHTML += itemHTML; } const guardianShopHeader = guardianShopContainer.querySelector('h3'); guardianShopContainer.innerHTML = ''; if (guardianShopHeader) guardianShopContainer.appendChild(guardianShopHeader); let buyOptionsHTML = '<div class="buy-options">'; for (const typeId in activeGameGuardianTypes) { const type = activeGameGuardianTypes[typeId]; const cost = type.evolutions[0].cost; const canAfford = money >= cost; buyOptionsHTML += `<button class="guardian-buy-btn" data-type-id="${typeId}" ${canAfford ? '' : 'disabled'}>${type.name} ($${cost})</button>`; } buyOptionsHTML += '</div>'; guardianShopContainer.innerHTML += buyOptionsHTML; document.querySelectorAll('.buy-button, .guardian-buy-btn').forEach(btn => { if (btn.disabled && !btn.textContent.includes('Equipada')) { btn.style.backgroundColor = '#f0f0f0'; btn.style.color = '#a0a0a0'; btn.style.cursor = 'not-allowed'; } }); }
     function updateGuardianPanel() { guardianInventoryContainer.innerHTML = ''; guardianSlotsContainer.innerHTML = ''; if (guardianInventory.length === 0) { guardianInventoryContainer.innerHTML = '<div class="guardian-slot empty">Compre guardiões na loja!</div>'; } else { guardianInventory.forEach((guardian, index) => { const type = activeGameGuardianTypes[guardian.typeId]; if (!type) return; const card = document.createElement('div'); card.className = 'guardian-card'; if (index === selectedGuardianInventoryIndex) { card.classList.add('selected'); } card.dataset.inventoryIndex = index; const cardContent = document.createElement('div'); cardContent.className = 'guardian-card-content'; cardContent.innerHTML = `<div>${type.name} <span>(Nv. ${guardian.level})</span></div>`; if (!type.isCustom && guardian.level < 4) { const nextEvo = type.evolutions[guardian.level]; const evolveBtn = document.createElement('button'); evolveBtn.className = 'guardian-evolve-btn'; evolveBtn.textContent = `($${nextEvo.cost})`; evolveBtn.disabled = money < nextEvo.cost; evolveBtn.dataset.inventoryIndex = index; cardContent.appendChild(evolveBtn); } else { const maxLabel = document.createElement('span'); maxLabel.className = 'max-level-label'; maxLabel.textContent = 'MAX'; cardContent.appendChild(maxLabel); } card.appendChild(cardContent); guardianInventoryContainer.appendChild(card); }); } guardianSlots.forEach((guardian, index) => { const slot = document.createElement('div'); slot.className = 'guardian-slot'; slot.dataset.slotIndex = index; if (guardian) { const type = activeGameGuardianTypes[guardian.typeId]; if (!type) { slot.classList.add('empty'); slot.innerHTML = `Slot ${index + 1} Vazio (Mod Removido)`; } else { slot.innerHTML = `<b>Slot ${index+1}:</b> ${type.name} <span>(Nv. ${guardian.level})</span>`; } } else { slot.classList.add('empty'); slot.innerHTML = `Slot ${index + 1} Vazio`; } guardianSlotsContainer.appendChild(slot); }); }
     
-    // MODIFICADO: Função de renderização dos guardiões agora usa sprites se disponíveis.
     function updateGuardianVisuals() {
         guardianPlacementArea.innerHTML = '';
         const castleWidth = 80;
@@ -1249,6 +1456,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             visualElement.classList.add('guardian');
+            if (isRageActive && !isAI) {
+                visualElement.classList.add('rage-active');
+            }
             const targetCastle = isAI ? castleAIElement : castleElement;
             const position = guardianSlotPositions[index];
             const yPos = targetCastle.offsetTop + (position.y / 100) * targetCastle.offsetHeight;
@@ -1263,7 +1473,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    function prepareBarricadePlacement(type) { placingBarricade = type; togglePause(true); gameUI.classList.add('collapsed'); gameUI.classList.remove('expanded'); shopToggleButton.textContent = 'Loja'; placementModeOverlay.style.display = 'flex'; placementModeOverlay.style.cursor = 'crosshair'; placementModeOverlay.addEventListener('dblclick', placeBarricadeAtClick); barricadeGhost.style.display = 'block'; barricadeGhost.style.width = `${type.width}px`; barricadeGhost.style.height = `${type.height}px`; barricadeGhost.querySelector('.health-preview').textContent = `Vida: ${type.health}`; document.getElementById('top-hud').style.display = 'none'; }
+    function prepareBarricadePlacement(type) { placingBarricade = type; togglePause(true); gameUI.classList.add('collapsed'); gameUI.classList.remove('expanded'); shopToggleButton.textContent = 'Loja'; placementModeOverlay.style.display = 'flex'; document.getElementById('placement-message').textContent = 'Dê um clique duplo para colocar a barricada!'; placementModeOverlay.style.cursor = 'crosshair'; placementModeOverlay.addEventListener('dblclick', placeBarricadeAtClick); barricadeGhost.style.display = 'block'; barricadeGhost.style.width = `${type.width}px`; barricadeGhost.style.height = `${type.height}px`; barricadeGhost.querySelector('.health-preview').textContent = `Vida: ${type.health}`; document.getElementById('top-hud').style.display = 'none'; }
     function placeBarricade(type, loadedData) { if (!type) return null; const x = loadedData ? loadedData.x : 0; const y = loadedData ? loadedData.y : 0; let barricadeElement; if (type.isCustom) { barricadeElement = createCustomModElement(type); barricadeElement.classList.add('barricade'); const hc=document.createElement('div'); hc.style.cssText="position:absolute;top:-10px;left:0;width:100%;height:4px;background-color:#555;overflow:hidden;border-radius:2px"; const hb=document.createElement('div'); hb.classList.add('barricade-health-bar'); hb.style.cssText="width:100%;height:100%;background-color:#00ff00;transition:width .1s"; hc.appendChild(hb); barricadeElement.appendChild(hc); } else { barricadeElement = createBarricadeElement(type); } const b = { id: Date.now() + Math.random(), typeId: type.id, element: barricadeElement, x: x, y: y, health: loadedData ? loadedData.health : type.health, maxHealth: type.health, width: type.width, height: type.height }; b.element.style.left = `${x}px`; b.element.style.top = `${y}px`; b.element.style.position = 'absolute'; const healthPercentage = (b.health / b.maxHealth) * 100; const hb = b.element.querySelector('.barricade-health-bar'); if (hb) hb.style.width = `${healthPercentage}%`; gameArea.appendChild(b.element); barricades.push(b); }
     function placeBarricadeAtClick(e) { if (!placingBarricade) return; const type = placingBarricade; const r = gameContainer.getBoundingClientRect(); const x = e.clientX - r.left - (type.width / 2); const y = e.clientY - r.top - (type.height / 2); const castleAreaWidth = gameMode === 'ai' ? 160 : 80; if (x < castleAreaWidth + 50 || x + type.width > gameContainer.offsetWidth - 20 || y < 10 || y + type.height > gameContainer.offsetHeight - 10 || barricades.some(b => (x < b.x + b.width && x + type.width > b.x && y < b.y + b.height && y + type.height > b.y)) || money < type.cost) return; money -= type.cost; updateMoneyDisplay(); placeBarricade(type, { x: x, y: y, health: type.health }); logDebugMessage(`Barricada '${type.name}' posicionada.`, 'purchase'); exitBarricadePlacementMode(); }
     function exitBarricadePlacementMode() { placementModeOverlay.removeEventListener('dblclick', placeBarricadeAtClick); placingBarricade = null; barricadeGhost.style.display = 'none'; placementModeOverlay.style.display = 'none'; togglePause(false); document.getElementById('top-hud').style.display = 'flex'; }
@@ -1279,21 +1489,178 @@ document.addEventListener('DOMContentLoaded', () => {
     function damageMonster(monster, damageAmount) { if (!monster || monster.health <= 0) return; monster.health -= damageAmount; if (monster.element) { const hb = monster.element.querySelector('.monster-health-bar'); if (hb) hb.style.width = `${Math.max(0, monster.health / monster.maxHealth) * 100}%`; monster.element.style.transition = 'transform 0.08s, opacity 0.08s'; monster.element.style.opacity = '0.7'; monster.element.style.transform = 'scale(0.9)'; setTimeout(() => { if(monster.element) { monster.element.style.opacity = '1'; monster.element.style.transform = 'scale(1)'; } }, 80); } }
     function applySlowEffect(monster) { if (!monster || monster.isSlowed) return; clearTimeout(monster.slowTimeout); monster.isSlowed=true; if (monster.element) monster.element.classList.add('slowed'); monster.slowTimeout = setTimeout(() => { if (monster) { monster.isSlowed = false; if(monster.element) monster.element.classList.remove('slowed'); } }, 3000); }
     function handleMonsterDeath(monster, index) { money += monster.money; monstersKilledThisWave++; if (monster.money > 3) { strongMonsterKillCount++; if (strongMonsterKillCount >= 3) { diamonds++; updateDiamondDisplay(); strongMonsterKillCount = 0; logDebugMessage(`+1 Diamante!`, 'diamond'); } } const corpse = monster.element.cloneNode(true); corpse.style.animation = monster.isFlying ? 'flying-monster-death-fall 1s forwards' : 'monster-death-fall 1s forwards'; corpse.querySelector('.monster-health-bar')?.remove(); corpse.style.zIndex = 1; gameArea.appendChild(corpse); corpse.addEventListener('animationend', () => corpse.remove(), { once: true }); if (!monster.isFlying) { const puddle = document.createElement('div'); puddle.className = 'blood-puddle'; puddle.style.left = `${monster.x}px`; puddle.style.top = `${monster.y + monster.element.offsetHeight * 0.7}px`; gameArea.appendChild(puddle); } monster.element.remove(); monsters.splice(index, 1); updateMoneyDisplay(); }
-    async function gameLoop() { if (isGameOver || isPaused) return; const now = Date.now(); if (isPlayerCastleDestroyed) { playerRespawnTimer -= 1000/60; playerRespawnTimerElement.innerHTML = `${Math.ceil(playerRespawnTimer/1000)}s <span>RENASCER</span>`; if (playerRespawnTimer <= 0) { isPlayerCastleDestroyed = false; castleHealth = MAX_CASTLE_HEALTH / 2; castleElement.classList.remove('castle-destroyed'); playerRespawnTimerElement.style.display = 'none'; updateCastleHealthDisplay(false); } } if (gameMode === 'ai' && isCastleAIDestroyed) { aiRespawnTimer -= 1000/60; aiRespawnTimerElement.innerHTML = `${Math.ceil(aiRespawnTimer/1000)}s <span>RENASCER</span>`; if (aiRespawnTimer <= 0) { isCastleAIDestroyed = false; castleHealthAI = MAX_CASTLE_HEALTH_AI / 2; castleAIElement.classList.remove('castle-destroyed'); aiRespawnTimerElement.style.display = 'none'; updateCastleHealthDisplay(true); } } projectiles.forEach((p, i) => { if (!p.element || !p.targetMonster || p.targetMonster.health <= 0) { if (p.element) p.element.remove(); projectiles.splice(i, 1); return; } const tx = p.targetMonster.x + p.targetMonster.element.offsetWidth/2, ty = p.targetMonster.y + p.targetMonster.element.offsetHeight/2; const dist = Math.hypot(tx-p.x, ty-p.y); if (dist < p.speed+5) { handleProjectileHit(p); projectiles.splice(i, 1); } else { p.x += (tx-p.x)/dist*p.speed; p.y += (ty-p.y)/dist*p.speed; p.element.style.left=`${p.x}px`; p.element.style.top=`${p.y}px`; } }); guardianSlots.forEach((guardian, index) => { if (guardian === null) return; const guardianType = activeGameGuardianTypes[guardian.typeId]; if (!guardianType) return; const stats = guardianType.evolutions[guardian.level - 1]; const sourceX = castleElement.offsetLeft + castleElement.offsetWidth + 10; const sourceY = castleElement.offsetTop + (guardianSlotPositions[index].y / 100) * castleElement.offsetHeight; if (now - guardian.lastAttackTime > stats.cooldown) { const target = findNearestMonster(sourceX, sourceY, stats.range); if (target) { guardian.lastAttackTime = now; createProjectile(target, stats, { from: 'guardian', guardianTypeId: guardian.typeId, x: sourceX, y: sourceY }); } } }); if (gameMode === 'ai') { guardianSlotsAI.forEach((guardian, index) => { if (guardian === null) return; const guardianType = activeGameGuardianTypes[guardian.typeId]; if (!guardianType) return; const stats = guardianType.evolutions[guardian.level - 1]; const sourceX = castleAIElement.offsetLeft + castleAIElement.offsetWidth + 10; const sourceY = castleAIElement.offsetTop + (guardianSlotPositions[index].y / 100) * castleAIElement.offsetHeight; if (now - guardian.lastAttackTime > stats.cooldown) { const target = findNearestMonster(sourceX, sourceY, stats.range); if (target) { guardian.lastAttackTime = now; createProjectile(target, stats, { from: 'guardian', guardianTypeId: guardian.typeId, x: sourceX, y: sourceY }); } } }); } for (let i = monsters.length - 1; i >= 0; i--) { const m = monsters[i]; if (m.health <= 0) { handleMonsterDeath(m, i); continue; } if (m.targetCastle.isDestroyed()) { if (m.targetCastle.isAI) { m.targetCastle = { element: castleElement, isAI: false, isDestroyed: () => isPlayerCastleDestroyed }; } else { m.targetCastle = { element: castleAIElement, isAI: true, isDestroyed: () => isCastleAIDestroyed }; } } let castleTargetElement = m.targetCastle.element; let tx = castleTargetElement.offsetLeft + castleTargetElement.offsetWidth; let b = null; for (const bar of barricades) { if (m.x+m.element.offsetWidth>=bar.x && m.x<=bar.x+bar.width && m.y+m.element.offsetHeight/2>bar.y && m.y+m.element.offsetHeight/2<bar.y+bar.height) { castleTargetElement = bar.element; tx = bar.x; b = bar; break; } } const speed = m.isSlowed ? m.speed * 0.5 : m.currentSpeed; const targetY = m.targetCastle.element.offsetTop + m.targetCastle.element.offsetHeight / 2; const monsterY = m.y + m.element.offsetHeight / 2; const yDist = targetY - monsterY; if (Math.abs(yDist) > speed) { m.y += Math.sign(yDist) * speed * 0.7; } if (m.attackType === 'ranged') { if (Math.hypot(m.x - tx, monsterY - targetY) > m.projectile.range) { m.x -= speed; } else if (now - m.lastAttackTime > m.projectile.cooldown) { m.lastAttackTime=now; const mpEl = document.createElement('div'); mpEl.className=`monster-projectile ${m.projectile.type}`; mpEl.style.position='absolute'; monsterProjectiles.push({element:mpEl,x:m.x+m.element.offsetWidth/2,y:m.y+m.element.offsetHeight/2,target:castleTargetElement, ...m.projectile, targetCastleInfo: m.targetCastle}); gameArea.appendChild(mpEl); } } else { if (m.x > tx) { m.x -= speed; } else if (now - m.lastAttackTime > 1000) { m.lastAttackTime = now; if (b) { b.health -= m.damage; const hb = b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`; } else if (!isGodMode) { if (m.targetCastle.isAI) { if (!isCastleAIDestroyed) castleHealthAI -= m.damage; } else { if (!isPlayerCastleDestroyed) castleHealth -= m.damage; } } } } m.element.style.left = `${m.x}px`; m.element.style.top = `${m.y}px`; }
-    monsterProjectiles.forEach((mp,i)=>{ const r=mp.target.getBoundingClientRect(), gr=gameArea.getBoundingClientRect(), tx=(r.left-gr.left)+r.width/2, ty=(r.top-gr.top)+r.height/2, dist=Math.hypot(tx-mp.x, ty-mp.y); if(dist<mp.speed+5){if(!isGodMode){ if(mp.target===castleElement && !isPlayerCastleDestroyed){castleHealth-=mp.damage;} else if(mp.target===castleAIElement && !isCastleAIDestroyed){castleHealthAI-=mp.damage;} else {const b = barricades.find(bar=>bar.element===mp.target); if(b){b.health-=mp.damage; const hb=b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`;}}} if(mp.element) mp.element.remove(); monsterProjectiles.splice(i,1);} else {mp.x+=(tx-mp.x)/dist*mp.speed; mp.y+=(ty-p.y)/dist*mp.speed; mp.element.style.left=`${mp.x}px`; mp.element.style.top=`${mp.y}px`;}});
-    barricades=barricades.filter(b=>{if(b.health<=0&&b.element)b.element.remove();return b.health>0;});
-    if (!isPlayerCastleDestroyed && castleHealth <= 0) { isPlayerCastleDestroyed = true; playerRespawnTimer = 30000; castleElement.classList.add('castle-destroyed'); playerRespawnTimerElement.style.display = 'flex'; }
-    if (gameMode === 'ai' && !isCastleAIDestroyed && castleHealthAI <= 0) { isCastleAIDestroyed = true; aiRespawnTimer = 30000; castleAIElement.classList.add('castle-destroyed'); aiRespawnTimerElement.style.display = 'flex'; }
-    updateCastleHealthDisplay(false); if(gameMode === 'ai') updateCastleHealthDisplay(true);
-    const singlePlayerLost = gameMode === 'single' && castleHealth <= 0; const multiPlayerLost = gameMode === 'ai' && isPlayerCastleDestroyed && isCastleAIDestroyed; if (!isGameOver && (singlePlayerLost || multiPlayerLost)) { endGame("GAME OVER!"); }
-    if (monstersSpawnedThisWave>=totalMonstersToSpawn && monsters.length === 0 && !isGameOver) { if (!isWaveClearMessageSent) { if (gameMode === 'ai') addChatMessage("IA", getRandomPhrase('waveEnd'), true); isWaveClearMessageSent = true; } startNextWave(); }
+    async function gameLoop() { 
+        if (isGameOver || isPaused) return; 
+        const now = Date.now(); 
+        if (isPlayerCastleDestroyed) { 
+            playerRespawnTimer -= 1000/60; 
+            playerRespawnTimerElement.innerHTML = `${Math.ceil(playerRespawnTimer/1000)}s <span>RENASCER</span>`; 
+            if (playerRespawnTimer <= 0) { 
+                isPlayerCastleDestroyed = false; 
+                castleHealth = MAX_CASTLE_HEALTH / 2; 
+                castleElement.classList.remove('castle-destroyed'); 
+                playerRespawnTimerElement.style.display = 'none'; 
+                updateCastleHealthDisplay(false); 
+            } 
+        } 
+        if (gameMode === 'ai' && isCastleAIDestroyed) { 
+            aiRespawnTimer -= 1000/60; 
+            aiRespawnTimerElement.innerHTML = `${Math.ceil(aiRespawnTimer/1000)}s <span>RENASCER</span>`; 
+            if (aiRespawnTimer <= 0) { 
+                isCastleAIDestroyed = false; 
+                castleHealthAI = MAX_CASTLE_HEALTH_AI / 2; 
+                castleAIElement.classList.remove('castle-destroyed'); 
+                aiRespawnTimerElement.style.display = 'none'; 
+                updateCastleHealthDisplay(true); 
+            } 
+        } 
+        projectiles.forEach((p, i) => { 
+            if (!p.element || !p.targetMonster || p.targetMonster.health <= 0) { 
+                if (p.element) p.element.remove(); 
+                projectiles.splice(i, 1); 
+                return; 
+            } 
+            const tx = p.targetMonster.x + p.targetMonster.element.offsetWidth/2, ty = p.targetMonster.y + p.targetMonster.element.offsetHeight/2; 
+            const dist = Math.hypot(tx-p.x, ty-p.y); 
+            if (dist < p.speed+5) { 
+                handleProjectileHit(p); 
+                projectiles.splice(i, 1); 
+            } else { 
+                p.x += (tx-p.x)/dist*p.speed; 
+                p.y += (ty-p.y)/dist*p.speed; 
+                p.element.style.left=`${p.x}px`; 
+                p.element.style.top=`${p.y}px`; 
+            } 
+        }); 
+        guardianSlots.forEach((guardian, index) => { 
+            if (guardian === null) return; 
+            const guardianType = activeGameGuardianTypes[guardian.typeId]; 
+            if (!guardianType) return; 
+            const stats = guardianType.evolutions[guardian.level - 1]; 
+            const sourceX = castleElement.offsetLeft + castleElement.offsetWidth + 10; 
+            const sourceY = castleElement.offsetTop + (guardianSlotPositions[index].y / 100) * castleElement.offsetHeight; 
+            if (now - guardian.lastAttackTime > stats.cooldown) { 
+                const target = findNearestMonster(sourceX, sourceY, stats.range); 
+                if (target) { 
+                    guardian.lastAttackTime = now; 
+                    let finalStats = {...stats};
+                    if (isRageActive) {
+                        finalStats.damage *= BOBS_SHOP_ITEMS.rage.effect.multiplier;
+                    }
+                    createProjectile(target, finalStats, { from: 'guardian', guardianTypeId: guardian.typeId, x: sourceX, y: sourceY }); 
+                } 
+            } 
+        }); 
+        if (gameMode === 'ai') { 
+            guardianSlotsAI.forEach((guardian, index) => { 
+                if (guardian === null) return; 
+                const guardianType = activeGameGuardianTypes[guardian.typeId]; 
+                if (!guardianType) return; 
+                const stats = guardianType.evolutions[guardian.level - 1]; 
+                const sourceX = castleAIElement.offsetLeft + castleAIElement.offsetWidth + 10; 
+                const sourceY = castleAIElement.offsetTop + (guardianSlotPositions[index].y / 100) * castleAIElement.offsetHeight; 
+                if (now - guardian.lastAttackTime > stats.cooldown) { 
+                    const target = findNearestMonster(sourceX, sourceY, stats.range); 
+                    if (target) { 
+                        guardian.lastAttackTime = now; 
+                        createProjectile(target, stats, { from: 'guardian', guardianTypeId: guardian.typeId, x: sourceX, y: sourceY }); 
+                    } 
+                } 
+            }); 
+        } 
+        for (let i = monsters.length - 1; i >= 0; i--) { 
+            const m = monsters[i]; 
+            if (m.health <= 0) { 
+                handleMonsterDeath(m, i); 
+                continue; 
+            }
+            if (m.stunnedUntil && Date.now() < m.stunnedUntil) {
+                continue; 
+            }
+            if (m.targetCastle.isDestroyed()) { 
+                if (m.targetCastle.isAI) { 
+                    m.targetCastle = { element: castleElement, isAI: false, isDestroyed: () => isPlayerCastleDestroyed }; 
+                } else { 
+                    m.targetCastle = { element: castleAIElement, isAI: true, isDestroyed: () => isCastleAIDestroyed }; 
+                } 
+            } 
+            let castleTargetElement = m.targetCastle.element; 
+            let tx = castleTargetElement.offsetLeft + castleTargetElement.offsetWidth; 
+            let b = null; 
+            for (const bar of barricades) { 
+                if (m.x+m.element.offsetWidth>=bar.x && m.x<=bar.x+bar.width && m.y+m.element.offsetHeight/2>bar.y && m.y+m.element.offsetHeight/2<bar.y+bar.height) { 
+                    castleTargetElement = bar.element; 
+                    tx = bar.x; 
+                    b = bar; 
+                    break; 
+                } 
+            } 
+            const speed = m.isSlowed ? m.speed * 0.5 : m.currentSpeed; 
+            const targetY = m.targetCastle.element.offsetTop + m.targetCastle.element.offsetHeight / 2; 
+            const monsterY = m.y + m.element.offsetHeight / 2; 
+            const yDist = targetY - monsterY; 
+            if (Math.abs(yDist) > speed) { 
+                m.y += Math.sign(yDist) * speed * 0.7; 
+            } 
+            if (m.attackType === 'ranged') { 
+                if (Math.hypot(m.x - tx, monsterY - targetY) > m.projectile.range) { 
+                    m.x -= speed; 
+                } else if (now - m.lastAttackTime > m.projectile.cooldown) { 
+                    m.lastAttackTime=now; 
+                    const mpEl = document.createElement('div'); 
+                    mpEl.className=`monster-projectile ${m.projectile.type}`; 
+                    mpEl.style.position='absolute'; 
+                    monsterProjectiles.push({element:mpEl,x:m.x+m.element.offsetWidth/2,y:m.y+m.element.offsetHeight/2,target:castleTargetElement, ...m.projectile, targetCastleInfo: m.targetCastle}); 
+                    gameArea.appendChild(mpEl); 
+                } 
+            } else { 
+                if (m.x > tx) { 
+                    m.x -= speed; 
+                } else if (now - m.lastAttackTime > 1000) { 
+                    m.lastAttackTime = now; 
+                    if (b) { 
+                        b.health -= m.damage; 
+                        const hb = b.element.querySelector('.barricade-health-bar'); 
+                        if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`; 
+                    } else if (!isGodMode) { 
+                        if (m.targetCastle.isAI) { 
+                            if (!isCastleAIDestroyed) castleHealthAI -= m.damage; 
+                        } else { 
+                            if (!isPlayerCastleDestroyed) castleHealth -= m.damage; 
+                        } 
+                    } 
+                } 
+            } 
+            m.element.style.left = `${m.x}px`; 
+            m.element.style.top = `${m.y}px`; 
+        }
+        monsterProjectiles.forEach((mp,i)=>{ const r=mp.target.getBoundingClientRect(), gr=gameArea.getBoundingClientRect(), tx=(r.left-gr.left)+r.width/2, ty=(r.top-gr.top)+r.height/2, dist=Math.hypot(tx-mp.x, ty-p.y); if(dist<mp.speed+5){if(!isGodMode){ if(mp.target===castleElement && !isPlayerCastleDestroyed){castleHealth-=mp.damage;} else if(mp.target===castleAIElement && !isCastleAIDestroyed){castleHealthAI-=mp.damage;} else {const b = barricades.find(bar=>bar.element===mp.target); if(b){b.health-=mp.damage; const hb=b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`;}}} if(mp.element) mp.element.remove(); monsterProjectiles.splice(i,1);} else {mp.x+=(tx-mp.x)/dist*mp.speed; mp.y+=(ty-p.y)/dist*mp.speed; mp.element.style.left=`${mp.x}px`; mp.element.style.top=`${mp.y}px`;}});
+        barricades=barricades.filter(b=>{if(b.health<=0&&b.element)b.element.remove();return b.health>0;});
+        if (!isPlayerCastleDestroyed && castleHealth <= 0) { isPlayerCastleDestroyed = true; playerRespawnTimer = 30000; castleElement.classList.add('castle-destroyed'); playerRespawnTimerElement.style.display = 'flex'; }
+        if (gameMode === 'ai' && !isCastleAIDestroyed && castleHealthAI <= 0) { isCastleAIDestroyed = true; aiRespawnTimer = 30000; castleAIElement.classList.add('castle-destroyed'); aiRespawnTimerElement.style.display = 'flex'; }
+        updateCastleHealthDisplay(false); if(gameMode === 'ai') updateCastleHealthDisplay(true);
+        const singlePlayerLost = gameMode === 'single' && castleHealth <= 0; const multiPlayerLost = gameMode === 'ai' && isPlayerCastleDestroyed && isCastleAIDestroyed; if (!isGameOver && (singlePlayerLost || multiPlayerLost)) { endGame("GAME OVER!"); }
+        if (monstersSpawnedThisWave>=totalMonstersToSpawn && monsters.length === 0 && !isGameOver) { if (!isWaveClearMessageSent) { if (gameMode === 'ai') addChatMessage("IA", getRandomPhrase('waveEnd'), true); isWaveClearMessageSent = true; } startNextWave(); }
     }
     async function endGame(message) { isGameOver = true; clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); castleAbilityIntervals.forEach(clearInterval); if(castleAbilityIntervalsAI) castleAbilityIntervalsAI.forEach(clearInterval); stopSocialPoll(); stopChatPoll(); logDebugMessage(`Fim de jogo: ${message}`, 'error'); const { trophiesGained, newTotalTrophies } = await updatePlayerStatsAndTrophies(); gameOverTitle.textContent = message; if (currentUser && !isDebugModeEnabled && !isGodMode) { postGameStats.innerHTML = `Estatísticas da Partida:<br>Dinheiro: $${money} | Diamantes: ${diamonds} | Onda: ${currentWave}<br>Troféus Ganhos: ${trophiesGained > 0 ? '+' : ''}${trophiesGained} 🏆<br>Total de Troféus: ${Math.floor(newTotalTrophies)} 🏆`; postGameStats.style.display = 'block'; } else { postGameStats.style.display = 'none'; } gameMessage.style.display = 'flex'; }
     function startGameLoop() { if (gameLoopInterval) clearInterval(gameLoopInterval); gameLoopInterval = setInterval(gameLoop, 1000 / 60); }
     function togglePause(forcePause = null) { isPaused = forcePause !== null ? forcePause : !isPaused; logDebugMessage(isPaused ? "Jogo Pausado" : "Jogo Retomado"); pauseButton.textContent = isPaused ? 'Continuar' : 'Pause'; if (isPaused) { clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); } else { startGameLoop(); if (monstersSpawnedThisWave < totalMonstersToSpawn) monsterSpawnInterval = setInterval(() => { if(monstersSpawnedThisWave < totalMonstersToSpawn) spawnMonster(); else clearInterval(monsterSpawnInterval); }, 500); } if (placingBarricade) barricadeGhost.style.display = isPaused ? 'block' : 'none'; }
     function showIntroScreen() { introScreen.style.display = 'flex'; loadingScreen.style.display = 'none'; startScreen.style.display = 'none'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; setTimeout(() => { introScreen.style.display = 'none'; showLoadingScreen(); }, 4000); }
     function showLoadingScreen() { loadingScreen.style.display = 'flex'; startScreen.style.display = 'none'; gameContainer.style.display = 'block'; setTimeout(() => { loadingScreen.style.display = 'none'; showStartScreen(); }, 1000); }
-    function showStartScreen() { gameMessage.style.display = 'none'; startScreen.style.display = 'flex'; modScreen.style.display = 'none'; modEditorScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; playerCastleIndicator.style.display = 'none'; socialOverlay.style.display = 'none'; dmGroupsOverlay.style.display = 'none'; gameContainer.style.display = 'block'; renderSaveSlots(); }
+    function showStartScreen() { 
+        gameMessage.style.display = 'none'; 
+        startScreen.style.display = 'flex'; 
+        modScreen.style.display = 'none'; 
+        modEditorScreen.style.display = 'none'; 
+        multiplayerLobbyScreen.style.display = 'none'; 
+        modSelectionScreen.style.display = 'none'; 
+        playerCastleIndicator.style.display = 'none'; 
+        socialOverlay.style.display = 'none'; 
+        dmGroupsOverlay.style.display = 'none'; 
+        gameContainer.style.display = 'block'; 
+        bobsInventoryToggleButton.style.display = 'none';
+        renderSaveSlots(); 
+    }
     function showLobbyScreen() { if (!currentUser) { showCustomAlert("Você precisa estar logado para acessar o modo multiplayer."); return; } startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'flex'; }
     
     function renderModSelectionLists() {
@@ -1332,14 +1699,166 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startGame(mode, options = {}) { startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'none'; modSelectionScreen.style.display = 'none'; gameContainer.style.display = 'block'; initializeGame(mode, options); }
-    function processCommand(commandStr) { logDebugMessage(`> ${commandStr}`, 'command'); const parts = commandStr.toLowerCase().split(' '); const command = parts[0]; const args = parts.slice(1); switch(command) { case 'money': money = parseInt(args[0]) || money; updateMoneyDisplay(); logDebugMessage(`Dinheiro definido para $${money}`); break; case 'diamonds': diamonds = parseInt(args[0]) || diamonds; updateDiamondDisplay(); logDebugMessage(`Diamantes definidos para ${diamonds}`); break; case 'wave': const waveNum = parseInt(args[0]); if(waveNum > 0) { monsters.forEach(m => m.element?.remove()); monsters = []; currentWave = waveNum - 1; startNextWave(); logDebugMessage(`Pulando para a onda ${waveNum}`); } else { logDebugMessage('Uso: wave [número > 0]', 'error');} break; case 'spawn': const monsterName = args[0] || ''; const amount = parseInt(args[1]) || 1; const monsterType = activeGameMonsterTypes.find(m => m.name.toLowerCase().includes(monsterName)); if (monsterType) { for (let i = 0; i < amount; i++) { spawnMonster(monsterType.id); } logDebugMessage(`${amount}x ${monsterType.name} spawnado(s).`); } else { logDebugMessage(`Monstro '${monsterName}' não encontrado.`, 'error'); } break; case 'health': const newHealth = parseInt(args[0]) || MAX_CASTLE_HEALTH; castleHealth = newHealth; if(gameMode === 'ai') castleHealthAI = parseInt(args[0]) || MAX_CASTLE_HEALTH_AI; updateCastleHealthDisplay(false); if(gameMode === 'ai') updateCastleHealthDisplay(true); logDebugMessage(`Vida dos castelos definida para ${args[0]}.`); break; case 'god': isGodMode = !isGodMode; logDebugMessage(`Modo Deus ${isGodMode ? 'ATIVADO' : 'DESATIVADO'}.`, 'godmode'); break; case 'killall': monsters.forEach(m => m.health = 0); logDebugMessage(`Todos os monstros foram derrotados.`); break; case 'help': logDebugMessage("Comandos: money, diamonds, wave, spawn, health, god, killall, help"); break; default: logDebugMessage(`Comando '${command}' desconhecido.`, 'error'); break; } }
+    function processCommand(commandStr) { 
+        logDebugMessage(`> ${commandStr}`, 'command'); 
+        const parts = commandStr.toLowerCase().split(' '); 
+        const command = parts[0]; 
+        const args = parts.slice(1); 
+        switch(command) { 
+            case 'money': 
+                money = parseInt(args[0]) || money; 
+                updateMoneyDisplay(); 
+                logDebugMessage(`Dinheiro definido para $${money}`); 
+                break; 
+            case 'diamonds': 
+                diamonds = parseInt(args[0]) || diamonds; 
+                updateDiamondDisplay(); 
+                logDebugMessage(`Diamantes definidos para ${diamonds}`); 
+                break;
+            case 'bobs':
+                bobs = parseInt(args[0]) || bobs;
+                updateBobsDisplay();
+                logDebugMessage(`Bobs definidos para ${bobs}`);
+                break;
+            case 'wave': 
+                const waveNum = parseInt(args[0]); 
+                if(waveNum > 0) { 
+                    monsters.forEach(m => m.element?.remove()); 
+                    monsters = []; 
+                    currentWave = waveNum - 1; 
+                    startNextWave(); 
+                    logDebugMessage(`Pulando para a onda ${waveNum}`); 
+                } else { 
+                    logDebugMessage('Uso: wave [número > 0]', 'error');
+                } 
+                break; 
+            case 'spawn': 
+                const monsterName = args[0] || ''; 
+                const amount = parseInt(args[1]) || 1; 
+                const monsterType = activeGameMonsterTypes.find(m => m.name.toLowerCase().includes(monsterName)); 
+                if (monsterType) { 
+                    for (let i = 0; i < amount; i++) { 
+                        spawnMonster(monsterType.id); 
+                    } 
+                    logDebugMessage(`${amount}x ${monsterType.name} spawnado(s).`); 
+                } else { 
+                    logDebugMessage(`Monstro '${monsterName}' não encontrado.`, 'error'); 
+                } 
+                break; 
+            case 'health': 
+                const newHealth = parseInt(args[0]) || MAX_CASTLE_HEALTH; 
+                castleHealth = newHealth; 
+                if(gameMode === 'ai') castleHealthAI = parseInt(args[0]) || MAX_CASTLE_HEALTH_AI; 
+                updateCastleHealthDisplay(false); 
+                if(gameMode === 'ai') updateCastleHealthDisplay(true); 
+                logDebugMessage(`Vida dos castelos definida para ${args[0]}.`); 
+                break; 
+            case 'god': 
+                isGodMode = !isGodMode; 
+                logDebugMessage(`Modo Deus ${isGodMode ? 'ATIVADO' : 'DESATIVADO'}.`, 'godmode'); 
+                break; 
+            case 'killall': 
+                monsters.forEach(m => m.health = 0); 
+                logDebugMessage(`Todos os monstros foram derrotados.`); 
+                break; 
+            case 'help': 
+                logDebugMessage("Comandos: money, diamonds, bobs, wave, spawn, health, god, killall, help"); 
+                break; 
+            default: 
+                logDebugMessage(`Comando '${command}' desconhecido.`, 'error'); 
+                break; 
+        } 
+    }
     function getSaveGames() { try { const saves = localStorage.getItem('castleDefenseSaves'); return saves ? JSON.parse(saves) : []; } catch (e) { console.error("Erro ao ler jogos salvos:", e); localStorage.removeItem('castleDefenseSaves'); return []; } }
     function saveGameList(saves) { localStorage.setItem('castleDefenseSaves', JSON.stringify(saves)); }
     function renderSaveSlots() { const saves = getSaveGames(); saveSlotsContainer.innerHTML = ''; for (let i = 0; i < MAX_SAVE_SLOTS; i++) { const save = saves[i]; const slot = document.createElement('div'); slot.classList.add('save-slot'); if (save) { const healthPercent = (save.castleHealth / save.maxCastleHealth) * 100; slot.innerHTML = `<div class="save-slot-header"><span class="save-slot-name">${save.name}</span><div class="save-slot-wave">Onda ${save.currentWave}</div></div><div class="save-slot-stats"><span>$${save.money}</span><span>💎 ${save.diamonds}</span></div><div class="save-slot-progress-container"><div class="save-slot-progress-bar" style="width: ${healthPercent}%;"></div></div><button class="save-slot-delete-button" data-index="${i}">X</button>`; slot.dataset.index = i; } else { slot.classList.add('empty'); slot.textContent = `[ Jogo Vazio ${i + 1} ]`; } saveSlotsContainer.appendChild(slot); } }
-    async function saveCurrentGame(saveIndex = -1) { if (gameMode === 'ai') { await showCustomAlert("Não é possível salvar jogos no modo Multiplayer."); return; } let saves = getSaveGames(); let saveName; if (saveIndex !== -1 && saves[saveIndex]) { saveName = saves[saveIndex].name; } else { if (saves.length >= MAX_SAVE_SLOTS) { await showCustomAlert('Máximo de saves atingido!'); return; } saveName = await showCustomPrompt("Nome para seu jogo salvo:", `Jogo ${saves.length + 1}`); if (!saveName || saveName.trim() === '') return; } const gameState = { name: saveName.trim(), money, diamonds, currentWave, castleHealth, maxCastleHealth: MAX_CASTLE_HEALTH, currentCastleType, currentCastleEvolution, purchasedWeapons, currentWeaponIndex, guardianInventory, guardianSlots, barricades: barricades.map(b => ({ typeId: b.typeId, health: b.health, x: b.x, y: b.y })) }; if (saveIndex !== -1) { saves[saveIndex] = gameState; logDebugMessage(`Jogo "${saveName}" sobrescrito.`); } else { saves.push(gameState); } saveGameList(saves); if (saveIndex === -1) { await showCustomAlert(`Jogo "${saveName}" salvo!`); } renderSaveSlots(); }
-    function loadGameFromState(state) { money = state.money; diamonds = state.diamonds; currentWave = state.currentWave - 1; purchasedWeapons = state.purchasedWeapons; currentWeaponIndex = state.currentWeaponIndex; guardianInventory = state.guardianInventory || []; guardianSlots = state.guardianSlots || [null, null, null]; isGameOver = false; isPaused = false; updateCastle(state.currentCastleType, state.currentCastleEvolution, { loadedHealth: state.castleHealth }); if(state.barricades) { barricades = []; state.barricades.forEach(bData => { const type = activeGameBarricadeTypes.find(t => t.id === bData.typeId); if(type) { placeBarricade(type, { x: bData.x, y: bData.y, health: bData.health }); } }); } updateGuardianVisuals(); updateGuardianPanel(); updateCastleHealthDisplay(false); updateDiamondDisplay(); updateMoneyDisplay(); startNextWave(); }
+    async function saveCurrentGame(saveIndex = -1) { 
+        if (gameMode === 'ai') { 
+            await showCustomAlert("Não é possível salvar jogos no modo Multiplayer."); 
+            return; 
+        } 
+        let saves = getSaveGames(); 
+        let saveName; 
+        if (saveIndex !== -1 && saves[saveIndex]) { 
+            saveName = saves[saveIndex].name; 
+        } else { 
+            if (saves.length >= MAX_SAVE_SLOTS) { 
+                await showCustomAlert('Máximo de saves atingido!'); 
+                return; 
+            } 
+            saveName = await showCustomPrompt("Nome para seu jogo salvo:", `Jogo ${saves.length + 1}`); 
+            if (!saveName || saveName.trim() === '') return; 
+        } 
+        const gameState = { 
+            name: saveName.trim(), 
+            money, 
+            diamonds, 
+            currentWave, 
+            castleHealth, 
+            maxCastleHealth: MAX_CASTLE_HEALTH,
+            isRageActive,
+            rageEndTime: isRageActive ? Date.now() + rageTimeout._idleTimeout : null,
+            currentCastleType, 
+            currentCastleEvolution, 
+            purchasedWeapons, 
+            currentWeaponIndex, 
+            guardianInventory, 
+            guardianSlots, 
+            barricades: barricades.map(b => ({ typeId: b.typeId, health: b.health, x: b.x, y: b.y })) 
+        }; 
+        if (saveIndex !== -1) { 
+            saves[saveIndex] = gameState; 
+            logDebugMessage(`Jogo "${saveName}" sobrescrito.`); 
+        } else { 
+            saves.push(gameState); 
+        } 
+        saveGameList(saves); 
+        if (saveIndex === -1) { 
+            await showCustomAlert(`Jogo "${saveName}" salvo!`); 
+        } 
+        renderSaveSlots(); 
+    }
+    function loadGameFromState(state) {
+        money = state.money;
+        diamonds = state.diamonds;
+        bobs = state.bobs || 0;
+        currentWave = state.currentWave - 1;
+        purchasedWeapons = state.purchasedWeapons;
+        currentWeaponIndex = state.currentWeaponIndex;
+        guardianInventory = state.guardianInventory || [];
+        guardianSlots = state.guardianSlots || [null, null, null];
+        isGameOver = false;
+        isPaused = false;
+        updateCastle(state.currentCastleType, state.currentCastleEvolution, { loadedHealth: state.castleHealth, loadedMaxHealth: state.maxCastleHealth });
+        if (state.barricades) {
+            barricades = [];
+            state.barricades.forEach(bData => {
+                const type = activeGameBarricadeTypes.find(t => t.id === bData.typeId);
+                if (type) {
+                    placeBarricade(type, { x: bData.x, y: bData.y, health: bData.health });
+                }
+            });
+        }
+        if (state.isRageActive && state.rageEndTime > Date.now()) {
+            const remainingDuration = state.rageEndTime - Date.now();
+            executeInstantSpell('rage'); // Reativa a fúria
+            clearTimeout(rageTimeout);
+            rageTimeout = setTimeout(() => {
+                isRageActive = false;
+                document.querySelectorAll('.guardian, .castle-soldier').forEach(g => g.classList.remove('rage-active'));
+                castleElement.classList.remove('rage-active');
+            }, remainingDuration);
+        }
+        updateGuardianVisuals();
+        updateGuardianPanel();
+        updateCastleHealthDisplay(false);
+        updateDiamondDisplay();
+        updateBobsDisplay();
+        updateMoneyDisplay();
+        startNextWave();
+    }
     
-    // --- Event Listeners (Main) ---
+    // --- Event Listeners ---
     enableDebugButton.addEventListener('click', () => { isDebugModeEnabled = !isDebugModeEnabled; enableDebugButton.textContent = `Debug: ${isDebugModeEnabled ? 'ON' : 'OFF'}`; enableDebugButton.classList.toggle('active', isDebugModeEnabled); });
     toggleLogButton.addEventListener('click', () => { debugLogOverlay.style.display = debugLogOverlay.style.display === 'flex' ? 'none' : 'flex'; });
     closeLogButton.addEventListener('click', () => { debugLogOverlay.style.display = 'none'; });
@@ -1347,8 +1866,29 @@ document.addEventListener('DOMContentLoaded', () => {
     commandInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && commandInput.value) { processCommand(commandInput.value); commandInput.value = ''; } });
     helpButton.addEventListener('click', () => { commandHelpOverlay.style.display = 'flex'; });
     closeHelpButton.addEventListener('click', () => { commandHelpOverlay.style.display = 'none'; });
-    gameArea.addEventListener('click', (e) => { if (isGameOver || isPaused || placingBarricade) return; const clicked = monsters.find(m => { if(!m.element) return false; const rect = m.element.getBoundingClientRect(); return e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom; }); shootProjectile(clicked); });
-    gameContainer.addEventListener('mousemove', (e) => { if (placingBarricade) { const r = gameContainer.getBoundingClientRect(); barricadeGhost.style.left = `${e.clientX - r.left}px`; barricadeGhost.style.top = `${e.clientY - r.top}px`; } });
+    gameArea.addEventListener('click', (e) => { 
+        if (isGameOver || isPaused || placingBarricade || placingSpell) return; 
+        const clicked = monsters.find(m => { if(!m.element) return false; const rect = m.element.getBoundingClientRect(); return e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom; }); 
+        shootProjectile(clicked); 
+    });
+    gameContainer.addEventListener('mousemove', (e) => { 
+        if (placingBarricade) { 
+            const r = gameContainer.getBoundingClientRect(); 
+            barricadeGhost.style.left = `${e.clientX - r.left}px`; 
+            barricadeGhost.style.top = `${e.clientY - r.top}px`; 
+        }
+        if (placingSpell) {
+            const r = gameContainer.getBoundingClientRect();
+            const spell = BOBS_SHOP_ITEMS[placingSpell];
+            placementReticle.style.left = `${e.clientX - r.left}px`;
+            placementReticle.style.top = `${e.clientY - r.top}px`;
+            placementReticle.style.width = `${spell.effect.radius * 2}px`;
+            placementReticle.style.height = `${spell.effect.radius * 2}px`;
+            placementReticle.style.display = 'block';
+        } else {
+            placementReticle.style.display = 'none';
+        }
+    });
     document.querySelector('#shop-content-wrapper').addEventListener('click', (e) => { const button = e.target.closest('.buy-button'); if (button) { const type = button.dataset.itemType; const id = button.dataset.itemId; if (type === 'weapon') { const weaponId = parseInt(id); if (purchasedWeapons[weaponId]) { currentWeaponIndex = weaponId; } else if (money >= weapons[weaponId].cost) { money -= weapons[weaponId].cost; purchasedWeapons[weaponId] = true; currentWeaponIndex = weaponId; } } else if (type === 'barricade') { const barricadeType = activeGameBarricadeTypes.find(b => b.id === id); if (barricadeType && money >= barricadeType.cost) { prepareBarricadePlacement(barricadeType); } } else if (type === 'special') { const item = specialItems[id]; if (item && diamonds >= item.cost) { const needsHeal = (!isPlayerCastleDestroyed && castleHealth < MAX_CASTLE_HEALTH) || (gameMode === 'ai' && !isCastleAIDestroyed && castleHealthAI < MAX_CASTLE_HEALTH_AI); if (needsHeal) { diamonds -= item.cost; if (!isPlayerCastleDestroyed) castleHealth = MAX_CASTLE_HEALTH; if (gameMode === 'ai' && !isCastleAIDestroyed) castleHealthAI = MAX_CASTLE_HEALTH_AI; logDebugMessage('Vida recuperada!', 'purchase'); updateDiamondDisplay(); updateCastleHealthDisplay(false); if (gameMode === 'ai') updateCastleHealthDisplay(true); } } } updateMoneyDisplay(); } const guardianBuyBtn = e.target.closest('.guardian-buy-btn:not(:disabled)'); if (guardianBuyBtn) { const typeId = guardianBuyBtn.dataset.typeId; const type = activeGameGuardianTypes[typeId]; if (money >= type.evolutions[0].cost) { money -= type.evolutions[0].cost; guardianInventory.push({ typeId: typeId, level: 1, lastAttackTime: 0 }); logDebugMessage(`${type.name} comprado.`, 'purchase'); updateMoneyDisplay(); } } });
     castleShopContainer.addEventListener('click', (e) => { const mainBtn = e.target.closest('.castle-main-btn'); const evoBtn = e.target.closest('.castle-evo-btn:not(:disabled)'); const item = e.target.closest('.castle-shop-item'); if (!item || item.classList.contains('disabled')) return; const castleId = item.dataset.castleId; if (mainBtn) { if (castleId !== currentCastleType) { const newCastleInfo = castles[castleId][0]; const cost = newCastleInfo.cost || 0; const costType = newCastleInfo.costType || 'money'; let canAfford = false; if (costType === 'diamond') { if (diamonds >= cost) { diamonds -= cost; canAfford = true; } } else { if (money >= cost) { money -= cost; canAfford = true; } } if (canAfford) { logDebugMessage(`Castelo trocado para: ${newCastleInfo.name}`, 'purchase'); updateCastle(castleId, 0, { isAI: false }); } } } else if (evoBtn) {  evolveCurrentCastle(false);  } });
     guardianUiToggleButton.addEventListener('click', () => guardianManagementPanel.classList.toggle('open'));
@@ -1366,7 +1906,7 @@ document.addEventListener('DOMContentLoaded', () => {
     backToMenuNavButton.addEventListener('click', async () => { const playerIsPlaying = !isGameOver && currentWave > 0; if (playerIsPlaying) { if (loadedSaveSlotIndex !== null) { await saveCurrentGame(loadedSaveSlotIndex); } else if (gameMode === 'single') { const wantToSave = await showCustomConfirm("Deseja salvar seu progresso antes de sair?"); if (wantToSave) await saveCurrentGame(); } else { const wantToLeave = await showCustomConfirm("Tem certeza que quer voltar ao menu? O progresso da partida será perdido."); if (!wantToLeave) return; } } clearInterval(gameLoopInterval); clearInterval(monsterSpawnInterval); clearInterval(aiLogicInterval); clearInterval(aiAttackInterval); stopSocialPoll(); stopChatPoll(); showStartScreen(); });
     savePanelToggle.addEventListener('click', () => savedGamesPanel.classList.toggle('collapsed'));
     saveSlotsContainer.addEventListener('click', async e => { const slot = e.target.closest('.save-slot:not(.empty)'); const deleteBtn = e.target.closest('.save-slot-delete-button'); if (deleteBtn) { e.stopPropagation(); const index = parseInt(deleteBtn.dataset.index); let saves = getSaveGames(); const wantToDelete = await showCustomConfirm(`Tem certeza que deseja apagar o jogo "${saves[index].name}"?`); if (wantToDelete) { saves.splice(index, 1); saveGameList(saves); renderSaveSlots(); } } else if (slot) { const index = parseInt(slot.dataset.index); const saves = getSaveGames(); if (saves[index]) { startGame('single', {savedState: saves[index], saveIndex: index}); } } });
-    const commands = [ { cmd: 'money 50000', desc: 'Adiciona X de dinheiro.' }, { cmd: 'diamonds 200', desc: 'Adiciona X de diamante.' }, { cmd: 'wave 15', desc: 'Pula para a onda desejada.' }, { cmd: 'spawn zumbi 10', desc: 'Exemplo: Spawna 10 zumbis.' }, { cmd: 'health 999', desc: 'Define a vida do castelo para o número desejado.' }, { cmd: 'god', desc: 'Ativa/Desativa a invencibilidade.' }, { cmd: 'killall', desc: 'Derrota todos os monstros.' }, { cmd: 'help', desc: 'Mostra esta lista de ajuda.' } ];
+    const commands = [ { cmd: 'money 50000', desc: 'Adiciona X de dinheiro.' }, { cmd: 'diamonds 200', desc: 'Adiciona X de diamante.' }, { cmd: 'bobs 1000', desc: 'Adiciona X de Bobs.' }, { cmd: 'wave 15', desc: 'Pula para a onda desejada.' }, { cmd: 'spawn zumbi 10', desc: 'Exemplo: Spawna 10 zumbis.' }, { cmd: 'health 999', desc: 'Define a vida do castelo para o número desejado.' }, { cmd: 'god', desc: 'Ativa/Desativa a invencibilidade.' }, { cmd: 'killall', desc: 'Derrota todos os monstros.' }, { cmd: 'help', desc: 'Mostra esta lista de ajuda.' } ];
     commandHelpContent.innerHTML = '<h3>Lista de Comandos</h3>';
     commands.forEach(c => { const entry = document.createElement('div'); entry.className = 'command-entry'; entry.innerHTML = `<div class="command-desc"><code>${c.cmd.split(' ')[0]}</code> - ${c.desc}</div><button class="copy-command-btn" data-command="${c.cmd}"><div class="clipboard-icon"></div><span class="copied-icon">✓</span></button>`; commandHelpContent.appendChild(entry); });
     document.querySelectorAll('.copy-command-btn').forEach(btn => { btn.addEventListener('click', (e) => { const button = e.currentTarget; const commandToCopy = button.dataset.command; navigator.clipboard.writeText(commandToCopy).then(() => { const clipboardIcon = button.querySelector('.clipboard-icon'); const copiedIcon = button.querySelector('.copied-icon'); clipboardIcon.style.display = 'none'; copiedIcon.style.display = 'inline'; setTimeout(() => { clipboardIcon.style.display = 'block'; copiedIcon.style.display = 'none'; }, 1000); }); }); });
@@ -1391,7 +1931,16 @@ document.addEventListener('DOMContentLoaded', () => {
     pixelGrid.addEventListener('mouseover', (e) => { if (!isDrawing || !e.target.classList.contains('pixel')) return; if (editorCurrentTool === 'pencil') { e.target.style.backgroundColor = editorCurrentColor; } else if (editorCurrentTool === 'eraser') { e.target.style.backgroundColor = 'transparent'; } });
     document.addEventListener('mouseup', () => { isDrawing = false; });
     addMonsterToWaveBtn.addEventListener('click', () => { const entryDiv = document.createElement('div'); entryDiv.className = 'wave-monster-entry'; const select = document.createElement('select'); populateMonsterDropdown(select); const input = document.createElement('input'); input.type = 'number'; input.value = '5'; input.min = '1'; const removeBtn = document.createElement('button'); removeBtn.className = 'mod-button danger'; removeBtn.textContent = 'X'; removeBtn.style.fontSize = '0.7em'; removeBtn.style.padding = '2px 6px'; removeBtn.onclick = () => entryDiv.remove(); entryDiv.append(select, ' Qtd: ', input, removeBtn); waveMonsterList.appendChild(entryDiv); });
-    saveModButton.addEventListener('click', async () => { const modData = { id: `custom_${Date.now()}`, type: editorCurrentType, active: true }; try { const getNumValue = (id, f) => { const i = document.getElementById(id); if (!i) throw new Error(`Input não encontrado para ${f}`); const v = parseFloat(i.value); if (isNaN(v)) throw new Error(`'${f}' precisa ser um número.`); return v; }; modData.name = document.getElementById('mod-name').value.trim(); if (!modData.name) throw new Error("O nome é obrigatório."); if (modData.type !== 'wave') { modData.pixelData = Array.from(document.querySelectorAll('#pixel-grid .pixel')).map(p => p.style.backgroundColor || 'transparent'); modData.gridWidth = editorGridSize.width; modData.gridHeight = editorGridSize.height; modData.width = getNumValue('mod-width', 'Largura'); modData.height = getNumValue('mod-height', 'Altura'); if (modData.width <= 0 || modData.height <= 0) throw new Error("Largura/Altura devem ser > 0."); } if (modData.type === 'monster') { modData.health = getNumValue('mod-health', 'Vida'); modData.damage = getNumValue('mod-damage', 'Dano'); modData.speed = getNumValue('mod-speed', 'Velocidade'); modData.money = getNumValue('mod-money', 'Dinheiro'); modData.spawnWaves = document.getElementById('mod-spawnWaves').value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0); if(modData.spawnWaves.length === 0) throw new Error("Insira ondas válidas."); modData.spawnCount = getNumValue('mod-spawnCount', 'Quantidade'); modData.isFlying = document.getElementById('mod-isFlying').value === 'true'; } else if (modData.type === 'guardian') { modData.cost = getNumValue('mod-cost', 'Custo'); modData.damage = getNumValue('mod-damage', 'Dano'); modData.cooldown = getNumValue('mod-cooldown', 'Cooldown'); modData.range = getNumValue('mod-range', 'Alcance'); modData.projectileSpeed = getNumValue('mod-projectileSpeed', 'Vel. Projétil'); modData.projectileSize = getNumValue('mod-projectileSize', 'Tam. Projétil'); modData.projectileColor = document.getElementById('mod-projectileColor').value; } else if (modData.type === 'barricade') { modData.cost = getNumValue('mod-cost', 'Custo'); modData.health = getNumValue('mod-health', 'Vida'); } else if (modData.type === 'wave') { modData.waveNumber = getNumValue('mod-waveNumber', 'Número da Onda'); if (modData.waveNumber <= 0) throw new Error("Número da onda deve ser > 0."); modData.spawns = Array.from(document.querySelectorAll('.wave-monster-entry')).map(entry => { const monsterId = entry.querySelector('select').value; const count = parseInt(entry.querySelector('input').value); return (monsterId && !isNaN(count) && count > 0) ? { monsterId, count } : null; }).filter(s => s !== null); if (modData.spawns.length === 0) throw new Error("Adicione monstros à onda."); } newlyCreatedMod = modData; modCodeTextarea.value = btoa(JSON.stringify(modData)); modCodeDisplayOverlay.style.display = 'flex'; } catch (error) { await showCustomAlert(error.message); console.error(error); } });
+    saveModButton.addEventListener('click', async () => { const modData = { id: `custom_${Date.now()}`, type: editorCurrentType, active: true }; try { const getNumValue = (id, f) => { const i = document.getElementById(id); if (!i) throw new Error(`Input não encontrado para ${f}`); const v = parseFloat(i.value); if (isNaN(v)) throw new Error(`'${f}' precisa ser um número.`); return v; }; modData.name = document.getElementById('mod-name').value.trim(); if (!modData.name) throw new Error("O nome é obrigatório."); if (modData.type !== 'wave') { modData.pixelData = Array.from(document.querySelectorAll('#pixel-grid .pixel')).map(p => p.style.backgroundColor || 'transparent'); modData.gridWidth = editorGridSize.width; modData.gridHeight = editorGridSize.height; modData.width = getNumValue('mod-width', 'Largura'); modData.height = getNumValue('mod-height', 'Altura'); if (modData.width <= 0 || modData.height <= 0) throw new Error("Largura/Altura devem ser > 0."); } if (modData.type === 'monster') { modData.health = getNumValue('mod-health', 'Vida'); modData.damage = getNumValue('mod-damage', 'Dano'); modData.speed = getNumValue('mod-speed', 'Velocidade'); modData.money = getNumValue('mod-money', 'Dinheiro'); modData.spawnWaves = document.getElementById('mod-spawnWaves').value.split(',').map(s => parseInt(s.trim())).filter(n => !isNaN(n) && n > 0); if(modData.spawnWaves.length === 0) throw new Error("Insira ondas válidas."); modData.spawnCount = getNumValue('mod-spawnCount', 'Quantidade'); modData.isFlying = document.getElementById('mod-isFlying').value === 'true'; } else if (modData.type === 'guardian') { modData.cost = getNumValue('mod-cost', 'Custo'); modData.damage = getNumValue('mod-damage', 'Dano'); modData.cooldown = getNumValue('mod-cooldown', 'Cooldown'); modData.range = getNumValue('mod-range', 'Alcance'); modData.projectileSpeed = getNumValue('mod-projectileSpeed', 'Vel. Projétil'); modData.projectileSize = getNumValue('mod-projectileSize', 'Tam. Projétil'); modData.projectileColor = document.getElementById('mod-projectileColor').value; } else if (modData.type === 'barricade') { modData.cost = getNumValue('mod-cost', 'Custo'); modData.health = getNumValue('mod-health', 'Vida'); } else if (modData.type === 'wave') { modData.waveNumber = getNumValue('mod-waveNumber', 'Número da Onda'); if (modData.waveNumber <= 0) throw new Error("Número da onda deve ser > 0."); modData.spawns = Array.from(document.querySelectorAll('.wave-monster-entry')).map(entry => { const monsterId = entry.querySelector('select').value; const count = parseInt(entry.querySelector('input').value); return (monsterId && !isNaN(count) && count > 0) ? { monsterId, count } : null; }).filter(s => s !== null); if (modData.spawns.length === 0) throw new Error("Adicione monstros à onda.");
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               } 
+            newlyCreatedMod = modData; 
+            modCodeTextarea.value = btoa(JSON.stringify(modData)); 
+            modCodeDisplayOverlay.style.display = 'flex'; 
+        } catch (error) { 
+            await showCustomAlert(error.message); 
+            console.error(error); 
+        } 
+    });
     copyModCodeBtn.addEventListener('click', () => { navigator.clipboard.writeText(modCodeTextarea.value).then(() => { copyModCodeBtn.textContent = 'Copiado!'; setTimeout(() => { copyModCodeBtn.textContent = 'Copiar Código'; }, 1500); }); });
     addNewlyCreatedModBtn.addEventListener('click', () => { if (newlyCreatedMod) { if (!allMods.some(m => m.id === newlyCreatedMod.id)) { allMods.push(newlyCreatedMod); saveMods(); } newlyCreatedMod = null; modCodeDisplayOverlay.style.display = 'none'; modEditorScreen.style.display = 'none'; modScreen.style.display = 'flex'; renderModList(); } });
     closeCodePanelBtn.addEventListener('click', () => { newlyCreatedMod = null; modCodeDisplayOverlay.style.display = 'none'; });
@@ -1491,6 +2040,42 @@ document.addEventListener('DOMContentLoaded', () => {
     showCreateGroupBtn.addEventListener('click', openCreateGroupPanel);
     createGroupConfirmBtn.addEventListener('click', handleCreateGroup);
     
+    bobsMineButton.addEventListener('click', showBobsMineScreen);
+    backToMenuFromMine.addEventListener('click', showStartScreen);
+    upgradeMineButton.addEventListener('click', handleMineUpgrade);
+    bobsShopButton.addEventListener('click', showBobsShopScreen);
+    backToMenuFromShop.addEventListener('click', showStartScreen);
+
+    bobsShopItemsContainer.addEventListener('click', e => {
+        const buyButton = e.target.closest('.buy-spell-button:not(.disabled)');
+        const infoButton = e.target.closest('.buy-spell-info-btn');
+        if (buyButton) {
+            handleBuySpell(buyButton.dataset.spellId);
+        }
+        if (infoButton) {
+            showSpellInfo(infoButton.dataset.spellId);
+        }
+    });
+
+    bobsInventoryToggleButton.addEventListener('click', toggleBobsInventory);
+    closeBobsInventoryButton.addEventListener('click', toggleBobsInventory);
+    itemInfoCloseButton.addEventListener('click', hideSpellInfo);
+
+    bobsInventoryContent.addEventListener('click', e => {
+        const card = e.target.closest('.inventory-item-card');
+        if (card) {
+            handleInventoryItemClick(card.dataset.spellId, card.dataset.spellType);
+        }
+    });
+    
+    placementModeOverlay.addEventListener('dblclick', (e) => {
+        if (placingSpell) {
+            executeTargetedSpell(placingSpell, e);
+        } else if (placingBarricade) {
+            placeBarricadeAtClick(e);
+        }
+    });
+
     async function checkAutoLogin() {
         const storedUser = localStorage.getItem('castleDefenseUser');
         if (storedUser) {
