@@ -1661,6 +1661,16 @@ document.addEventListener('DOMContentLoaded', () => {
         bobsInventoryToggleButton.style.display = 'none';
         renderSaveSlots(); 
     }
+
+function showBobsMineScreen() {
+    // Esconde a tela de início (ou outra tela ativa)
+    startScreen.style.display = 'none';
+    
+    // Mostra a tela da Mina do Bob
+    // O ideal é usar 'flex' se o layout usar flexbox, ou 'block'
+    bobsMineScreen.style.display = 'flex'; 
+}
+    
     function showLobbyScreen() { if (!currentUser) { showCustomAlert("Você precisa estar logado para acessar o modo multiplayer."); return; } startScreen.style.display = 'none'; multiplayerLobbyScreen.style.display = 'flex'; }
     
     function renderModSelectionLists() {
