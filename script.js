@@ -1235,6 +1235,57 @@ document.addEventListener('DOMContentLoaded', () => {
     async function handleCreateGroup() { const groupName = createGroupNameInput.value.trim(); if (!groupName) { await showCustomAlert("O grupo precisa de um nome."); return; } const invitedFriends = Array.from(createGroupFriendsList.querySelectorAll('input:checked')).map(input => input.dataset.friendName); const socialData = await fetchSocialData(); const groupId = `group_${Date.now()}`; socialData.groups[groupId] = { name: groupName, owner: currentUser.username, members: [currentUser.username], chat: [] }; const notification = { groupId, groupName, sender: currentUser.username }; invitedFriends.forEach(friendName => { if (socialData[friendName.toLowerCase()]) { if (!socialData[friendName.toLowerCase()].groupInvites) socialData[friendName.toLowerCase()].groupInvites = []; socialData[friendName.toLowerCase()].groupInvites.push(notification); } }); const success = await updateSocialData(socialData); if (success) { await showCustomAlert(`Grupo "${groupName}" criado e convites enviados!`); createGroupNameInput.value = ''; dmGroupsOverlay.style.display = 'none'; } }
     async function handleGroupInviteResponse(notificationData, accept) { const socialData = await fetchSocialData(); if (!socialData) return; const myData = socialData[currentUser.username.toLowerCase()]; myData.groupInvites = myData.groupInvites.filter(inv => inv.groupId !== notificationData.groupId); if (accept) { const group = socialData.groups[notificationData.groupId]; if (group && !group.members.includes(currentUser.username)) { group.members.push(currentUser.username); } } const success = await updateSocialData(socialData); if (success && accept) { await showCustomAlert(`Você entrou no grupo "${notificationData.groupName}"!`); } hideInteractiveNotification(); checkForNotifications(); }
     
+    // --- Funções de Chat e UI Auxiliares ---
+
+// Adiciona uma mensagem ao painel de chat do jogo
+function addChatMessage(sender, message, isAI) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message-ingame');
+    if (isAI) {
+        messageElement.classList.add('ai-message');
+        messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+    } else {
+        messageElement.classList.add('player-message');
+        messageElement.innerHTML = `<strong>Você:</strong> ${message}`;
+    }
+    chatMessages.appendChild(messageElement);
+    // Rola para a mensagem mais recente
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Mostra uma bolha de notificação (usada para emotes)
+function showNotificationBubble(content, type) {
+    const bubble = document.createElement('div');
+    bubble.className = `notification-bubble ${type}`;
+    bubble.textContent = content;
+    notificationBubblesContainer.appendChild(bubble);
+
+    // Remove a bolha após a animação
+    setTimeout(() => {
+        bubble.remove();
+    }, 2000);
+}
+
+// Faz a IA reagir a um emote do jogador
+function triggerAIEmoteReaction(emote) {
+    const reaction = aiPhrases.emoteReaction[emote];
+    if (reaction) {
+        const randomReaction = reaction[Math.floor(Math.random() * reaction.length)];
+        setTimeout(() => {
+            addChatMessage("IA", randomReaction, true);
+        }, 800); // Pequeno atraso para a reação parecer mais natural
+    }
+}
+
+// Pega uma frase aleatória de uma lista no objeto aiPhrases
+function getRandomPhrase(phraseType) {
+    const phraseList = aiPhrases[phraseType];
+    if (phraseList && phraseList.length > 0) {
+        return phraseList[Math.floor(Math.random() * phraseList.length)];
+    }
+    return ""; // Retorna string vazia se não encontrar
+}
+    
     // --- Funções do Jogo (Principais) ---
     function logDebugMessage(message, type = 'info') { if (!isDebugModeEnabled) return; const entry = document.createElement('div'); entry.className = `log-entry ${type}`; entry.innerHTML = `<span class="log-time">[${new Date().toLocaleTimeString()}]</span> ${message}`; debugLogContent.appendChild(entry); debugLogContent.scrollTop = debugLogContent.scrollHeight; }
     
