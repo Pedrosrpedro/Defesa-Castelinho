@@ -1,5 +1,36 @@
 // data.js - Contém todos os dados de configuração estáticos para o jogo Defesa do Castelo.
 
+function createGoblinElement() { 
+    const e=document.createElement('div'); e.style.cssText="width:30px;height:30px;background-color:#228B22;border:2px solid #006400;border-radius:50%;position:absolute;transition:transform .1s,opacity .1s;box-shadow:inset 0 0 5px rgba(0,0,0,.3)"; e.innerHTML=`<div style="position:absolute;top:8px;left:7px;width:5px;height:5px;background:black;border-radius:50%"></div><div style="position:absolute;top:8px;right:7px;width:5px;height:5px;background:black;border-radius:50%"></div><div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:15px;height:3px;background:black;border-radius:2px"></div>`; return e; 
+}
+function createSlimeElement() { 
+    const e=document.createElement('div'); e.style.cssText="width:45px;height:45px;background-color:#8A2BE2;border:2px solid #4B0082;border-radius:60% 40% 50% 50%/60% 60% 40% 40%;position:absolute;transition:transform .1s,opacity .1s;box-shadow:inset 0 0 5px rgba(0,0,0,.3)"; e.innerHTML=`<div style="position:absolute;top:12px;left:10px;width:8px;height:8px;background:white;border-radius:50%;border:1px solid black"></div><div style="position:absolute;top:12px;right:10px;width:8px;height:8px;background:white;border-radius:50%;border:1px solid black"></div>`; return e; 
+}
+function createOgreElement() {
+    const e=document.createElement('div'); e.style.cssText="width:60px;height:60px;background-color:#B22222;border:3px solid #8B0000;border-radius:10px;position:absolute;transition:transform .1s,opacity .1s;box-shadow:inset 0 0 8px rgba(0,0,0,.4)"; e.innerHTML=`<div style="position:absolute;top:15px;left:15px;width:10px;height:10px;background:black;border-radius:50%"></div><div style="position:absolute;top:15px;right:15px;width:10px;height:10px;background:black;border-radius:50%"></div><div style="position:absolute;bottom:15px;left:50%;transform:translateX(-50%);width:30px;height:5px;background:black;border-radius:3px"></div>`; return e; 
+}
+function createZombieElement() {
+    const e=document.createElement('div'); e.classList.add('monster','zombie'); e.style.position='absolute'; return e; 
+}
+function createSkeletonElement() { 
+    const e=document.createElement('div'); e.classList.add('monster','skeleton'); e.style.position='absolute'; e.innerHTML=`<div class="mouth"></div><div class="ribcage"></div>`; return e; 
+}
+function createGhostElement() { 
+    const e=document.createElement('div'); e.classList.add('monster','ghost'); e.style.position='absolute'; e.innerHTML=`<div class="tail"></div>`; return e; 
+}
+function createStoneGolemElement() { 
+    const e=document.createElement('div'); e.classList.add('monster','stone-golem'); e.style.position='absolute'; e.innerHTML=`<div class="crack"></div>`; return e; 
+}
+function createDarkMageElement() { 
+    const e=document.createElement('div'); e.classList.add('monster','dark-mage'); e.style.position='absolute'; e.innerHTML=`<div class="eye left"></div><div class="eye right"></div><div class="staff"></div>`; return e; 
+}
+function createBatElement() { 
+    const e=document.createElement('div'); e.classList.add('monster','bat'); e.style.position='absolute'; return e; 
+}
+function createDragonElement() { 
+    const e=document.createElement('div'); e.classList.add('monster','dragon'); e.style.position='absolute'; e.innerHTML=`<div class="head"></div><div class="wing"></div>`; return e; 
+}
+
 // ### INÍCIO: Definição dos Mods e Modpacks Padrão ###
 
 const NIGHTMARE_MODS = [
