@@ -1293,13 +1293,6 @@ function checkTrophyUnlocks() {
     // Adicione mais verificações aqui para outras recompensas
 }
 
----
-
-#### **Bloco 3: Lógica Principal da IA**
-
-Este é o bloco mais importante. Ele corrige o erro `runAILogic is not defined` e restaura completamente o comportamento da IA, fazendo-a comprar guardiões, evoluí-los e melhorar o castelo.
-
-```javascript
 // --- Lógica da Inteligência Artificial ---
 
 function runAILogic() {
