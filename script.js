@@ -1821,7 +1821,40 @@ function getRandomPhrase(phraseType) {
             m.element.style.left = `${m.x}px`; 
             m.element.style.top = `${m.y}px`; 
         }
-        monsterProjectiles.forEach((mp,i)=>{ const r=mp.target.getBoundingClientRect(), gr=gameArea.getBoundingClientRect(), tx=(r.left-gr.left)+r.width/2, ty=(r.top-gr.top)+r.height/2, dist=Math.hypot(tx-mp.x, ty-p.y); if(dist<mp.speed+5){if(!isGodMode){ if(mp.target===castleElement && !isPlayerCastleDestroyed){castleHealth-=mp.damage;} else if(mp.target===castleAIElement && !isCastleAIDestroyed){castleHealthAI-=mp.damage;} else {const b = barricades.find(bar=>bar.element===mp.target); if(b){b.health-=mp.damage; const hb=b.element.querySelector('.barricade-health-bar'); if(hb) hb.style.width=`${Math.max(0,b.health/b.maxHealth)*100}%`;}}} if(mp.element) mp.element.remove(); monsterProjectiles.splice(i,1);} else {mp.x+=(tx-mp.x)/dist*mp.speed; mp.y+=(ty-p.y)/dist*mp.speed; mp.element.style.left=`${mp.x}px`; mp.element.style.top=`${mp.y}px`;}});
+                // Substitua este bloco inteiro no seu código
+        monsterProjectiles.forEach((mp, i) => {
+            const r = mp.target.getBoundingClientRect(),
+                gr = gameArea.getBoundingClientRect(),
+                tx = (r.left - gr.left) + r.width / 2,
+                ty = (r.top - gr.top) + r.height / 2,
+                // CORREÇÃO AQUI: trocado p.y por mp.y
+                dist = Math.hypot(tx - mp.x, ty - mp.y); 
+
+            if (dist < mp.speed + 5) {
+                if (!isGodMode) {
+                    if (mp.target === castleElement && !isPlayerCastleDestroyed) {
+                        castleHealth -= mp.damage;
+                    } else if (mp.target === castleAIElement && !isCastleAIDestroyed) {
+                        castleHealthAI -= mp.damage;
+                    } else {
+                        const b = barricades.find(bar => bar.element === mp.target);
+                        if (b) {
+                            b.health -= mp.damage;
+                            const hb = b.element.querySelector('.barricade-health-bar');
+                            if (hb) hb.style.width = `${Math.max(0, b.health / b.maxHealth) * 100}%`;
+                        }
+                    }
+                }
+                if (mp.element) mp.element.remove();
+                monsterProjectiles.splice(i, 1);
+            } else {
+                mp.x += (tx - mp.x) / dist * mp.speed;
+                // E CORREÇÃO AQUI: trocado p.y por mp.y
+                mp.y += (ty - mp.y) / dist * mp.speed;
+                mp.element.style.left = `${mp.x}px`;
+                mp.element.style.top = `${mp.y}px`;
+            }
+        });
         barricades=barricades.filter(b=>{if(b.health<=0&&b.element)b.element.remove();return b.health>0;});
         if (!isPlayerCastleDestroyed && castleHealth <= 0) { isPlayerCastleDestroyed = true; playerRespawnTimer = 30000; castleElement.classList.add('castle-destroyed'); playerRespawnTimerElement.style.display = 'flex'; }
         if (gameMode === 'ai' && !isCastleAIDestroyed && castleHealthAI <= 0) { isCastleAIDestroyed = true; aiRespawnTimer = 30000; castleAIElement.classList.add('castle-destroyed'); aiRespawnTimerElement.style.display = 'flex'; }
