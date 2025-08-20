@@ -36,6 +36,8 @@
                 <button id="new-game-button" class="main-menu-button">Novo Jogo</button>
                 <button id="multiplayer-button" class="main-menu-button">Multiplayer</button>
                 <button id="mods-button" class="main-menu-button">Mods</button>
+                <button id="bobs-mine-button" class="main-menu-button" style="background-color: #8B4513; display: none;">Mina de Bobs</button>
+                <button id="bobs-shop-button" class="main-menu-button" style="background-color: #4db8ff; display: none;">Loja de Bobs</button>
             </div>
         </div>
         
@@ -201,6 +203,73 @@
         </div>
     </div>
 
+    <!-- Tela da Mina de Bobs -->
+    <div id="bobs-mine-screen" style="display: none; flex-direction: column; justify-content: flex-start; align-items: center; background-color: #7CFC00; font-family: 'Press Start 2P', cursive, monospace; color: #333; padding: 20px; box-sizing: border-box;">
+        <div id="bobs-mine-hud">
+            <div id="bobs-mine-counter" class="bobs-counter-display">
+                <svg class="bobs-gem-icon" viewBox="0 0 24 24"><path d="M12 2L2 8.5l10 13.5L22 8.5 12 2zm0 2.31L19.5 8.5 12 18.31 4.5 8.5 12 4.31z"/></svg>
+                <span id="bobs-mine-value">0</span>
+            </div>
+            <button id="back-to-menu-from-mine" class="main-menu-button" style="font-size: 0.8em; padding: 10px 15px; background-color: #ff9800;">Voltar</button>
+        </div>
+        <div class="mine-title">MINA DE BOBS</div>
+        <div id="mine-areas-container">
+            <div id="mine-level-1-area" class="mine-level-area">
+                <div class="mine-header">
+                    <h2>MINA NV.1</h2>
+                    <span class="mine-price free">GRATUITO</span>
+                </div>
+                <div class="mine-content">
+                    <img src="img/hut_level_1.png" class="mine-hut">
+                    <div class="mine-workers">
+                        <img src="img/miner.png" class="miner">
+                    </div>
+                    <div class="mining-hole"></div>
+                </div>
+                <div class="mine-footer">
+                    <span>Produção: 1 Bob por Hora</span>
+                </div>
+            </div>
+            <div id="mine-level-2-area" class="mine-level-area">
+                 <div class="mine-header">
+                    <h2>MINA NV.2</h2>
+                    <span class="mine-price upgrade-cost">Custo: 800 Bobs</span>
+                </div>
+                 <div class="mine-content">
+                    <img src="img/hut_level_2.png" class="mine-hut">
+                     <div class="mine-workers">
+                        <img src="img/miner.png" class="miner">
+                        <img src="img/miner.png" class="miner miner-2">
+                    </div>
+                    <div class="mining-hole"></div>
+                </div>
+                <div class="mine-footer">
+                    <span>Produção: 3 Bobs por Hora</span>
+                    <button id="upgrade-mine-button" class="main-menu-button primary" style="font-size: 0.7em; padding: 8px 12px;">Melhorar</button>
+                </div>
+            </div>
+        </div>
+        <div class="mine-location-text">
+            <p>A MINA DE BOBS FICA AQUI</p>
+        </div>
+    </div>
+
+    <!-- Tela da Loja de Bobs -->
+    <div id="bobs-shop-screen" style="display: none; flex-direction: column; justify-content: flex-start; align-items: center; background-color: #333; font-family: 'Press Start 2P', cursive, monospace; color: white; padding: 20px; box-sizing: border-box;">
+        <div id="bobs-shop-hud">
+            <div id="bobs-shop-counter" class="bobs-counter-display">
+                <svg class="bobs-gem-icon" viewBox="0 0 24 24"><path d="M12 2L2 8.5l10 13.5L22 8.5 12 2zm0 2.31L19.5 8.5 12 18.31 4.5 8.5 12 4.31z"/></svg>
+                <span id="bobs-shop-value">0</span>
+            </div>
+            <button id="back-to-menu-from-shop" class="main-menu-button" style="font-size: 0.8em; padding: 10px 15px; background-color: #ff9800;">Voltar</button>
+        </div>
+        <h1 style="font-size: 2.5em; text-shadow: 3px 3px 0px #000;">LOJA DE BOBS</h1>
+        <p style="font-size: 0.8em; margin-top: -15px; margin-bottom: 25px;">Compre feitiços para usar em batalha!</p>
+        <div id="bobs-shop-items-container">
+            <!-- Os itens da loja serão gerados aqui pelo JavaScript -->
+        </div>
+    </div>
+
     <div id="grass-elements-container" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
     <div class="cloud" style="position: absolute; top: 20px; left: 80%; width: 100px; height: 40px; background: white; border-radius: 50px; animation: cloud-move 30s linear infinite; z-index: 0;"> <div style="position: absolute; top: -15px; left: 10px; width: 60px; height: 30px; background: white; border-radius: 50%;"></div> <div style="position: absolute; top: -10px; right: 10px; width: 70px; height: 35px; background: white; border-radius: 50%;"></div> </div>
     <div class="cloud" style="position: absolute; top: 70px; left: 40%; width: 120px; height: 50px; background: white; border-radius: 60px; animation: cloud-move 45s linear infinite; animation-delay: 15s; z-index: 0;"> <div style="position: absolute; top: -20px; left: 20px; width: 80px; height: 40px; background: white; border-radius: 50%;"></div> <div style="position: absolute; top: -15px; right: 20px; width: 90px; height: 45px; background: white; border-radius: 50%;"></div> </div>
@@ -228,6 +297,10 @@
             <button id="pause-button">Pause</button>
             <div id="money-display">Dinheiro: $0</div>
             <div id="diamond-display">💎 <span>0</span></div>
+            <div id="bobs-display">
+                <svg class="bobs-gem-icon" viewBox="0 0 24 24"><path d="M12 2L2 8.5l10 13.5L22 8.5 12 2zm0 2.31L19.5 8.5 12 18.31 4.5 8.5 12 4.31z"/></svg>
+                <span>0</span>
+            </div>
             <div class="hud-item">
                 <div class="hud-label">JOGADOR</div>
                 <div id="castle-health-bar-container">
@@ -270,6 +343,17 @@
             <div class="mustache"></div>
         </div>
     </button>
+    
+    <button id="bobs-inventory-toggle-button">🧪</button>
+    
+    <div id="bobs-inventory-panel">
+        <div id="bobs-inventory-header">
+            <span>Inventário de Bobs</span>
+            <button id="close-bobs-inventory-button">X</button>
+        </div>
+        <div id="bobs-inventory-content"></div>
+    </div>
+    
     <div id="guardian-management-panel">
         <div id="guardian-panel-header">
             <span>Guardiões</span>
@@ -294,7 +378,10 @@
 
     <div id="barricade-ghost"><div class="health-preview"></div></div>
     <div id="placement-mode-overlay"><div id="placement-message">Dê um clique duplo para colocar a barricada!</div><div id="placement-controls"><button id="cancel-placement-button">Cancelar</button></div></div>
-    <div id="game-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;"></div>
+    
+    <div id="game-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;">
+        <div id="placement-reticle"></div>
+    </div>
     
     <div id="chat-emote-container" style="display: none;">
       <div id="notification-bubbles-container"></div>
@@ -331,47 +418,45 @@
         <div id="command-help-content"></div>
     </div>
 
-<div id="dm-and-groups-overlay" style="display: none;">
-    <div id="dm-groups-main-panel" class="social-panel">
-        <button class="social-panel-close-button">X</button>
-        <h2>Mensagens</h2>
-        <div class="dm-groups-columns">
-            <div class="dm-groups-column">
-                <h3>Amigos (DMs)</h3>
-                <div id="dm-list" class="dm-groups-list-container"></div>
+    <div id="dm-and-groups-overlay" style="display: none;">
+        <div id="dm-groups-main-panel" class="social-panel">
+            <button class="social-panel-close-button">X</button>
+            <h2>Mensagens</h2>
+            <div class="dm-groups-columns">
+                <div class="dm-groups-column">
+                    <h3>Amigos (DMs)</h3>
+                    <div id="dm-list" class="dm-groups-list-container"></div>
+                </div>
+                <div class="dm-groups-column">
+                    <h3>Grupos</h3>
+                    <div id="group-list" class="dm-groups-list-container"></div>
+                    <button id="show-create-group-btn" class="main-menu-button secondary" style="width: 100%; font-size: 0.8em; margin-top: 10px;">Criar Novo Grupo</button>
+                </div>
             </div>
-            <div class="dm-groups-column">
-                <h3>Grupos</h3>
-                <div id="group-list" class="dm-groups-list-container"></div>
-                <button id="show-create-group-btn" class="main-menu-button secondary" style="width: 100%; font-size: 0.8em; margin-top: 10px;">Criar Novo Grupo</button>
+        </div>
+        <div id="chat-view-panel" class="social-panel" style="display: none;">
+            <div id="chat-view-header">
+                <button id="chat-back-button">← Voltar</button>
+                <h3 id="chat-with-name"></h3>
+            </div>
+            <div id="chat-view-messages"></div>
+            <div id="chat-view-input-form">
+                <input type="text" id="chat-view-input" placeholder="Digite uma mensagem...">
+                <button id="chat-view-send-btn">Enviar</button>
             </div>
         </div>
-    </div>
-
-    <div id="chat-view-panel" class="social-panel" style="display: none;">
-        <div id="chat-view-header">
-            <button id="chat-back-button">← Voltar</button>
-            <h3 id="chat-with-name"></h3>
+        <div id="create-group-panel" class="social-panel" style="display: none;">
+            <button class="social-panel-close-button">X</button>
+            <h2>Criar Novo Grupo</h2>
+            <div class="social-input-group">
+                <label for="create-group-name">Nome do Grupo</label>
+                <input type="text" id="create-group-name" class="social-input">
+            </div>
+            <h3>Convidar Amigos</h3>
+            <div id="create-group-friends-list" class="dm-groups-list-container"></div>
+            <button id="create-group-confirm-btn" class="main-menu-button primary" style="width: 100%; margin-top: 15px;">Criar Grupo</button>
         </div>
-        <div id="chat-view-messages"></div>
-        <div id="chat-view-input-form">
-            <input type="text" id="chat-view-input" placeholder="Digite uma mensagem...">
-            <button id="chat-view-send-btn">Enviar</button>
-        </div>
     </div>
-
-    <div id="create-group-panel" class="social-panel" style="display: none;">
-        <button class="social-panel-close-button">X</button>
-        <h2>Criar Novo Grupo</h2>
-        <div class="social-input-group">
-            <label for="create-group-name">Nome do Grupo</label>
-            <input type="text" id="create-group-name" class="social-input">
-        </div>
-        <h3>Convidar Amigos</h3>
-        <div id="create-group-friends-list" class="dm-groups-list-container"></div>
-        <button id="create-group-confirm-btn" class="main-menu-button primary" style="width: 100%; margin-top: 15px;">Criar Grupo</button>
-    </div>
-</div>
   
     <div id="social-overlay">
         <div id="auth-panel" class="social-panel" style="display: none;">
@@ -388,12 +473,10 @@
             <button id="auth-submit-button" class="main-menu-button primary" style="width: 100%; font-size: 1em;">Criar Conta</button>
             <span id="auth-toggle-link" class="auth-toggle-link">Já tem uma conta? Clique para logar</span>
         </div>
-
         <div id="friends-panel" class="social-panel" style="display: none;">
             <button class="social-panel-close-button">X</button>
             <h2 id="friends-panel-title">Amigos de NOME</h2>
             <div id="friends-list-container"></div>
-            
             <div id="add-friend-panel">
                 <h3>Adicionar Amigo</h3>
                 <form id="add-friend-form" onsubmit="event.preventDefault();">
@@ -413,14 +496,25 @@
         </div>
     </div>
 
-</div>
-<div id="custom-modal-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 20000; font-family: 'Press Start 2P', cursive, monospace;">
-    <div id="custom-modal-panel" style="background-color: #333; color: white; border: 4px solid #ffc107; padding: 25px; border-radius: 10px; text-align: center; max-width: 80%;">
-        <p id="custom-modal-message" style="margin-top: 0; margin-bottom: 20px; font-size: 0.9em; line-height: 1.5;"></p>
-        <input type="text" id="custom-modal-input" style="display: none; width: calc(100% - 20px); padding: 10px; margin-bottom: 20px; font-family: 'Press Start 2P', cursive, monospace; font-size: 0.8em; background-color: #222; border: 2px solid #555; color: white; border-radius: 5px;">
-        <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 15px;">
+    <div id="custom-modal-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 20000; font-family: 'Press Start 2P', cursive, monospace;">
+        <div id="custom-modal-panel" style="background-color: #333; color: white; border: 4px solid #ffc107; padding: 25px; border-radius: 10px; text-align: center; max-width: 80%;">
+            <p id="custom-modal-message" style="margin-top: 0; margin-bottom: 20px; font-size: 0.9em; line-height: 1.5;"></p>
+            <input type="text" id="custom-modal-input" style="display: none; width: calc(100% - 20px); padding: 10px; margin-bottom: 20px; font-family: 'Press Start 2P', cursive, monospace; font-size: 0.8em; background-color: #222; border: 2px solid #555; color: white; border-radius: 5px;">
+            <div id="custom-modal-actions" style="display: flex; justify-content: center; gap: 15px;">
+            </div>
         </div>
     </div>
+
+    <div id="item-info-modal-overlay">
+        <div id="item-info-modal-panel">
+            <h2 id="item-info-title"></h2>
+            <p id="item-info-description"></p>
+            <h3 id="item-info-usage-title">Como Usar:</h3>
+            <p id="item-info-usage"></p>
+            <button id="item-info-close-button" class="main-menu-button">Entendi</button>
+        </div>
+    </div>
+
 </div>
 
 <script src="script.js"></script>
