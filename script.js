@@ -1291,7 +1291,7 @@ function checkTrophyUnlocks() {
         // Ex: socialProfileButton.classList.add('veteran-player');
     }
     // Adicione mais verificações aqui para outras recompensas
-}```
+}
 
 ---
 
