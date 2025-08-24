@@ -1,3 +1,5 @@
+--- START OF FILE index (36).html ---
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -19,7 +21,8 @@
             <h2 id="intro-text">Arroz e Feijãozinho Games</h2>
         </div>
     </div>
-    <!-- NOVO: Tela de Seleção de Idioma -->
+
+    <!-- NOVO CÓDIGO AQUI -->
     <div id="language-selection-screen">
         <div class="lang-selection-content">
             <h2 data-i18n-key="selectLanguageTitle">Selecione o Idioma</h2>
@@ -27,26 +30,35 @@
             <button id="lang-en-button" data-lang="en" class="main-menu-button">English</button>
         </div>
     </div>
-    <!-- FIM NOVO -->
+    <!-- FIM NOVO CÓDIGO -->
+
     <div id="loading-screen">
-        <div style="font-size: 1.5em; margin-bottom: 20px;">Carregando...</div>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <div style="font-size: 1.5em; margin-bottom: 20px;" data-i18n-key="loading">Carregando...</div>
         <div id="loading-spinner" style="border: 8px solid #f3f3f3; border-top: 8px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
     </div>
 
     <div id="start-screen">
         <div id="saved-games-panel" class="collapsed">
-            <h2 class="panel-title">Jogos Salvos</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 class="panel-title" data-i18n-key="savedGames">Jogos Salvos</h2>
             <div id="save-slots-container"></div>
             <div id="save-panel-toggle"><span class="arrow">▶</span></div>
         </div>
         <div id="main-actions-panel">
-            <h1 style="font-size: 3em; margin-bottom: 40px; text-shadow: 4px 4px 0px #000;">DEFESA DO CASTELO</h1>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h1 style="font-size: 3em; margin-bottom: 40px; text-shadow: 4px 4px 0px #000;" data-i18n-key="gameTitle">DEFESA DO CASTELO</h1>
             <div id="start-menu-buttons">
-                <button id="new-game-button" class="main-menu-button">Novo Jogo</button>
-                <button id="multiplayer-button" class="main-menu-button">Multiplayer</button>
-                <button id="mods-button" class="main-menu-button">Mods</button>
-                <button id="bobs-mine-button" class="main-menu-button" style="background-color: #8B4513; display: none;">Mina de Bobs</button>
-                <button id="bobs-shop-button" class="main-menu-button" style="background-color: #4db8ff; display: none;">Loja de Bobs</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="new-game-button" class="main-menu-button" data-i18n-key="newGame">Novo Jogo</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="multiplayer-button" class="main-menu-button" data-i18n-key="multiplayer">Multiplayer</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="mods-button" class="main-menu-button" data-i18n-key="mods">Mods</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="bobs-mine-button" class="main-menu-button" style="background-color: #8B4513; display: none;" data-i18n-key="bobsMine">Mina de Bobs</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="bobs-shop-button" class="main-menu-button" style="background-color: #4db8ff; display: none;" data-i18n-key="bobsShop">Loja de Bobs</button>
             </div>
         </div>
         
@@ -62,24 +74,32 @@
             <span></span>
             <span></span>
         </button>
-        <button id="enable-debug-button">Debug: OFF</button>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <button id="enable-debug-button" data-i18n-key="debugOff">Debug: OFF</button>
     </div>
     
     <div id="multiplayer-lobby-screen">
-        <h1 style="font-size: 2.5em; margin-bottom: 40px; text-shadow: 3px 3px 0px #000;">MODO MULTIPLAYER</h1>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <h1 style="font-size: 2.5em; margin-bottom: 40px; text-shadow: 3px 3px 0px #000;" data-i18n-key="multiplayerMode">MODO MULTIPLAYER</h1>
         <div id="lobby-buttons" style="display: flex; flex-direction: column; gap: 20px;">
-            <button id="play-with-ai-button" class="main-menu-button" style="background-color: #28a745;">Jogar com IA</button>
-            <button id="play-with-friend-button" class="main-menu-button disabled">Jogar com Amigo (Em breve)</button>
-            <button id="back-to-menu-from-lobby-button" class="main-menu-button" style="background-color: #dc3545; font-size: 1em; padding: 10px 20px;">Voltar</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="play-with-ai-button" class="main-menu-button" style="background-color: #28a745;" data-i18n-key="playWithAI">Jogar com IA</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="play-with-friend-button" class="main-menu-button disabled" data-i18n-key="playWithFriend">Jogar com Amigo (Em breve)</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="back-to-menu-from-lobby-button" class="main-menu-button" style="background-color: #dc3545; font-size: 1em; padding: 10px 20px;" data-i18n-key="back">Voltar</button>
         </div>
     </div>
 
     <div id="mod-selection-screen">
         <div class="mod-screen-container">
-            <h2 class="mod-header">Selecionar para a Partida</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 class="mod-header" data-i18n-key="selectForMatch">Selecionar para a Partida</h2>
             <div class="editor-tabs" style="margin-bottom: 15px;">
-                <button id="mod-selection-tab-mods" class="editor-tab active">Mods Ativos</button>
-                <button id="mod-selection-tab-packs" class="editor-tab">Modpacks Ativos</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="mod-selection-tab-mods" class="editor-tab active" data-i18n-key="activeMods">Mods Ativos</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="mod-selection-tab-packs" class="editor-tab" data-i18n-key="activeModpacks">Modpacks Ativos</button>
             </div>
             
             <div id="mod-selection-list-container" class="mod-tab-content active" style="flex-grow: 1; overflow-y: auto;">
@@ -90,24 +110,31 @@
             </div>
 
             <div class="mod-controls" style="margin-top: 15px; justify-content: space-between;">
-                <button id="back-to-lobby-from-mod-selection-button" class="mod-button danger">Voltar</button>
-                <button id="start-ai-game-with-mods-button" class="mod-button primary">Iniciar Jogo</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="back-to-lobby-from-mod-selection-button" class="mod-button danger" data-i18n-key="back">Voltar</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="start-ai-game-with-mods-button" class="mod-button primary" data-i18n-key="startGame">Iniciar Jogo</button>
             </div>
         </div>
     </div>
 
     <div id="mod-screen">
         <div class="mod-screen-container">
-            <h2 class="mod-header">Gerenciador de Mods</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 class="mod-header" data-i18n-key="modManager">Gerenciador de Mods</h2>
             <div class="editor-tabs" style="margin-bottom: 20px;">
-                <button id="mod-tab-local" class="editor-tab active" data-tab="local">Mods Locais</button>
-                <button id="mod-tab-packs" class="editor-tab" data-tab="packs">Modpacks</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="mod-tab-local" class="editor-tab active" data-tab="local" data-i18n-key="localMods">Mods Locais</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="mod-tab-packs" class="editor-tab" data-tab="packs" data-i18n-key="modpacks">Modpacks</button>
             </div>
 
             <div id="local-mods-content" class="mod-tab-content active">
                 <div class="mod-controls">
-                    <input type="text" id="mod-code-input" class="mod-input" placeholder="Cole o código do mod aqui...">
-                    <button id="add-mod-button" class="mod-button primary">Adicionar</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <input type="text" id="mod-code-input" class="mod-input" placeholder="Cole o código do mod aqui..." data-i18n-key="pasteModCodePlaceholder">
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="add-mod-button" class="mod-button primary" data-i18n-key="add">Adicionar</button>
                 </div>
                 <div id="mod-list-container"></div>
             </div>
@@ -117,8 +144,10 @@
             </div>
 
             <div class="mod-controls" style="margin-top: 20px; margin-bottom: 0; justify-content: space-between;">
-                <button id="back-to-menu-from-mods-button" class="mod-button danger">Voltar ao Menu</button>
-                <button id="create-new-mod-button" class="mod-button secondary">Criar Novo Mod</button> 
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="back-to-menu-from-mods-button" class="mod-button danger" data-i18n-key="backToMenu">Voltar ao Menu</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="create-new-mod-button" class="mod-button secondary" data-i18n-key="createNewMod">Criar Novo Mod</button> 
             </div>
         </div>
 
@@ -127,17 +156,22 @@
                 <span class="arrow">▶</span>
             </div>
             <div id="online-panel-content">
-                <h2 class="mod-header" style="font-size: 1.3em; color: #4db8ff;">Mod Hub</h2>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <h2 class="mod-header" style="font-size: 1.3em; color: #4db8ff;" data-i18n-key="modHub">Mod Hub</h2>
                 <div class="editor-tabs" style="margin-bottom: 15px; justify-content: center;">
-                    <button id="hub-tab-mods" class="editor-tab active">Mods</button>
-                    <button id="hub-tab-packs" class="editor-tab">Modpacks</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="hub-tab-mods" class="editor-tab active" data-i18n-key="mods">Mods</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="hub-tab-packs" class="editor-tab" data-i18n-key="modpacks">Modpacks</button>
                 </div>
                 <div id="online-mod-controls">
-                    <input type="text" id="online-mod-search" class="mod-input" placeholder="Pesquisar por nome...">
-                    <select id="online-mod-sort" class="mod-input">
-                        <option value="date_desc">Mais Recentes</option>
-                        <option value="usage_desc">Mais Usados</option>
-                        <option value="name_asc">Nome (A-Z)</option>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <input type="text" id="online-mod-search" class="mod-input" placeholder="Pesquisar por nome..." data-i18n-key="searchByNamePlaceholder">
+                    <!-- ALTERADO: Adicionado data-i18n-group e data-i18n-key para as options -->
+                    <select id="online-mod-sort" class="mod-input" data-i18n-group="onlineModSortOptions">
+                        <option value="date_desc" data-i18n-key="mostRecent">Mais Recentes</option>
+                        <option value="usage_desc" data-i18n-key="mostUsed">Mais Usados</option>
+                        <option value="name_asc" data-i18n-key="nameAZ">Nome (A-Z)</option>
                     </select>
                 </div>
                 <div id="online-mod-list"></div>
@@ -147,16 +181,21 @@
     
     <div id="modpack-editor-overlay">
         <div class="mod-screen-container">
-            <h2 id="modpack-editor-title" class="mod-header">Criar Novo Modpack</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 id="modpack-editor-title" class="mod-header" data-i18n-key="createNewModpack">Criar Novo Modpack</h2>
             <div class="stat-input-group">
-                <label for="modpack-name-input">Nome do Modpack:</label>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <label for="modpack-name-input" data-i18n-key="modpackName">Nome do Modpack:</label>
                 <input type="text" id="modpack-name-input" class="mod-input" style="font-size: 1em;">
             </div>
-            <h3 class="panel-section-header" style="color: #ffc107;">Adicionar Mods (Locais e do Hub)</h3>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h3 class="panel-section-header" style="color: #ffc107;" data-i18n-key="addModsToPack">Adicionar Mods (Locais e do Hub)</h3>
             <div id="add-mods-to-pack-list"></div>
             <div class="mod-controls" style="margin-top: 20px; margin-bottom: 0; justify-content: flex-end;">
-                <button id="cancel-modpack-creation-button" class="mod-button danger">Cancelar</button>
-                <button id="save-modpack-button" class="mod-button primary">Salvar Modpack</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="cancel-modpack-creation-button" class="mod-button danger" data-i18n-key="cancel">Cancelar</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="save-modpack-button" class="mod-button primary" data-i18n-key="saveModpack">Salvar Modpack</button>
             </div>
         </div>
     </div>
@@ -165,10 +204,14 @@
         <div id="mod-editor-content">
             <div id="editor-main-panel">
                 <div class="editor-tabs">
-                    <button class="editor-tab active" data-type="monster">Monstro</button>
-                    <button class="editor-tab" data-type="guardian">Guardião</button>
-                    <button class="editor-tab" data-type="barricade">Barricada</button>
-                    <button class="editor-tab" data-type="wave">Onda</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button class="editor-tab active" data-type="monster" data-i18n-key="monster">Monstro</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button class="editor-tab" data-type="guardian" data-i18n-key="guardian">Guardião</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button class="editor-tab" data-type="barricade" data-i18n-key="barricade">Barricada</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button class="editor-tab" data-type="wave" data-i18n-key="wave">Onda</button>
                 </div>
 
                 <div id="pixel-editor-panel" class="editor-panel-for-type">
@@ -185,16 +228,20 @@
 
                 <div id="wave-editor-panel" class="editor-panel-for-type">
                     <div id="wave-monster-list" style="max-height: 200px; overflow-y: auto; padding: 5px;"></div>
-                    <button id="add-monster-to-wave-btn" class="mod-button secondary" style="font-size: 0.6em; padding: 6px;">+ Adicionar Monstro à Onda</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="add-monster-to-wave-btn" class="mod-button secondary" style="font-size: 0.6em; padding: 6px;" data-i18n-key="addMonsterToWave">+ Adicionar Monstro à Onda</button>
                 </div>
                 
                 <div class="editor-actions-bar">
-                    <button id="cancel-mod-creation-button" class="mod-button danger">Cancelar</button>
-                    <button id="save-mod-button" class="mod-button primary">Salvar e Gerar Código</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="cancel-mod-creation-button" class="mod-button danger" data-i18n-key="cancel">Cancelar</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="save-mod-button" class="mod-button primary" data-i18n-key="saveAndGenerateCode">Salvar e Gerar Código</button>
                 </div>
             </div>
             <div id="editor-stat-panel">
-                <h3 style="text-align: center; margin-top: 0; font-size: 1em; color: #ffc107;">Propriedades</h3>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <h3 style="text-align: center; margin-top: 0; font-size: 1em; color: #ffc107;" data-i18n-key="properties">Propriedades</h3>
                 <div id="stat-inputs-container"></div>
             </div>
         </div>
@@ -202,12 +249,16 @@
 
     <div id="mod-code-display-overlay">
         <div class="mod-code-panel">
-            <h3 class="mod-header" style="font-size: 1.2em; margin-bottom: 10px;">Mod Criado com Sucesso!</h3>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h3 class="mod-header" style="font-size: 1.2em; margin-bottom: 10px;" data-i18n-key="modCreatedSuccess">Mod Criado com Sucesso!</h3>
             <textarea id="mod-code-textarea" readonly></textarea>
             <div class="mod-code-panel-actions">
-                <button id="copy-mod-code-btn" class="mod-button secondary">Copiar Código</button>
-                <button id="add-newly-created-mod-btn" class="mod-button primary">Adicionar ao Jogo e Fechar</button>
-                <button id="close-code-panel-btn" class="mod-button danger">Fechar</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="copy-mod-code-btn" class="mod-button secondary" data-i18n-key="copyCode">Copiar Código</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="add-newly-created-mod-btn" class="mod-button primary" data-i18n-key="addToGameAndClose">Adicionar ao Jogo e Fechar</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="close-code-panel-btn" class="mod-button danger" data-i18n-key="close">Fechar</button>
             </div>
         </div>
     </div>
@@ -219,14 +270,18 @@
                 <svg class="bobs-gem-icon" viewBox="0 0 24 24"><path d="M12 2L2 8.5l10 13.5L22 8.5 12 2zm0 2.31L19.5 8.5 12 18.31 4.5 8.5 12 4.31z"/></svg>
                 <span id="bobs-mine-value">0</span>
             </div>
-            <button id="back-to-menu-from-mine" class="main-menu-button" style="font-size: 0.8em; padding: 10px 15px; background-color: #ff9800;">Voltar</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="back-to-menu-from-mine" class="main-menu-button" style="font-size: 0.8em; padding: 10px 15px; background-color: #ff9800;" data-i18n-key="back">Voltar</button>
         </div>
-        <div class="mine-title">MINA DE BOBS</div>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <div class="mine-title" data-i18n-key="bobsMineTitle">MINA DE BOBS</div>
         <div id="mine-areas-container">
             <div id="mine-level-1-area" class="mine-level-area">
                 <div class="mine-header">
-                    <h2>MINA NV.1</h2>
-                    <span class="mine-price free">GRATUITO</span>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h2 data-i18n-key="mineLv1">MINA NV.1</h2>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <span class="mine-price free" data-i18n-key="free">GRATUITO</span>
                 </div>
                 <div class="mine-content">
                     <img src="img/hut_level_1.png" class="mine-hut">
@@ -236,13 +291,16 @@
                     <div class="mining-hole"></div>
                 </div>
                 <div class="mine-footer">
-                    <span>Produção: 1 Bob por Hora</span>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <span data-i18n-key="prod1BobPerHour">Produção: 1 Bob por Hora</span>
                 </div>
             </div>
             <div id="mine-level-2-area" class="mine-level-area">
                  <div class="mine-header">
-                    <h2>MINA NV.2</h2>
-                    <span class="mine-price upgrade-cost">Custo: 800 Bobs</span>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h2 data-i18n-key="mineLv2">MINA NV.2</h2>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <span class="mine-price upgrade-cost" data-i18n-key="cost800Bobs">Custo: 800 Bobs</span>
                 </div>
                  <div class="mine-content">
                     <img src="img/hut_level_2.png" class="mine-hut">
@@ -253,13 +311,16 @@
                     <div class="mining-hole"></div>
                 </div>
                 <div class="mine-footer">
-                    <span>Produção: 3 Bobs por Hora</span>
-                    <button id="upgrade-mine-button" class="main-menu-button primary" style="font-size: 0.7em; padding: 8px 12px;">Melhorar</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <span data-i18n-key="prod3BobsPerHour">Produção: 3 Bobs por Hora</span>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="upgrade-mine-button" class="main-menu-button primary" style="font-size: 0.7em; padding: 8px 12px;" data-i18n-key="upgrade">Melhorar</button>
                 </div>
             </div>
         </div>
         <div class="mine-location-text">
-            <p>A MINA DE BOBS FICA AQUI</p>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <p data-i18n-key="bobsMineLocationText">A MINA DE BOBS FICA AQUI</p>
         </div>
     </div>
 
@@ -268,12 +329,16 @@
         <div id="bobs-shop-hud">
             <div id="bobs-shop-counter" class="bobs-counter-display">
                 <svg class="bobs-gem-icon" viewBox="0 0 24 24"><path d="M12 2L2 8.5l10 13.5L22 8.5 12 2zm0 2.31L19.5 8.5 12 18.31 4.5 8.5 12 4.31z"/></svg>
-                <span id="bobs-shop-value">0</span>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <span id="bobs-shop-value" data-i18n-key="bobsValue">0</span>
             </div>
-            <button id="back-to-menu-from-shop" class="main-menu-button" style="font-size: 0.8em; padding: 10px 15px; background-color: #ff9800;">Voltar</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="back-to-menu-from-shop" class="main-menu-button" style="font-size: 0.8em; padding: 10px 15px; background-color: #ff9800;" data-i18n-key="back">Voltar</button>
         </div>
-        <h1 style="font-size: 2.5em; text-shadow: 3px 3px 0px #000;">LOJA DE BOBS</h1>
-        <p style="font-size: 0.8em; margin-top: -15px; margin-bottom: 25px;">Compre feitiços para usar em batalha!</p>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <h1 style="font-size: 2.5em; text-shadow: 3px 3px 0px #000;" data-i18n-key="bobsShopTitle">LOJA DE BOBS</h1>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <p style="font-size: 0.8em; margin-top: -15px; margin-bottom: 25px;" data-i18n-key="buySpellsDescription">Compre feitiços para usar em batalha!</p>
         <div id="bobs-shop-items-container">
             <!-- Os itens da loja serão gerados aqui pelo JavaScript -->
         </div>
@@ -302,44 +367,56 @@
 
     <div id="top-hud">
         <div id="top-ui-elements">
-            <button id="back-to-menu-nav-button">Menu</button>
-            <button id="pause-button">Pause</button>
-            <div id="money-display">Dinheiro: $0</div>
-            <div id="diamond-display">💎 <span>0</span></div>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="back-to-menu-nav-button" data-i18n-key="menu">Menu</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="pause-button" data-i18n-key="pause">Pause</button>
+            <!-- ALTERADO: Adicionado data-i18n-prefix -->
+            <div id="money-display" data-i18n-prefix="money">Dinheiro: $0</div>
+            <div id="diamond-display">💎 <!-- ALTERADO: Adicionado data-i18n-key --> <span data-i18n-key="diamondValue">0</span></div>
             <div id="bobs-display">
                 <svg class="bobs-gem-icon" viewBox="0 0 24 24"><path d="M12 2L2 8.5l10 13.5L22 8.5 12 2zm0 2.31L19.5 8.5 12 18.31 4.5 8.5 12 4.31z"/></svg>
-                <span>0</span>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <span data-i18n-key="bobsValue">0</span>
             </div>
             <div class="hud-item">
-                <div class="hud-label">JOGADOR</div>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <div class="hud-label" data-i18n-key="player">JOGADOR</div>
                 <div id="castle-health-bar-container">
                     <div id="castle-health-bar"></div>
                     <div id="castle-health-text"></div>
                 </div>
             </div>
             <div class="hud-item" id="ai-hud-item" style="display: none;">
-                <div class="hud-label">IA</div>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <div class="hud-label" data-i18n-key="ai">IA</div>
                 <div id="castle-health-bar-container-ai">
                     <div id="castle-health-bar-ai"></div>
                     <div id="castle-health-text-ai"></div>
                 </div>
             </div>
-            <div id="wave-info">Onda: 1</div>
+            <!-- ALTERADO: Adicionado data-i18n-prefix -->
+            <div id="wave-info" data-i18n-prefix="wave">Onda: 1</div>
         </div>
         <div id="game-ui" class="collapsed">
-            <button id="shop-toggle-button">Loja</button> 
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="shop-toggle-button" data-i18n-key="shop">Loja</button> 
             <div id="shop-content-wrapper"> 
-                <div id="weapon-shop" style="margin-top: 8px;"> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Armas</h3> <button class="buy-button" data-item-type="weapon" data-item-id="0"></button> <button class="buy-button" data-item-type="weapon" data-item-id="1"></button> <button class="buy-button" data-item-type="weapon" data-item-id="2"></button> <button class="buy-button" data-item-type="weapon" data-item-id="3"></button> <button class="buy-button" data-item-type="weapon" data-item-id="4"></button> </div>
-                <div id="barricade-shop" style="margin-top: 10px;"> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Barricadas</h3></div>
+                <div id="weapon-shop" style="margin-top: 8px;"> <!-- ALTERADO: Adicionado data-i18n-key --> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;" data-i18n-key="weapons">Armas</h3> <button class="buy-button" data-item-type="weapon" data-item-id="0"></button> <button class="buy-button" data-item-type="weapon" data-item-id="1"></button> <button class="buy-button" data-item-type="weapon" data-item-id="2"></button> <button class="buy-button" data-item-type="weapon" data-item-id="3"></button> <button class="buy-button" data-item-type="weapon" data-item-id="4"></button> </div>
+                <div id="barricade-shop" style="margin-top: 10px;"> <!-- ALTERADO: Adicionado data-i18n-key --> <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;" data-i18n-key="barricades">Barricadas</h3></div>
                 <div id="specials-shop" style="margin-top: 10px;">
-                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Especiais</h3>
-                    <button class="buy-button" data-item-type="special" data-item-id="full_heal"></button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;" data-i18n-key="specials">Especiais</h3>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button class="buy-button" data-item-type="special" data-item-id="full_heal" data-i18n-key="fullHealButton"></button>
                 </div>
                 <div id="castle-shop" style="margin-top: 10px;">
-                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Castelo</h3>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;" data-i18n-key="castle">Castelo</h3>
                 </div>
                 <div id="guardian-shop" style="margin-top: 10px;">
-                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;">Guardiões</h3>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h3 style="margin-top: 0; margin-bottom: 4px; font-size: 0.8em; color: #555;" data-i18n-key="guardians">Guardiões</h3>
                 </div>
             </div>
         </div>
@@ -353,11 +430,13 @@
         </div>
     </button>
     
-    <button id="bobs-inventory-toggle-button">🧪</button>
+    <!-- ALTERADO: Adicionado data-i18n-key -->
+    <button id="bobs-inventory-toggle-button" data-i18n-key="bobsInventoryToggle">🧪</button>
     
     <div id="bobs-inventory-panel">
         <div id="bobs-inventory-header">
-            <span>Inventário de Bobs</span>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <span data-i18n-key="bobsInventoryTitle">Inventário de Bobs</span>
             <button id="close-bobs-inventory-button">X</button>
         </div>
         <div id="bobs-inventory-content"></div>
@@ -365,28 +444,36 @@
     
     <div id="guardian-management-panel">
         <div id="guardian-panel-header">
-            <span>Guardiões</span>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <span data-i18n-key="guardiansTitle">Guardiões</span>
             <button id="close-guardian-panel-button">X</button>
         </div>
         <div id="guardian-panel-content">
-            <div class="panel-section-header">Estoque</div>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <div class="panel-section-header" data-i18n-key="stock">Estoque</div>
             <div id="guardian-inventory"></div>
-            <div class="panel-section-header">Slots Ativos</div>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <div class="panel-section-header" data-i18n-key="activeSlots">Slots Ativos</div>
             <div id="guardian-slots-display"></div>
         </div>
     </div>
 
     <div id="game-message" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.9); color: white; padding: 30px; border-radius: 10px; text-align: center; font-family: 'Press Start 2P', cursive, monospace; font-size: 2em; display: none; flex-direction: column; z-index: 150;">
-        <span id="game-over-title">Game Over!</span>
+        <!-- ALTERADO: Adicionado data-i18n-key -->
+        <span id="game-over-title" data-i18n-key="gameOverTitle">Game Over!</span>
         <p id="post-game-stats" style="font-size: 0.4em; line-height: 1.5; margin-top: 15px;"></p>
         <div id="game-over-buttons">
-            <button id="restart-button" class="game-over-button">Reiniciar</button>
-            <button id="back-to-menu-button" class="game-over-button">Voltar ao Menu</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="restart-button" class="game-over-button" data-i18n-key="restart">Reiniciar</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="back-to-menu-button" class="game-over-button" data-i18n-key="backToMenu">Voltar ao Menu</button>
         </div>
     </div>
 
     <div id="barricade-ghost"><div class="health-preview"></div></div>
-    <div id="placement-mode-overlay"><div id="placement-message">Dê um clique duplo para colocar a barricada!</div><div id="placement-controls"><button id="cancel-placement-button">Cancelar</button></div></div>
+    <div id="placement-mode-overlay"><!-- ALTERADO: Adicionado data-i18n-key -->
+    <div id="placement-message" data-i18n-key="placeBarricadeMessage">Dê um clique duplo para colocar a barricada!</div><div id="placement-controls"><!-- ALTERADO: Adicionado data-i18n-key -->
+    <button id="cancel-placement-button" data-i18n-key="cancel">Cancelar</button></div></div>
     
     <div id="game-area" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2;">
         <div id="placement-reticle"></div>
@@ -397,7 +484,8 @@
       <div id="chat-panel" class="hidden">
         <div id="chat-messages"></div>
         <div id="chat-input-wrapper">
-          <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="100">
+          <!-- ALTERADO: Adicionado data-i18n-key -->
+          <input type="text" id="chat-input" placeholder="Digite uma mensagem..." maxlength="100" data-i18n-key="typeMessagePlaceholder">
         </div>
       </div>
       <div id="emote-picker">
@@ -407,21 +495,25 @@
       <button id="emote-toggle-button">😀</button>
     </div>
 
-    <button id="toggle-log-button" style="display: none;">Logs</button>
+    <!-- ALTERADO: Adicionado data-i18n-key -->
+    <button id="toggle-log-button" style="display: none;" data-i18n-key="logs">Logs</button>
     <div id="debug-log-overlay">
         <div id="debug-log-header">
-            <span>Game Logs</span>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <span data-i18n-key="gameLogs">Game Logs</span>
             <div>
-                <button id="help-button">?</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="help-button" data-i18n-key="helpBtn">?</button>
                 <button id="close-log-button">X</button>
             </div>
         </div>
         <div id="debug-log-content"></div>
-        <div id="debug-command-container"> <input type="text" id="command-input" placeholder="Digite um comando..."> <button id="command-submit-button">Enviar</button> </div>
+        <div id="debug-command-container"> <!-- ALTERADO: Adicionado data-i18n-key --> <input type="text" id="command-input" placeholder="Digite um comando..." data-i18n-key="typeCommandPlaceholder"> <!-- ALTERADO: Adicionado data-i18n-key --> <button id="command-submit-button" data-i18n-key="send">Enviar</button> </div>
     </div>
     <div id="command-help-overlay">
         <div id="debug-log-header">
-            <span>Ajuda de Comandos</span>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <span data-i18n-key="commandHelp">Ajuda de Comandos</span>
             <button id="close-help-button">X</button>
         </div>
         <div id="command-help-content"></div>
@@ -430,70 +522,90 @@
     <div id="dm-and-groups-overlay" style="display: none;">
         <div id="dm-groups-main-panel" class="social-panel">
             <button class="social-panel-close-button">X</button>
-            <h2>Mensagens</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 data-i18n-key="messages">Mensagens</h2>
             <div class="dm-groups-columns">
                 <div class="dm-groups-column">
-                    <h3>Amigos (DMs)</h3>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h3 data-i18n-key="friendsDMs">Amigos (DMs)</h3>
                     <div id="dm-list" class="dm-groups-list-container"></div>
                 </div>
                 <div class="dm-groups-column">
-                    <h3>Grupos</h3>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <h3 data-i18n-key="groups">Grupos</h3>
                     <div id="group-list" class="dm-groups-list-container"></div>
-                    <button id="show-create-group-btn" class="main-menu-button secondary" style="width: 100%; font-size: 0.8em; margin-top: 10px;">Criar Novo Grupo</button>
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <button id="show-create-group-btn" class="main-menu-button secondary" style="width: 100%; font-size: 0.8em; margin-top: 10px;" data-i18n-key="createNewGroup">Criar Novo Grupo</button>
                 </div>
             </div>
         </div>
         <div id="chat-view-panel" class="social-panel" style="display: none;">
             <div id="chat-view-header">
-                <button id="chat-back-button">← Voltar</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="chat-back-button" data-i18n-key="backArrow">← Voltar</button>
                 <h3 id="chat-with-name"></h3>
             </div>
             <div id="chat-view-messages"></div>
             <div id="chat-view-input-form">
-                <input type="text" id="chat-view-input" placeholder="Digite uma mensagem...">
-                <button id="chat-view-send-btn">Enviar</button>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <input type="text" id="chat-view-input" placeholder="Digite uma mensagem..." data-i18n-key="typeMessagePlaceholder">
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <button id="chat-view-send-btn" data-i18n-key="send">Enviar</button>
             </div>
         </div>
         <div id="create-group-panel" class="social-panel" style="display: none;">
             <button class="social-panel-close-button">X</button>
-            <h2>Criar Novo Grupo</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 data-i18n-key="createNewGroup">Criar Novo Grupo</h2>
             <div class="social-input-group">
-                <label for="create-group-name">Nome do Grupo</label>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <label for="create-group-name" data-i18n-key="groupName">Nome do Grupo</label>
                 <input type="text" id="create-group-name" class="social-input">
             </div>
-            <h3>Convidar Amigos</h3>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h3 data-i18n-key="inviteFriends">Convidar Amigos</h3>
             <div id="create-group-friends-list" class="dm-groups-list-container"></div>
-            <button id="create-group-confirm-btn" class="main-menu-button primary" style="width: 100%; margin-top: 15px;">Criar Grupo</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="create-group-confirm-btn" class="main-menu-button primary" style="width: 100%; margin-top: 15px;" data-i18n-key="createGroup">Criar Grupo</button>
         </div>
     </div>
   
     <div id="social-overlay">
         <div id="auth-panel" class="social-panel" style="display: none;">
             <button class="social-panel-close-button">X</button>
-            <h2 id="auth-title">Criar Conta</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h2 id="auth-title" data-i18n-key="createAccountTitle">Criar Conta</h2>
             <div class="social-input-group">
-                <label for="auth-username">Seu nome de usuário</label>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <label for="auth-username" data-i18n-key="yourUsername">Seu nome de usuário</label>
                 <input type="text" id="auth-username" class="social-input" autocomplete="username">
             </div>
             <div class="social-input-group">
-                <label for="auth-password">Sua senha</label>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <label for="auth-password" data-i18n-key="yourPassword">Sua senha</label>
                 <input type="password" id="auth-password" class="social-input" autocomplete="current-password">
             </div>
-            <button id="auth-submit-button" class="main-menu-button primary" style="width: 100%; font-size: 1em;">Criar Conta</button>
-            <span id="auth-toggle-link" class="auth-toggle-link">Já tem uma conta? Clique para logar</span>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="auth-submit-button" class="main-menu-button primary" style="width: 100%; font-size: 1em;" data-i18n-key="createAccount">Criar Conta</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <span id="auth-toggle-link" class="auth-toggle-link" data-i18n-key="alreadyHaveAccount">Já tem uma conta? Clique para logar</span>
         </div>
         <div id="friends-panel" class="social-panel" style="display: none;">
             <button class="social-panel-close-button">X</button>
-            <h2 id="friends-panel-title">Amigos de NOME</h2>
+            <!-- ALTERADO: Adicionado data-i18n-key e data-i18n-suffix -->
+            <h2 id="friends-panel-title" data-i18n-key="friendsOf" data-i18n-suffix=":NAME">Amigos de NOME</h2>
             <div id="friends-list-container"></div>
             <div id="add-friend-panel">
-                <h3>Adicionar Amigo</h3>
+                <!-- ALTERADO: Adicionado data-i18n-key -->
+                <h3 data-i18n-key="addFriend">Adicionar Amigo</h3>
                 <form id="add-friend-form" onsubmit="event.preventDefault();">
-                    <input type="text" id="add-friend-username" class="social-input" placeholder="Nome de usuário do amigo">
+                    <!-- ALTERADO: Adicionado data-i18n-key -->
+                    <input type="text" id="add-friend-username" class="social-input" placeholder="Nome de usuário do amigo" data-i18n-key="friendUsernamePlaceholder">
                     <button id="add-friend-button" class="mod-button secondary" style="font-size: 1.2em;">+</button>
                 </form>
             </div>
-            <button id="logout-button" class="main-menu-button danger" style="width: 100%; font-size: 0.8em; margin-top: 20px;">Logout</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="logout-button" class="main-menu-button danger" style="width: 100%; font-size: 0.8em; margin-top: 20px;" data-i18n-key="logout">Logout</button>
         </div>
     </div>
 
@@ -518,9 +630,11 @@
         <div id="item-info-modal-panel">
             <h2 id="item-info-title"></h2>
             <p id="item-info-description"></p>
-            <h3 id="item-info-usage-title">Como Usar:</h3>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <h3 id="item-info-usage-title" data-i18n-key="howToUseTitle">Como Usar:</h3>
             <p id="item-info-usage"></p>
-            <button id="item-info-close-button" class="main-menu-button">Entendi</button>
+            <!-- ALTERADO: Adicionado data-i18n-key -->
+            <button id="item-info-close-button" class="main-menu-button" data-i18n-key="gotIt">Entendi</button>
         </div>
     </div>
 
